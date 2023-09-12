@@ -1,7 +1,9 @@
 package com.example.rms.user;
 
+import com.example.rms.converter.DTOConverter;
 import com.example.rms.exceptions.InvalidRequestBodyException;
 import com.example.rms.exceptions.ResourceNotFoundException;
+import com.example.rms.user.dto.UserDTO;
 import com.example.rms.user.dto.UserSlim;
 import com.example.rms.user.request.CreateUserRequest;
 import com.example.rms.user.request.UpdateUserRequest;
@@ -30,25 +32,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserBy(String username) {
+    public UserDTO getUserBy(String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (optionalUser.isPresent()) {
-            return optionalUser.get();
+            User user = optionalUser.get();
+            return DTOConverter.convertToDTO(user, UserDTO.class);
         }
         throw new ResourceNotFoundException("User `" +username+ "` does not exist");
     }
 
     @Override
-    public User getUserBy(Integer userId) {
+    public UserDTO getUserBy(Integer userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
-            return optionalUser.get();
+            return DTOConverter.convertToDTO(optionalUser.get(), UserDTO.class);
         }
         throw new ResourceNotFoundException("User with ID `" +userId+ "` does not exist");
     }
 
     @Override
-    public User createUser(@Valid CreateUserRequest request) {
+    public UserDTO createUser(CreateUserRequest request) {
         isEmailAndPhoneValid(request.email(), request.phone(), null);
         User newUser = User.builder()
                 .firstName(request.firstName())
@@ -65,12 +68,13 @@ public class UserServiceImpl implements UserService {
                 .updatedAt(LocalDateTime.now())
                 .build();
 
-        return userRepository.save(newUser);
+        User savedUser = userRepository.save(newUser);
+        return DTOConverter.convertToDTO(savedUser, UserDTO.class);
 
     }
 
     @Override
-    public User updateUser(Integer userId, UpdateUserRequest request) {
+    public UserDTO updateUser(Integer userId, UpdateUserRequest request) {
         Optional<User> optionalUser = userRepository.findById(userId);
 
         if (optionalUser.isPresent()) {
@@ -86,7 +90,8 @@ public class UserServiceImpl implements UserService {
             user.setPhone(request.phone());
             user.setUpdatedAt(LocalDateTime.now());
 
-            return userRepository.save(user);
+            User savedUser = userRepository.save(user);
+            return DTOConverter.convertToDTO(savedUser, UserDTO.class);
 
         }
         throw new ResourceNotFoundException("User " +userId+ " does not exist");

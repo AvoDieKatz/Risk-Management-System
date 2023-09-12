@@ -2,7 +2,7 @@ package com.example.rms.business.category;
 
 import com.example.rms.business.category.dto.CategoryDTO;
 import com.example.rms.business.category.dto.CategoryWithThreads;
-import com.example.rms.business.category.request.CategoryRequest;
+import com.example.rms.business.category.dto.CategoryRequest;
 import com.example.rms.converter.DTOConverter;
 import com.example.rms.exceptions.InvalidRequestBodyException;
 import com.example.rms.exceptions.ResourceNotFoundException;
@@ -52,9 +52,10 @@ public class CategoryServiceImpl implements CategoryService {
         Optional<Category> optional = categoryRepository.findById(categoryId);
         if (optional.isPresent()) {
             Category foundCategory = optional.get();
-            if (foundCategory.getName().equals(request.name())) {
-                throw new InvalidRequestBodyException(new ArrayList<>(List.of("Name `" + request.name() + "` is already taken")));
+            if (categoryRepository.existsByName(request.name())) {
+                throw new InvalidRequestBodyException(List.of("Name `" + request.name() + "` is already taken"));
             }
+            foundCategory.setName(request.name());
             Category updatedCategory = categoryRepository.save(foundCategory);
             return DTOConverter.convertToDTO(updatedCategory, CategoryDTO.class);
         }

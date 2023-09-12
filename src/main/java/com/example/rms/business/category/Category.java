@@ -1,6 +1,7 @@
 package com.example.rms.business.category;
 
 import com.example.rms.business.thread.Thread;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,5 +25,6 @@ public class Category {
     private String name;
 
     @OneToMany(mappedBy = "category")
+    @JsonManagedReference
     private List<Thread> threads;
 }

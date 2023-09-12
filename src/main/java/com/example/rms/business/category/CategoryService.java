@@ -2,7 +2,7 @@ package com.example.rms.business.category;
 
 import com.example.rms.business.category.dto.CategoryDTO;
 import com.example.rms.business.category.dto.CategoryWithThreads;
-import com.example.rms.business.category.request.CategoryRequest;
+import com.example.rms.business.category.dto.CategoryRequest;
 
 import java.util.List;
 

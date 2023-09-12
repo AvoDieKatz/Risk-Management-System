@@ -33,11 +33,15 @@ public class SecurityConfig {
                     ex.authenticationEntryPoint(authEntryPoint)
                 )
                 .authorizeHttpRequests((request) -> request.requestMatchers(antMatcher("/api/auth/**")).permitAll()
-                        .requestMatchers(antMatcher("/api/admin/**")).hasRole(Role.ADMIN.name())
-                        .requestMatchers(antMatcher("/api/analyst/**")).hasRole(Role.ADMIN.name())
+                        .requestMatchers(antMatcher("/api/**")).hasRole(Role.ADMIN.name())
+//                        .requestMatchers(antMatcher("/api/admin/**")).hasRole(Role.ADMIN.name())
+//                        .requestMatchers(antMatcher("/api/analyst/**")).hasRole(Role.ADMIN.name())
+//                        .requestMatchers(antMatcher("/api/thread/**")).hasRole(Role.ADMIN.name())
+
+                        // Not working due to some severe Security 3 bug that I forgot which
 //                        .requestMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
 //                        .requestMatchers("/api/analyst/**").hasRole(Role.ANALYST.name())
-                        .anyRequest().authenticated())
+                        .anyRequest().denyAll())
                 .authenticationProvider(authProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

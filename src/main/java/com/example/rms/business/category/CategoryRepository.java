@@ -1,6 +1,5 @@
 package com.example.rms.business.category;
 
-import com.example.rms.business.category.dto.CategoryDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

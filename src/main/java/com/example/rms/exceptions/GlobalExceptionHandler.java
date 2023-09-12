@@ -36,4 +36,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 ), HttpStatus.NOT_FOUND
         );
     }
+
+    @ExceptionHandler(UnsatisfiedConditionException.class)
+    public ResponseEntity<ErrorObject> UnsatisfiedConditionException(UnsatisfiedConditionException ex, HttpServletRequest request) {
+        return new ResponseEntity<>(
+                new ErrorObject(
+                        ex.getMessage(),
+                        HttpStatus.NOT_ACCEPTABLE.value(),
+                        new Date(),
+                        request.getRequestURI()
+                ), HttpStatus.NOT_ACCEPTABLE
+        );
+    }
 }

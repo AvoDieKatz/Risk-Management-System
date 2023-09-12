@@ -6,6 +6,7 @@ import com.example.rms.business.thread.comment.Comment;
 import com.example.rms.business.thread.feedback.ThreadFeedback;
 import com.example.rms.business.thread.likelihood.Likelihood;
 import com.example.rms.business.thread.severity.Severity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -73,15 +74,12 @@ public class User implements UserDetails {
     private List<Thread> ownedThreads;
 
     @OneToMany(mappedBy = "assessor")
-//    @OneToMany
-    private List<Likelihood> assessedLikelihood;
+    private List<Likelihood> assessedLikelihoods;
 
     @OneToMany(mappedBy = "assessor")
-//    @OneToMany
-    private List<Severity> assessedSeverity;
+    private List<Severity> assessedSeverities;
 
     @OneToMany(mappedBy = "author")
-//    @OneToMany
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "author")

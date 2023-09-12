@@ -7,6 +7,7 @@ import com.example.rms.business.thread.feedback.ThreadFeedback;
 import com.example.rms.business.thread.likelihood.Likelihood;
 import com.example.rms.business.thread.severity.Severity;
 import com.example.rms.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -49,11 +50,11 @@ public class Thread {
 
 
     // Review needed
-    @OneToMany(mappedBy = "thread")
-    private List<Likelihood> likelihood;
+    @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL)
+    private List<Likelihood> likelihoods;
 
     @OneToMany(mappedBy = "thread")
-    private List<Severity> severity;
+    private List<Severity> severities;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -67,7 +68,7 @@ public class Thread {
     @OneToMany(mappedBy = "thread")
     private List<Solution> solutions;
 
-    @OneToOne(mappedBy = "thread")
+    @OneToOne(mappedBy = "thread", fetch = FetchType.LAZY)
     private ThreadFeedback feedback;
 
 }

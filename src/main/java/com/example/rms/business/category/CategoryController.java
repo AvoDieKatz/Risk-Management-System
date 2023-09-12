@@ -2,7 +2,7 @@ package com.example.rms.business.category;
 
 import com.example.rms.business.category.dto.CategoryDTO;
 import com.example.rms.business.category.dto.CategoryWithThreads;
-import com.example.rms.business.category.request.CategoryRequest;
+import com.example.rms.business.category.dto.CategoryRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +26,11 @@ public class CategoryController {
     }
 
     @PostMapping
-    @ResponseBody
     public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryRequest request) {
         return new ResponseEntity<>(categoryService.createCategory(request), HttpStatus.CREATED);
     }
 
     @PutMapping("{categoryId}")
-    @ResponseBody
     public ResponseEntity<CategoryDTO> updateCategory(@RequestBody CategoryRequest request, @PathVariable("categoryId") Integer categoryId) {
         return new ResponseEntity<>(categoryService.updateCategory(request, categoryId), HttpStatus.OK);
     }
