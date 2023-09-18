@@ -1,4 +1,4 @@
-package com.example.rms.business.solution;
+package com.example.rms.business.thread.solution;
 
 public enum SolutionType {
     ACCEPT,

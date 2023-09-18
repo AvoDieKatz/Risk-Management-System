@@ -1,4 +1,4 @@
-package com.example.rms.business.category.dto;
+package com.example.rms.business.thread.category.dto;
 
 import lombok.Data;
 

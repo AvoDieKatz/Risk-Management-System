@@ -11,17 +11,17 @@ import java.util.Date;
 public record CreateUserRequest(
         @NotBlank(message = "First Name is required.")
         String firstName,
-        @NotBlank(message = "First Name is required.")
+        @NotBlank(message = "Last Name is required.")
         String lastName,
-        @NotNull(message = "First Name is required.")
+        @NotNull(message = "Gender is required.")
         Gender gender,
-        @NotNull(message = "First Name is required.")
+        @NotNull(message = "Date of Birth is required.")
         LocalDate dob,
-        @NotBlank(message = "First Name is required.")
+        @NotBlank(message = "Email is required.")
         String email,
-        @NotBlank(message = "First Name is required.")
+        @NotBlank(message = "Phone Number is required.")
         String phone,
-        @NotNull(message = "First Name is required.")
+        @NotNull(message = "Role is required.")
         Role role
 ) {
 }

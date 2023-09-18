@@ -1,6 +1,6 @@
-package com.example.rms.business.category.dto;
+package com.example.rms.business.thread.category.dto;
 
-import com.example.rms.business.thread.ThreadStatus;
+import com.example.rms.business.thread.thread.ThreadStatus;
 
 import java.time.LocalDateTime;
 

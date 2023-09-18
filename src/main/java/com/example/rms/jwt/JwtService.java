@@ -18,7 +18,7 @@ import java.util.function.Function;
 public class JwtService {
 
     private final static String SECRET_KEY = "qWJN7VpeVkSXawfIosC8qajApwILsG8P2738907hf238475h902475908f235bb723400h57tyhfn4jrtw4tf7b0nuthse5ith235794btn90487f0t97q";
-        private final static long EXPIRATION = 43200000;
+        private final static long EXPIRATION = 7200000; // 2 hours
 
     public String extractUsername(String jwt) {
         return extractClaim(jwt, Claims::getSubject);

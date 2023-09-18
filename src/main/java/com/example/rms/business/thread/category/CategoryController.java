@@ -1,15 +1,15 @@
-package com.example.rms.business.category;
+package com.example.rms.business.thread.category;
 
-import com.example.rms.business.category.dto.CategoryDTO;
-import com.example.rms.business.category.dto.CategoryWithThreads;
-import com.example.rms.business.category.dto.CategoryRequest;
+import com.example.rms.business.thread.category.dto.CategoryDTO;
+import com.example.rms.business.thread.category.dto.CategoryWithThreads;
+import com.example.rms.business.thread.category.dto.CategoryRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/thread/category")
+@RequestMapping("/api/category")
 @RequiredArgsConstructor
 public class CategoryController {
 

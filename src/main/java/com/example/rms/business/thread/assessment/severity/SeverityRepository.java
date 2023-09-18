@@ -1,4 +1,4 @@
-package com.example.rms.business.thread.severity;
+package com.example.rms.business.thread.assessment.severity;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

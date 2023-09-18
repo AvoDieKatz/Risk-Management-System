@@ -1,21 +1,19 @@
-package com.example.rms.business.category;
+package com.example.rms.business.thread.category;
 
-import com.example.rms.business.thread.Thread;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.example.rms.business.thread.thread.Thread;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
-@Data
+//@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tbl_category")
+@Table(name = "tbl_thread_category")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +23,5 @@ public class Category {
     private String name;
 
     @OneToMany(mappedBy = "category")
-    @JsonManagedReference
     private List<Thread> threads;
 }

@@ -1,20 +1,21 @@
-package com.example.rms.business.thread;
+package com.example.rms.business.thread.thread;
 
-import com.example.rms.business.solution.Solution;
-import com.example.rms.business.category.Category;
+import com.example.rms.business.thread.solution.Solution;
+import com.example.rms.business.thread.category.Category;
 import com.example.rms.business.thread.comment.Comment;
 import com.example.rms.business.thread.feedback.ThreadFeedback;
-import com.example.rms.business.thread.likelihood.Likelihood;
-import com.example.rms.business.thread.severity.Severity;
+import com.example.rms.business.thread.assessment.likelihood.Likelihood;
+import com.example.rms.business.thread.assessment.severity.Severity;
 import com.example.rms.user.User;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+//@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -40,11 +41,11 @@ public class Thread {
     @JoinColumn(nullable = false, name = "category_id")
     private Category category;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "author_id")
     private User author;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "risk_owner_id")
     private User riskOwner;
 
@@ -53,7 +54,7 @@ public class Thread {
     @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL)
     private List<Likelihood> likelihoods;
 
-    @OneToMany(mappedBy = "thread")
+    @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL)
     private List<Severity> severities;
 
     @Column(name = "created_at", nullable = false)
@@ -68,7 +69,7 @@ public class Thread {
     @OneToMany(mappedBy = "thread")
     private List<Solution> solutions;
 
-    @OneToOne(mappedBy = "thread", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "thread")
     private ThreadFeedback feedback;
 
 }

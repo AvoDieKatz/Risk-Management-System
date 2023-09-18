@@ -1,16 +1,15 @@
-package com.example.rms.business.thread.severity;
+package com.example.rms.business.thread.assessment.severity;
 
-import com.example.rms.business.thread.Thread;
+import com.example.rms.business.thread.thread.Thread;
 import com.example.rms.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
+//@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,7 +20,7 @@ public class Severity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "thread_id", nullable = false)
     private Thread thread;
 
@@ -32,7 +31,6 @@ public class Severity {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    // QUESTIONS: What happens when the risk owner changed?
     @ManyToOne
     @JoinColumn(name = "assessor_id", nullable = false)
     private User assessor;

@@ -1,16 +1,15 @@
-package com.example.rms.business.solution;
+package com.example.rms.business.thread.solution;
 
-import com.example.rms.business.thread.Thread;
+import com.example.rms.business.thread.thread.Thread;
 import com.example.rms.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
+//@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

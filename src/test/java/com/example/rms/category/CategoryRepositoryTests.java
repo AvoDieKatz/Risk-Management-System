@@ -1,8 +1,8 @@
 package com.example.rms.category;
 
-import com.example.rms.business.category.Category;
-import com.example.rms.business.category.CategoryRepository;
-import com.example.rms.business.category.dto.CategoryDTO;
+import com.example.rms.business.thread.category.Category;
+import com.example.rms.business.thread.category.CategoryRepository;
+import com.example.rms.business.thread.category.dto.CategoryDTO;
 import com.example.rms.converter.DTOConverter;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

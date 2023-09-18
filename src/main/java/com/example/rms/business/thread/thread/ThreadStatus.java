@@ -1,4 +1,4 @@
-package com.example.rms.business.thread;
+package com.example.rms.business.thread.thread;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

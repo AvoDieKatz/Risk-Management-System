@@ -1,8 +1,8 @@
-package com.example.rms.business.category;
+package com.example.rms.business.thread.category;
 
-import com.example.rms.business.category.dto.CategoryDTO;
-import com.example.rms.business.category.dto.CategoryWithThreads;
-import com.example.rms.business.category.dto.CategoryRequest;
+import com.example.rms.business.thread.category.dto.CategoryDTO;
+import com.example.rms.business.thread.category.dto.CategoryWithThreads;
+import com.example.rms.business.thread.category.dto.CategoryRequest;
 import com.example.rms.converter.DTOConverter;
 import com.example.rms.exceptions.InvalidRequestBodyException;
 import com.example.rms.exceptions.ResourceNotFoundException;
@@ -22,7 +22,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDTO> getCategories() {
-//        return categoryRepository.findAllBy(CategoryDTO.class).stream().map(el -> DTOConverter.convertToDTO(el, CategoryDTO.class)).toList();
         return categoryRepository.findAll().stream().map(el -> DTOConverter.convertToDTO(el, CategoryDTO.class)).toList();
     }
 

@@ -1,4 +1,4 @@
-package com.example.rms.business.category;
+package com.example.rms.business.thread.category;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

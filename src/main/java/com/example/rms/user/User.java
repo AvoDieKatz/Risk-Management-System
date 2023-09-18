@@ -1,12 +1,11 @@
 package com.example.rms.user;
 
-import com.example.rms.business.solution.Solution;
-import com.example.rms.business.thread.Thread;
+import com.example.rms.business.thread.solution.Solution;
+import com.example.rms.business.thread.thread.Thread;
 import com.example.rms.business.thread.comment.Comment;
 import com.example.rms.business.thread.feedback.ThreadFeedback;
-import com.example.rms.business.thread.likelihood.Likelihood;
-import com.example.rms.business.thread.severity.Severity;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.example.rms.business.thread.assessment.likelihood.Likelihood;
+import com.example.rms.business.thread.assessment.severity.Severity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,7 +16,9 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-@Data
+//@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

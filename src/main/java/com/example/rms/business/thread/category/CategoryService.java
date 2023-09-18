@@ -1,8 +1,8 @@
-package com.example.rms.business.category;
+package com.example.rms.business.thread.category;
 
-import com.example.rms.business.category.dto.CategoryDTO;
-import com.example.rms.business.category.dto.CategoryWithThreads;
-import com.example.rms.business.category.dto.CategoryRequest;
+import com.example.rms.business.thread.category.dto.CategoryDTO;
+import com.example.rms.business.thread.category.dto.CategoryWithThreads;
+import com.example.rms.business.thread.category.dto.CategoryRequest;
 
 import java.util.List;
 
