@@ -12,7 +12,8 @@ public record UpdateUserRequest (
     Gender gender,
     LocalDate dob,
     String email,
-    String phone
+    String phone,
+    Role role
 ) {
 
 }

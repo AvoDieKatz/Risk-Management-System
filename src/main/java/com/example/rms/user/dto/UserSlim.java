@@ -17,5 +17,6 @@ public interface UserSlim {
     String getEmail();
     String getUsername();
     LocalDateTime getCreatedAt();
+    LocalDateTime getUpdatedAt();
     Role getRole();
 }

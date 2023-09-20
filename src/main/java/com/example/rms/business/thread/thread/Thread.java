@@ -9,16 +9,19 @@ import com.example.rms.business.thread.assessment.severity.Severity;
 import com.example.rms.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-//@Data
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "tbl_thread")
 public class Thread {
@@ -57,9 +60,11 @@ public class Thread {
     @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL)
     private List<Severity> severities;
 
+    @CreatedDate
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 

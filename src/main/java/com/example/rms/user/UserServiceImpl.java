@@ -7,13 +7,11 @@ import com.example.rms.user.dto.UserDTO;
 import com.example.rms.user.dto.UserSlim;
 import com.example.rms.user.request.CreateUserRequest;
 import com.example.rms.user.request.UpdateUserRequest;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,8 +62,6 @@ public class UserServiceImpl implements UserService {
                 .password(generatePassword(request))
                 .removed(false)
                 .role(request.role())
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
                 .build();
 
         User savedUser = userRepository.save(newUser);
@@ -88,7 +84,7 @@ public class UserServiceImpl implements UserService {
             user.setDob(request.dob());
             user.setEmail(request.email());
             user.setPhone(request.phone());
-            user.setUpdatedAt(LocalDateTime.now());
+            user.setRole(request.role());
 
             User savedUser = userRepository.save(user);
             return DTOConverter.convertToDTO(savedUser, UserDTO.class);

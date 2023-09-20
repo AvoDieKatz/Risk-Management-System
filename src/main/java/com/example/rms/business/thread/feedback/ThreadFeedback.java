@@ -4,6 +4,8 @@ import com.example.rms.business.thread.thread.Thread;
 import com.example.rms.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "tbl_thread_feedback")
 public class ThreadFeedback {
@@ -26,6 +29,7 @@ public class ThreadFeedback {
     @Column(nullable = false)
     private boolean approval;
 
+    @CreatedDate
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 

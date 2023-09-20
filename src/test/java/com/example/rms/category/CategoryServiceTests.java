@@ -4,8 +4,10 @@ import com.example.rms.business.thread.category.Category;
 import com.example.rms.business.thread.category.CategoryRepository;
 import com.example.rms.business.thread.category.CategoryServiceImpl;
 import com.example.rms.business.thread.category.dto.CategoryDTO;
+import com.example.rms.business.thread.category.dto.CategoryRequest;
+import com.example.rms.business.thread.category.dto.CategoryWithThreads;
 import com.example.rms.converter.DTOConverter;
-import org.junit.jupiter.api.DisplayName;
+import com.example.rms.exceptions.InvalidRequestBodyException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,9 +18,14 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
@@ -28,9 +35,8 @@ public class CategoryServiceTests {
     @InjectMocks
     private CategoryServiceImpl service;
 
-    @DisplayName("JUnit test for getCategories()")
     @Test
-    void CategoryService_GetCategoriesSlim_ReturnsCategorySlimList() {
+    void GetCategoryList_Normal_ReturnsCategoryList() {
         // Arrange
         List<Category> categoryReturn = new ArrayList<>();
         for (int i=0; i<5 ; i++) {
@@ -44,72 +50,43 @@ public class CategoryServiceTests {
         // Assert
         assertThat(savedCategories).isNotNull();
         assertThat(savedCategories.size()).isEqualTo(5);
+    }
+
+    @Test
+    void GetCategoryDetail_IdExists_ReturnCategoryWithThreads() {
+        int categoryId = 1;
+        CategoryWithThreads expectedCategory = mock(CategoryWithThreads.class);
+        given(repository.findById(eq(categoryId), eq(CategoryWithThreads.class))).willReturn(
+                Optional.ofNullable(expectedCategory)
+        );
+        CategoryWithThreads returnedCategory = service.getCategoryDetail(categoryId);
+        assertThat(returnedCategory).isNotNull();
+        assertThat(returnedCategory).hasFieldOrProperty("threads");
+        verify(repository, times(1)).findById(categoryId, CategoryWithThreads.class);
+    }
+
+    @Test
+    void CreateCategory_NewCategoryNameNotExist_ReturnNewCategory() {
+        Category expectedCategory = mock(Category.class);
+        CategoryRequest mockedRequest = mock(CategoryRequest.class);
+        given(repository.save(any(Category.class))).willReturn(expectedCategory);
+
+        CategoryDTO newCategory = service.createCategory(mockedRequest);
+        assertThat(newCategory).isNotNull();
+        assertThat(newCategory.getId()).isEqualTo(expectedCategory.getId());
+        assertThat(newCategory).hasOnlyFields("id", "name");
 
     }
 
+    @Test
+    void CreateCategory_NewCategoryNameExist_ThrowException() {
+        CategoryRequest mockedRequest = new CategoryRequest("Finance");
+        given(repository.existsByName(eq("Finance"))).willReturn(true);
+        assertThatThrownBy(
+                () -> service.createCategory(mockedRequest)
+        ).isInstanceOf(InvalidRequestBodyException.class);
+        verify(repository, times(1)).existsByName("Finance");
+    }
 
-
-//    @BeforeEach
-//    public void setUp() {
-//        Category category1 = Category.builder()
-//                .name("Human")
-//                .build();
-//        Category category2 = Category.builder()
-//                .name("Financial")
-//                .build();
-//        Category category3 = Category.builder()
-//                .name("Environment")
-//                .build();
-//
-//        categoryList = List.of(category1, category2, category3);
-//        categoryList = Arrays.asList(category1, category2, category3);
-
-//        repository.save(category1);
-//        repository.save(category2);
-//        repository.save(category3);
-
-
-//        List<Category> categoryList = new ArrayList<>(List.of(category1, category2, category3));
-//        repository.saveAll(categoryList);
-
-//        service.createCategory(new CategoryRequest("Human"));
-//        service.createCategory(new CategoryRequest("Finance"));
-//        service.createCategory(new CategoryRequest("Environment"));
-//    }
-
-//    @Test
-//    void CategoryService_FindOneCategory_CaseSensitive() {
-//        CategoryWithThreads category = service.getCategoryDetail(1);
-//
-//        Assertions.assertThat(category.getName()).isEqualTo("Human");
-//    }
-//
-//    @Test
-//    void CategoryService_FindOneCategory_CaseInsensitive() {
-//        CategoryWithThreads category = service.getCategoryDetail(1);
-//
-//        Assertions.assertThat(category.getName()).isEqualTo("human");
-//    }
-
-//    @Test
-//    void CategoryService_CreateNewCategory() {
-//        // Case 1: Non-existing Name
-//        CategoryDTO testDTO = new CategoryDTO();
-//        testDTO.setId(4);
-//        testDTO.setName("Employee");
-//
-//        CategoryDTO categoryDTO = service.createCategory(new CategoryRequest("Employee"));
-//
-//        Assertions.assertThat(categoryDTO).isEqualTo(testDTO);
-//
-//        // Case 2: Existing Name
-//        Assertions.assertThatExceptionOfType(InvalidRequestBodyException.class)
-//                        .isThrownBy(() -> service.createCategory(new CategoryRequest("Employee")));
-//    }
-//
-//    @Test
-//    void CategoryService_UpdateExistingCategory() {
-//
-//    }
 
 }

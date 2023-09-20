@@ -54,10 +54,11 @@ public class ThreadController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("/{threadId}/status")
-    public ResponseEntity<ThreadDTO> updateThreadStatus(@PathVariable("threadId") int threadId, @RequestParam ThreadStatus status) {
-        return new ResponseEntity<>(threadService.updateThreadStatus(threadId, status), HttpStatus.OK);
-    }
+    // Should let the system update status only to remain consistent.
+//    @PutMapping("/{threadId}/status")
+//    public ResponseEntity<ThreadDTO> updateThreadStatus(@PathVariable("threadId") int threadId, @RequestParam ThreadStatus status) {
+//        return new ResponseEntity<>(threadService.updateThreadStatus(threadId, status), HttpStatus.OK);
+//    }
 
     @PutMapping("/{threadId}/owner")
     public ResponseEntity<ThreadDTO> assignThreadOwner(

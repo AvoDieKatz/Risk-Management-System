@@ -48,4 +48,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 ), HttpStatus.NOT_ACCEPTABLE
         );
     }
+
+    @ExceptionHandler(ForbiddenActionException.class)
+    public ResponseEntity<ErrorObject> ForbiddenActionExceptionHandler(ForbiddenActionException ex, HttpServletRequest request) {
+        return new ResponseEntity<>(
+                new ErrorObject(
+                        ex.getMessage(),
+                        HttpStatus.FORBIDDEN.value(),
+                        new Date(),
+                        request.getRequestURI()
+                ), HttpStatus.FORBIDDEN
+        );
+    }
 }
