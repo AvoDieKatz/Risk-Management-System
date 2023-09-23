@@ -8,5 +8,4 @@ import java.util.Optional;
 public interface ThreadRepository extends JpaRepository<Thread, Integer> {
     <T> List<T> findAllByStatus(ThreadStatus status, Class<T> classType);
     <T> Optional<T> findById(Integer threadId, Class<T> classType);
-
 }
