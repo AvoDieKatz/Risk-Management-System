@@ -1,6 +1,6 @@
 package com.example.rms.jwt;
 
-import com.example.rms.token.TokenRepository;
+import com.example.rms.business.token.TokenRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,6 +1,6 @@
 package com.example.rms.business.thread.document;
 
-import com.example.rms.business.thread.Thread;
+import com.example.rms.business.thread.thread.Thread;
 import com.example.rms.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

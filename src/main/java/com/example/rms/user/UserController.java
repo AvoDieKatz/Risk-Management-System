@@ -1,15 +1,16 @@
 package com.example.rms.user;
 
+import com.example.rms.user.dto.UserDTO;
 import com.example.rms.user.dto.UserSlim;
-import com.example.rms.user.request.CreateUserRequest;
-import com.example.rms.user.request.UpdateUserRequest;
+import com.example.rms.user.request.UserRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/admin/users")
+@RequestMapping("/api/admin/user")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -27,7 +28,7 @@ public class UserController {
     }
 
     @GetMapping("u")
-    public ResponseEntity<User> getUser(
+    public ResponseEntity<UserDTO> getUser(
             @RequestParam(required = false) String username,
             @RequestParam(required = false) Integer userId
     ) {
@@ -40,14 +41,13 @@ public class UserController {
     }
 
     @PostMapping
-    @ResponseBody
-    public ResponseEntity<User> createUser(@RequestBody CreateUserRequest request) {
+    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserRequest request) {
         // Object Way - Status Code only
         return new ResponseEntity<>(userService.createUser(request), HttpStatus.CREATED);
     }
 
     @PutMapping("{userId}")
-    public ResponseEntity<User> updateUser(@RequestBody UpdateUserRequest request, @PathVariable("userId") Integer userId) {
+    public ResponseEntity<UserDTO> updateUser(@RequestBody @Valid UserRequest request, @PathVariable("userId") Integer userId) {
         return new ResponseEntity<>(userService.updateUser(userId, request), HttpStatus.OK);
     }
 

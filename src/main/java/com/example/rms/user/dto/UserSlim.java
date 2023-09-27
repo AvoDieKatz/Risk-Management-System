@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 public interface UserSlim {
     Integer getId();
-    @Value("#{target.lastName + ' ' + target.firstName}")
+    @Value("#{target.firstName + ' ' + target.lastName}")
     String getFullName();
     Gender getGender();
     LocalDate getDob();
@@ -17,5 +17,6 @@ public interface UserSlim {
     String getEmail();
     String getUsername();
     LocalDateTime getCreatedAt();
+    LocalDateTime getUpdatedAt();
     Role getRole();
 }

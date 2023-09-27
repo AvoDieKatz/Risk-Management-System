@@ -1,13 +1,16 @@
 package com.example.rms.user;
 
-import com.example.rms.business.solution.Solution;
-import com.example.rms.business.thread.Thread;
+import com.example.rms.business.thread.solution.Solution;
+import com.example.rms.business.thread.thread.Thread;
 import com.example.rms.business.thread.comment.Comment;
 import com.example.rms.business.thread.feedback.ThreadFeedback;
-import com.example.rms.business.thread.likelihood.Likelihood;
-import com.example.rms.business.thread.severity.Severity;
+import com.example.rms.business.thread.assessment.likelihood.Likelihood;
+import com.example.rms.business.thread.assessment.severity.Severity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,10 +19,13 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-@Data
+//@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "tbl_user")
 public class User implements UserDetails {
@@ -56,9 +62,11 @@ public class User implements UserDetails {
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean removed;
 
+    @CreatedDate
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
@@ -73,15 +81,12 @@ public class User implements UserDetails {
     private List<Thread> ownedThreads;
 
     @OneToMany(mappedBy = "assessor")
-//    @OneToMany
-    private List<Likelihood> assessedLikelihood;
+    private List<Likelihood> assessedLikelihoods;
 
     @OneToMany(mappedBy = "assessor")
-//    @OneToMany
-    private List<Severity> assessedSeverity;
+    private List<Severity> assessedSeverities;
 
     @OneToMany(mappedBy = "author")
-//    @OneToMany
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "author")

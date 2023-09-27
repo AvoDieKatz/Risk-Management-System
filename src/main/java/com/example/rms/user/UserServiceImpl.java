@@ -1,17 +1,16 @@
 package com.example.rms.user;
 
+import com.example.rms.converter.DTOConverter;
 import com.example.rms.exceptions.InvalidRequestBodyException;
 import com.example.rms.exceptions.ResourceNotFoundException;
+import com.example.rms.user.dto.UserDTO;
 import com.example.rms.user.dto.UserSlim;
-import com.example.rms.user.request.CreateUserRequest;
-import com.example.rms.user.request.UpdateUserRequest;
-import jakarta.validation.Valid;
+import com.example.rms.user.request.UserRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,25 +29,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserBy(String username) {
+    public UserDTO getUserBy(String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (optionalUser.isPresent()) {
-            return optionalUser.get();
+            User user = optionalUser.get();
+            return DTOConverter.convertToDTO(user, UserDTO.class);
         }
         throw new ResourceNotFoundException("User `" +username+ "` does not exist");
     }
 
     @Override
-    public User getUserBy(Integer userId) {
+    public UserDTO getUserBy(Integer userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
-            return optionalUser.get();
+            return DTOConverter.convertToDTO(optionalUser.get(), UserDTO.class);
         }
         throw new ResourceNotFoundException("User with ID `" +userId+ "` does not exist");
     }
 
     @Override
-    public User createUser(@Valid CreateUserRequest request) {
+    public UserDTO createUser(UserRequest request) {
         isEmailAndPhoneValid(request.email(), request.phone(), null);
         User newUser = User.builder()
                 .firstName(request.firstName())
@@ -61,16 +61,15 @@ public class UserServiceImpl implements UserService {
                 .password(generatePassword(request))
                 .removed(false)
                 .role(request.role())
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
                 .build();
 
-        return userRepository.save(newUser);
+        User savedUser = userRepository.save(newUser);
+        return DTOConverter.convertToDTO(savedUser, UserDTO.class);
 
     }
 
     @Override
-    public User updateUser(Integer userId, UpdateUserRequest request) {
+    public UserDTO updateUser(Integer userId, UserRequest request) {
         Optional<User> optionalUser = userRepository.findById(userId);
 
         if (optionalUser.isPresent()) {
@@ -84,9 +83,10 @@ public class UserServiceImpl implements UserService {
             user.setDob(request.dob());
             user.setEmail(request.email());
             user.setPhone(request.phone());
-            user.setUpdatedAt(LocalDateTime.now());
+            user.setRole(request.role());
 
-            return userRepository.save(user);
+            User savedUser = userRepository.save(user);
+            return DTOConverter.convertToDTO(savedUser, UserDTO.class);
 
         }
         throw new ResourceNotFoundException("User " +userId+ " does not exist");
@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private String generateUsername(CreateUserRequest request) {
+    private String generateUsername(UserRequest request) {
         final String lastName = request.lastName();
         final String firstName = request.firstName();
         final LocalDate dob = request.dob();
@@ -142,10 +142,18 @@ public class UserServiceImpl implements UserService {
             case OFFICER -> roleAbbreviation = "co";
         }
 
-        return firstName + lastNameShortened + dobFormatted + roleAbbreviation;
+        //
+
+        String createdUsername = firstName + lastNameShortened + dobFormatted + roleAbbreviation;
+
+        // check for username existence
+        // count number of occurrences with such username
+        // +1 to the total number
+
+        return createdUsername;
     }
 
-    private String generatePassword(CreateUserRequest request) {
+    private String generatePassword(UserRequest request) {
         final String firstName = request.firstName();
         final LocalDate dob = request.dob();
 
