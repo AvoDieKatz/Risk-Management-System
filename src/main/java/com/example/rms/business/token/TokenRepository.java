@@ -1,4 +1,4 @@
-package com.example.rms.token;
+package com.example.rms.business.token;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

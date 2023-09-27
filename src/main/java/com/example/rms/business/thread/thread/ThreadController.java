@@ -6,6 +6,7 @@ import com.example.rms.business.thread.thread.dto.ThreadDTO;
 import com.example.rms.business.thread.thread.dto.ThreadCompactProjection;
 import com.example.rms.business.thread.thread.dto.ThreadRequest;
 import com.example.rms.business.thread.feedback.ThreadFeedbackDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,24 +32,24 @@ public class ThreadController {
     }
 
     @PostMapping("/{threadId}/assess")
-    public ResponseEntity<AssessmentDTO> assessThread(@PathVariable("threadId") int threadId, @RequestBody AssessmentRequest request) {
+    public ResponseEntity<AssessmentDTO> assessThread(@PathVariable("threadId") int threadId, @RequestBody @Valid AssessmentRequest request) {
         return new ResponseEntity<>(threadService.assessThread(threadId, request), HttpStatus.CREATED);
     }
 
     @PostMapping
-    public ResponseEntity<ThreadDTO> createThread(@RequestBody ThreadRequest request) {
+    public ResponseEntity<ThreadDTO> createThread(@RequestBody @Valid ThreadRequest request) {
         return new ResponseEntity<>(threadService.createThread(request), HttpStatus.CREATED);
     }
 
     @PutMapping("/{threadId}")
-    public ResponseEntity<ThreadDTO> updateThread(@PathVariable("threadId") int threadId, @RequestBody ThreadRequest request) {
+    public ResponseEntity<ThreadDTO> updateThread(@PathVariable("threadId") int threadId, @RequestBody @Valid ThreadRequest request) {
         return new ResponseEntity<>(threadService.updateThread(threadId, request), HttpStatus.OK);
     }
 
     @PostMapping("/{threadId}/review")
     public ResponseEntity<HttpStatus> reviewSubmittedThread(
             @PathVariable("threadId") int threadId,
-            @RequestBody ThreadFeedbackDTO request
+            @RequestBody @Valid ThreadFeedbackDTO request
     ) {
         threadService.reviewThread(threadId, request);
         return ResponseEntity.status(HttpStatus.CREATED).build();

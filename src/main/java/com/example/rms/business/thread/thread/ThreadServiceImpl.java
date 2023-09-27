@@ -1,6 +1,6 @@
 package com.example.rms.business.thread.thread;
 
-import com.example.rms.auth.AuthenticationService;
+import com.example.rms.business.auth.AuthenticationService;
 import com.example.rms.business.thread.category.Category;
 import com.example.rms.business.thread.category.CategoryRepository;
 import com.example.rms.business.thread.assessment.AssessServiceImpl;

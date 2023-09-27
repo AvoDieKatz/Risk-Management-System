@@ -2,8 +2,8 @@ package com.example.rms.user;
 
 import com.example.rms.user.dto.UserDTO;
 import com.example.rms.user.dto.UserSlim;
-import com.example.rms.user.request.CreateUserRequest;
-import com.example.rms.user.request.UpdateUserRequest;
+import com.example.rms.user.request.UserRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,13 +41,13 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody CreateUserRequest request) {
+    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserRequest request) {
         // Object Way - Status Code only
         return new ResponseEntity<>(userService.createUser(request), HttpStatus.CREATED);
     }
 
     @PutMapping("{userId}")
-    public ResponseEntity<UserDTO> updateUser(@RequestBody UpdateUserRequest request, @PathVariable("userId") Integer userId) {
+    public ResponseEntity<UserDTO> updateUser(@RequestBody @Valid UserRequest request, @PathVariable("userId") Integer userId) {
         return new ResponseEntity<>(userService.updateUser(userId, request), HttpStatus.OK);
     }
 

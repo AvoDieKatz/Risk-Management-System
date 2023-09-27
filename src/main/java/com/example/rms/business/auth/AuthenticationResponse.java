@@ -1,4 +1,4 @@
-package com.example.rms.auth;
+package com.example.rms.business.auth;
 
 import lombok.*;
 

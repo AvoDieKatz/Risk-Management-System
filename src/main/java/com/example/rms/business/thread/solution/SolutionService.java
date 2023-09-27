@@ -13,4 +13,6 @@ public interface SolutionService {
     SolutionCompact updateSolution(SolutionRequest request, int threadId, int solutionId);
 
     void deleteSolution(int threadId, int solutionId);
+
+    SolutionCompact acceptSolution(int threadId, int solutionId);
 }

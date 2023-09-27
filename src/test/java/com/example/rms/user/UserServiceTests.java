@@ -2,7 +2,7 @@ package com.example.rms.user;
 
 import com.example.rms.user.dto.UserDTO;
 import com.example.rms.user.dto.UserSlim;
-import com.example.rms.user.request.CreateUserRequest;
+import com.example.rms.user.request.UserRequest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -176,7 +176,7 @@ public class UserServiceTests {
                 .updatedAt(LocalDateTime.now())
                 .build();
 
-        CreateUserRequest request = new CreateUserRequest(
+        UserRequest request = new UserRequest(
                 firstName,
                 lastName,
                 gender,

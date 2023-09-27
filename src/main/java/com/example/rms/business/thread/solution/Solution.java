@@ -31,9 +31,9 @@ public class Solution {
     @Column(nullable = false)
     private SolutionType type;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private SolutionStatus status;
+//    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean accepted;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false)

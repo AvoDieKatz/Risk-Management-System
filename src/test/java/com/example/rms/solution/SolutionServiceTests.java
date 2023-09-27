@@ -1,5 +1,6 @@
 package com.example.rms.solution;
 
+import com.example.rms.business.auth.AuthenticationService;
 import com.example.rms.business.thread.solution.Solution;
 import com.example.rms.business.thread.solution.SolutionRepository;
 import com.example.rms.business.thread.solution.SolutionServiceImpl;
@@ -10,6 +11,7 @@ import com.example.rms.business.thread.thread.Thread;
 import com.example.rms.business.thread.thread.ThreadRepository;
 import com.example.rms.exceptions.InvalidRequestBodyException;
 import com.example.rms.exceptions.ResourceNotFoundException;
+import com.example.rms.user.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,6 +36,8 @@ public class SolutionServiceTests {
     private SolutionRepository solutionRepository;
     @Mock
     private ThreadRepository threadRepository;
+    @Mock
+    private AuthenticationService authenticationService;
     @InjectMocks
     private SolutionServiceImpl service;
 
@@ -81,7 +85,7 @@ public class SolutionServiceTests {
     }
 
     @Test
-    void CreateThreadSolution_ThreadExist_SolutionTypeNotProvided_ReturnCreatedSolution() {
+    void CreateThreadSolution_ThreadExist_SolutionTypeNotBeenProvided_ReturnCreatedSolution() {
         Thread validThread = mock(Thread.class);
         SolutionRequest mockedRequest = new SolutionRequest(
                 "My ACCEPT solution for this thread.",
@@ -91,6 +95,8 @@ public class SolutionServiceTests {
         Solution expectedSolution = new Solution();
         expectedSolution.setContent("My ACCEPT solution for this thread.");
         expectedSolution.setType(SolutionType.ACCEPT);
+
+        given(authenticationService.getAuthenticatedUser()).willReturn(mock(User.class));
 
         given(threadRepository.findById(anyInt())).willReturn(Optional.of(validThread));
         given(solutionRepository.save(any(Solution.class))).willReturn(expectedSolution);
@@ -127,5 +133,36 @@ public class SolutionServiceTests {
 
         verify(threadRepository, times(1)).findById(anyInt());
         verify(solutionRepository, never()).save(any(Solution.class));
+    }
+
+    @Test
+    void ChooseSolution_ThreadExist_SolutionExist_ReturnChoseSolution() {
+        Thread validThread = mock(Thread.class);
+        Solution validSolution = mock(Solution.class);
+
+        given(threadRepository.findById(anyInt())).willReturn(Optional.ofNullable(validThread));
+        given(solutionRepository.findById(anyInt())).willReturn(Optional.ofNullable(validSolution));
+
+        assert validSolution != null;
+        assert validThread != null;
+
+        given(validSolution.isAccepted()).willReturn(true);
+
+        given(solutionRepository.save(eq(validSolution))).willReturn(validSolution);
+        given(threadRepository.save(eq(validThread))).willReturn(validThread);
+
+        var choseSolution = service.acceptSolution(1,1);
+
+        System.out.println(choseSolution);
+
+        assertThat(choseSolution).isNotNull();
+        assertThat(choseSolution.isAccepted()).isEqualTo(true);
+
+        verify(threadRepository).findById(anyInt());
+        verify(solutionRepository).findById(anyInt());
+
+        verify(threadRepository).save(validThread);
+        verify(solutionRepository).save(validSolution);
+
     }
 }

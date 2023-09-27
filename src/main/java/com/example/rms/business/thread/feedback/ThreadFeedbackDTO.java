@@ -1,8 +1,12 @@
 package com.example.rms.business.thread.feedback;
 
-public record ThreadFeedbackDTO(
-        String content,
-        boolean approval
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
+public record ThreadFeedbackDTO(
+        @NotBlank(message = "Feedback's content must be provided.")
+        String content,
+        @NotNull(message = "Feedback's approval must be provided")
+        Boolean approval
 ) {
 }

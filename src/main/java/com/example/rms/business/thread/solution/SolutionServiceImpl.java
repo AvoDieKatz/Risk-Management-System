@@ -1,13 +1,14 @@
 package com.example.rms.business.thread.solution;
 
-import com.example.rms.auth.AuthenticationService;
+import com.example.rms.business.auth.AuthenticationService;
 import com.example.rms.business.thread.solution.dto.SolutionCompact;
 import com.example.rms.business.thread.solution.dto.SolutionRequest;
 import com.example.rms.business.thread.thread.Thread;
 import com.example.rms.business.thread.thread.ThreadRepository;
-import com.example.rms.converter.DTOConverter;
+import com.example.rms.business.thread.thread.ThreadStatus;
 import com.example.rms.exceptions.InvalidRequestBodyException;
 import com.example.rms.exceptions.ResourceNotFoundException;
+import com.example.rms.exceptions.UnsatisfiedConditionException;
 import com.example.rms.user.User;
 import lombok.AllArgsConstructor;
 import org.springframework.data.projection.ProjectionFactory;
@@ -59,8 +60,6 @@ public class SolutionServiceImpl implements SolutionService {
 
         ProjectionFactory projectionFactory = new SpelAwareProxyProjectionFactory();
         return projectionFactory.createProjection(SolutionCompact.class, savedSolution);
-
-        //        return DTOConverter.convertToDTO(savedSolution, SolutionDTO.class);
     }
 
     @Override
@@ -71,5 +70,29 @@ public class SolutionServiceImpl implements SolutionService {
     @Override
     public void deleteSolution(int threadId, int solutionId) {
 
+    }
+
+    @Override
+    public SolutionCompact acceptSolution(int threadId, int solutionId) {
+        Thread thread = threadRepository.findById(threadId).orElseThrow(
+                () -> new ResourceNotFoundException("Cannot find selected Thread. (Id: "+threadId+")")
+        );
+
+        if (thread.getStatus() == ThreadStatus.RESOLVED) {
+            throw new UnsatisfiedConditionException("A solution has been chosen for this thread. (Thread ID: " + threadId + ")");
+        }
+
+        Solution solution = solutionRepository.findById(solutionId).orElseThrow(
+                () -> new ResourceNotFoundException("Cannot find the choosing solution. (Id: " + solutionId + ")" )
+        );
+
+        solution.setAccepted(true);
+        Solution savedSolution = solutionRepository.save(solution);
+
+        thread.setStatus(ThreadStatus.RESOLVED);
+        threadRepository.save(thread);
+
+        ProjectionFactory projectionFactory = new SpelAwareProxyProjectionFactory();
+        return projectionFactory.createProjection(SolutionCompact.class, savedSolution);
     }
 }

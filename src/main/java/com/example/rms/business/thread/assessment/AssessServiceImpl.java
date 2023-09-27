@@ -1,6 +1,6 @@
 package com.example.rms.business.thread.assessment;
 
-import com.example.rms.auth.AuthenticationService;
+import com.example.rms.business.auth.AuthenticationService;
 import com.example.rms.business.thread.thread.Thread;
 import com.example.rms.business.thread.assessment.likelihood.Likelihood;
 import com.example.rms.business.thread.assessment.likelihood.LikelihoodRepository;
@@ -11,8 +11,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

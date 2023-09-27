@@ -5,8 +5,7 @@ import com.example.rms.exceptions.InvalidRequestBodyException;
 import com.example.rms.exceptions.ResourceNotFoundException;
 import com.example.rms.user.dto.UserDTO;
 import com.example.rms.user.dto.UserSlim;
-import com.example.rms.user.request.CreateUserRequest;
-import com.example.rms.user.request.UpdateUserRequest;
+import com.example.rms.user.request.UserRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -49,7 +48,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO createUser(CreateUserRequest request) {
+    public UserDTO createUser(UserRequest request) {
         isEmailAndPhoneValid(request.email(), request.phone(), null);
         User newUser = User.builder()
                 .firstName(request.firstName())
@@ -70,7 +69,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUser(Integer userId, UpdateUserRequest request) {
+    public UserDTO updateUser(Integer userId, UserRequest request) {
         Optional<User> optionalUser = userRepository.findById(userId);
 
         if (optionalUser.isPresent()) {
@@ -124,7 +123,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private String generateUsername(CreateUserRequest request) {
+    private String generateUsername(UserRequest request) {
         final String lastName = request.lastName();
         final String firstName = request.firstName();
         final LocalDate dob = request.dob();
@@ -143,10 +142,18 @@ public class UserServiceImpl implements UserService {
             case OFFICER -> roleAbbreviation = "co";
         }
 
-        return firstName + lastNameShortened + dobFormatted + roleAbbreviation;
+        //
+
+        String createdUsername = firstName + lastNameShortened + dobFormatted + roleAbbreviation;
+
+        // check for username existence
+        // count number of occurrences with such username
+        // +1 to the total number
+
+        return createdUsername;
     }
 
-    private String generatePassword(CreateUserRequest request) {
+    private String generatePassword(UserRequest request) {
         final String firstName = request.firstName();
         final LocalDate dob = request.dob();
 
