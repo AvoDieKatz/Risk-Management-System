@@ -21,3 +21,6 @@ export * from "./UserManagementPage.jsx";
 
 export { default as ContactPage } from "./ContactPage.jsx";
 export * from "./ContactPage.jsx";
+
+export { default as NotFoundPage } from "./NotFoundPage.jsx";
+export * from "./NotFoundPage.jsx";

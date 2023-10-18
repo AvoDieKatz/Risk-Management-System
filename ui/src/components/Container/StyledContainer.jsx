@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Box, Paper, styled } from "@mui/material";
+import { Box, styled } from "@mui/material";
 
 const CenteredBox = styled(Box)(() => ({
     width: "100%",

@@ -16,6 +16,7 @@ import { MemoryRouter as RouterProvider } from "react-router-dom";
 import constants from "./shared/constants";
 import { ThemeProvider } from "@mui/material";
 import { appTheme } from "./shared/styles.js";
+import { AuthProvider } from "./contexts/AuthContext.jsx";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -52,16 +53,18 @@ const AppSetup = ({ children }) => {
     return (
         <ThemeProvider theme={appTheme}>
             <RouterProvider>
-                <AlertProvider>
-                    <QueryClientProvider client={queryClient}>
-                        {children}
-                        <Notification />
-                        <ReactQueryDevtools
-                            initialIsOpen={false}
-                            position="bottom-right"
-                        />
-                    </QueryClientProvider>
-                </AlertProvider>
+                <QueryClientProvider client={queryClient}>
+                    <AuthProvider>
+                        <AlertProvider>
+                            {children}
+                            <Notification />
+                            <ReactQueryDevtools
+                                initialIsOpen={false}
+                                position="bottom-right"
+                            />
+                        </AlertProvider>
+                    </AuthProvider>
+                </QueryClientProvider>
             </RouterProvider>
         </ThemeProvider>
     );

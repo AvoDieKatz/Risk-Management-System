@@ -81,10 +81,10 @@ const LoginForm = () => {
                 width: 360,
             }}
         >
-            <Typography variant="h4" align="center">
+            <Typography variant="h4" align="center" letterSpacing={2}>
                 LOGIN
             </Typography>
-            <Stack spacing={3} mt={2} justifyContent={"center"}>
+            <Stack spacing={3} mt={3} justifyContent={"center"}>
                 <Controller
                     name="username"
                     control={control}
