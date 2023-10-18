@@ -1,0 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,400;0,500;0,600;1,200;1,400;1,500;1,600&display=swap");
+
+body {
+    font-family: "Poppins", "Open Sans", "sans-serif", "-apple-system";
+    margin: 0;
+}
+
+p {
+    font-weight: 400;
+}
+
+p.text-thin {
+    font-weight: 200;
+}
+
+p.text-bold {
+    font-weight: 600;
+}
