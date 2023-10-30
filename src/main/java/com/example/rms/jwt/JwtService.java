@@ -1,14 +1,17 @@
 package com.example.rms.jwt;
 
+import com.example.rms.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.security.Principal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,8 +53,20 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(UserDetails userDetails) {
-        return buildToken(new HashMap<>(), userDetails);
+//    public String generateToken(UserDetails userDetails) {
+//        return buildToken(new HashMap<>(), userDetails);
+//    }
+
+    public String generateToken(User user) {
+        Map<String, Object> extraClaims = new HashMap<>();
+
+        HashMap<String, String> userClaim = new HashMap<>();
+        userClaim.put("firstName", user.getFirstName());
+        userClaim.put("lastName", user.getLastName());
+        userClaim.put("role", String.valueOf(user.getAuthorities().iterator().next()));
+
+        extraClaims.put("user", userClaim);
+        return buildToken(extraClaims, user);
     }
 
     public String buildToken(Map<String, Object> extraClaims, UserDetails userDetails) {
