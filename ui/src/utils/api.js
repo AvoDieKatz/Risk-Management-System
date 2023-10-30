@@ -1,14 +1,23 @@
 import axios from "axios";
+import { getTokenFromStorage } from "./storage";
 
-const url = "https://jsonplaceholder.typicode.com";
+const url =
+    process.env.NODE_ENV === "production"
+        ? "{productionURL}"
+        : "http://localhost:8080/api";
 
 const instance = axios.create({
     baseURL: url,
     headers: {
-        // "X-Requested-With": "XMLHttpRequest",
         Accept: "application/json",
     },
-    // withCredentials: true,
+});
+
+instance.interceptors.request.use((config) => {
+    const token = getTokenFromStorage("token");
+    console.log("Interceptor run, token =", token);
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
 });
 
 // instance.interceptors.response.use(

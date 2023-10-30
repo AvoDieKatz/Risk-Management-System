@@ -1,9 +1,9 @@
 import React from "react";
 import { Button, Stack, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import StyledContainer from "../components";
+import StyledContainer from "../../components";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
-import constants from "../shared/constants";
+import constants from "../../shared/constants";
 
 const NotFoundPage = () => {
     return (

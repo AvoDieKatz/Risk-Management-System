@@ -19,4 +19,10 @@ export * from "./Button/RmsButton.jsx";
 export { default as DataTable } from "./Table/DataTable.jsx";
 export * from "./Table/DataTable.jsx";
 
+export { default as AppDialog } from "./Dialog/AppDialog.jsx";
+export * from "./Dialog/AppDialog.jsx";
+
+export { default as ExpirationDialog } from "./Dialog/ExpirationDialog.jsx";
+export * from "./Dialog/ExpirationDialog.jsx";
+
 export { default } from "./Container/StyledContainer.jsx";

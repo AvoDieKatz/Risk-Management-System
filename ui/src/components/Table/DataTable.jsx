@@ -76,6 +76,12 @@ const DataTable = ({ data, columns, setSelectedData }) => {
         [pageIndex, pageSize]
     );
 
+    // Avoid a layout jump when reaching the last page with empty rows.
+    const emptyRows =
+        pageIndex > 0
+            ? Math.max(0, (1 + pageIndex) * pageSize - data.length)
+            : 0;
+
     const table = useReactTable({
         data: data,
         columns: columns,
@@ -112,22 +118,22 @@ const DataTable = ({ data, columns, setSelectedData }) => {
         <>
             <Grid
                 container
-                justifyContent={"space-between"}
+                justifyContent={"flex-end"}
                 alignItems={"flex-end"}
                 columnSpacing={2}
             >
-                <Grid flexGrow={2}>
+                {/* <Grid flexGrow={2}>
                     <AddRecordButton label={"Add User"} />
-                </Grid>
+                </Grid> */}
                 <Grid>
                     <FilterOption size={"small"} />
                 </Grid>
                 <Grid>
                     <TextField
-                        label="Search field"
+                        label="Search"
                         type="search"
                         size="small"
-                        variant={"standard"}
+                        variant={"outlined"}
                         value={globalFilter ?? ""}
                         onChange={(event) =>
                             setGlobalFilter(event.target.value)
@@ -198,6 +204,16 @@ const DataTable = ({ data, columns, setSelectedData }) => {
                                 ))}
                             </TableRow>
                         ))}
+
+                        {emptyRows > 0 && (
+                            <TableRow
+                                style={{
+                                    height: 52 * emptyRows, // 52px by MUI Guidelines
+                                }}
+                            >
+                                <TableCell colSpan={6} />
+                            </TableRow>
+                        )}
                     </TableBody>
                 </Table>
             </TableContainer>

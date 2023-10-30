@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { MainLayout, PublicLayout } from "../layouts";
-import { AuthContext } from "../contexts/AuthContext.jsx";
+import { AuthContext } from "../contexts";
+import constants from "../shared/constants";
 
 export const PublicRoute = () => {
     const location = useLocation();
@@ -28,10 +29,13 @@ export const PrivateRoute = () => {
 
 export const ProtectedRoute = ({ allowedRoles }) => {
     const location = useLocation();
-    const { userAuthentication } = useContext(AuthContext);
+    const {
+        userAuthentication: { user },
+    } = useContext(AuthContext);
 
-    return allowedRoles?.includes(userAuthentication?.role) ? (
-        <MainLayout />
+    // return allowedRoles?.includes(user?.role) ? (
+    return allowedRoles?.includes(constants.roles[user?.role]) ? (
+        <Outlet />
     ) : (
         <Navigate to="/404" state={{ from: location }} replace />
     );

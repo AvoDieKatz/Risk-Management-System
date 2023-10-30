@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import {
     Box,
@@ -13,10 +13,91 @@ import {
     Avatar,
     IconButton,
     Collapse,
+    ListItemIcon,
+    LinearProgress,
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useLocation, Link } from "react-router-dom";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { AuthContext } from "../../contexts";
+import constants from "../../shared/constants";
+import authService from "../../services/AuthService";
+
+const { ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_CRO } = constants.roles;
+
+const listItemsMapping = [
+    {
+        path: "",
+        label: "Dashboard",
+        sublist: [],
+        permittedRoles: [ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_CRO],
+    },
+    {
+        path: "thread",
+        label: "Thread",
+        sublist: [
+            {
+                path: "",
+                label: "Active Threads",
+                permittedRoles: [
+                    ROLE_ANALYST,
+                    ROLE_MANAGER,
+                    ROLE_ADMIN,
+                    ROLE_CRO,
+                ],
+            },
+            {
+                path: "assignments",
+                label: "Your Assignments",
+                permittedRoles: [ROLE_ANALYST],
+            },
+        ],
+        permittedRoles: [ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_CRO],
+    },
+    {
+        path: "meeting",
+        label: "Meeting",
+        sublist: [],
+        permittedRoles: [ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_CRO],
+    },
+    {
+        path: "policy",
+        label: "Policy",
+        sublist: [],
+        permittedRoles: [ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_CRO],
+    },
+    {
+        path: "admin",
+        label: "Admin",
+        sublist: [
+            {
+                path: "user",
+                label: "User Management",
+                permittedRoles: [ROLE_ADMIN],
+            },
+        ],
+        permittedRoles: [ROLE_ADMIN],
+    },
+
+    /**
+     *
+     * Below routes are for development purposes only
+     *
+     */
+    {
+        path: "test",
+        label: "Test Page",
+        sublist: [],
+        permittedRoles: [ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_CRO],
+    },
+    {
+        path: "login",
+        label: "Login Page",
+        sublist: [],
+        permittedRoles: [ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_CRO],
+    },
+];
 
 const StyledList = styled(List)(({ theme }) => ({
     "& .MuiListItemButton-root:hover, .MuiListItemButton-root.Mui-selected, .MuiListItemButton-root.Mui-selected:hover":
@@ -46,7 +127,7 @@ const NavTop = () => {
     );
 };
 
-const NavListButton = ({ item, currentLocation }) => {
+const NavListButton = ({ item, currentLocation, currentRole }) => {
     const [listOpen, setListOpen] = useState(false);
     const isSubmenu = item.sublist.length > 0;
 
@@ -64,18 +145,23 @@ const NavListButton = ({ item, currentLocation }) => {
                     </ListItemButton>
                     <Collapse in={listOpen} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
-                            {item.sublist.map((i) => (
-                                <ListItemButton
-                                    key={i.path}
-                                    component={Link}
-                                    to={`/${item.path}/${i.path}`}
-                                    sx={{ pl: 3 }}
-                                    dense={true}
-                                    selected={i.path === currentLocation[2]}
-                                >
-                                    <ListItemText primary={i.label} />
-                                </ListItemButton>
-                            ))}
+                            {item.sublist.map(
+                                (i) =>
+                                    i.permittedRoles?.includes(currentRole) && (
+                                        <ListItemButton
+                                            key={i.path}
+                                            component={Link}
+                                            to={`/${item.path}/${i.path}`}
+                                            sx={{ pl: 3 }}
+                                            dense={true}
+                                            selected={
+                                                i.path === currentLocation[2]
+                                            }
+                                        >
+                                            <ListItemText primary={i.label} />
+                                        </ListItemButton>
+                                    )
+                            )}
                         </List>
                     </Collapse>
                 </>
@@ -92,169 +178,48 @@ const NavListButton = ({ item, currentLocation }) => {
     );
 };
 
-NavListButton.propTypes = {
-    item: PropTypes.shape({
-        path: PropTypes.string,
-        label: PropTypes.string,
-        sublist: PropTypes.array,
-        permittedRoles: PropTypes.array,
-    }),
-    currentLocation: PropTypes.array,
-};
-
-const NavigationList = () => {
-    const listItemsMapping = [
-        {
-            path: "",
-            label: "Dashboard",
-            sublist: [],
-            permittedRoles: [],
-        },
-        {
-            path: "thread",
-            label: "Thread",
-            sublist: [],
-            permittedRoles: [],
-        },
-        {
-            path: "meeting",
-            label: "Meeting",
-            sublist: [],
-            permittedRoles: [],
-        },
-        {
-            path: "policy",
-            label: "Policy",
-            sublist: [],
-            permittedRoles: [],
-        },
-        {
-            path: "admin",
-            label: "Admin",
-            sublist: [
-                {
-                    path: "user",
-                    label: "User Management",
-                },
-            ],
-            permittedRoles: [],
-        },
-        {
-            path: "test",
-            label: "Test Page",
-            sublist: [],
-            permittedRoles: [],
-        },
-        {
-            path: "login",
-            label: "Login Page",
-            sublist: [],
-            permittedRoles: [],
-        },
-    ];
-
+const NavigationList = ({ userRole }) => {
     const path = useLocation();
     const currentPath = path.pathname.split("/");
 
+    console.log("List role = ", userRole)
+    
     return (
         <>
             <StyledList disablePadding={true}>
-                {listItemsMapping.map((item) => (
-                    <NavListButton
-                        key={item.path}
-                        item={item}
-                        currentLocation={currentPath}
-                    />
-                ))}
-
-                {/* <ListItemButton
-                    component={Link}
-                    to="/"
-                    selected={location === ""}
-                >
-                    <ListItemText primary="Dashboard" />
-                </ListItemButton>
-                <ListItemButton
-                    component={Link}
-                    to="/thread"
-                    selected={location === "thread"}
-                >
-                    <ListItemText primary="Thread" />
-                </ListItemButton>
-                <ListItemButton
-                    component={Link}
-                    to="/meeting"
-                    selected={location === "meeting"}
-                >
-                    <ListItemText primary="Meeting" />
-                </ListItemButton>
-                <ListItemButton
-                    component={Link}
-                    to="/policy"
-                    selected={location === "policy"}
-                >
-                    <ListItemText primary="Policy" />
-                </ListItemButton>
-
-                <ListItemButton onClick={handleOpenAdminMenu}>
-                    <ListItemText primary="Admin" />
-                    {adminMenuOpen ? <ExpandLess /> : <ExpandMore />}
-                </ListItemButton>
-                <Collapse in={adminMenuOpen} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                        <ListItemButton
-                            component={Link}
-                            to="/admin/user"
-                            sx={{ pl: 3 }}
-                        >
-                            <ListItemText primary="User Management" />
-                        </ListItemButton>
-                    </List>
-                </Collapse>
-
-                <Divider />
-
-                <ListItemButton
-                    component={Link}
-                    to="/test"
-                    selected={location === "test"}
-                >
-                    <ListItemText primary="Test Page" />
-                </ListItemButton>
-                <ListItemButton
-                    component={Link}
-                    to="/login"
-                    selected={location === "login"}
-                >
-                    <ListItemText primary="Login Form" />
-                </ListItemButton> */}
+                {listItemsMapping.map(
+                    (item) =>
+                        item?.permittedRoles.includes(userRole) && (
+                            <NavListButton
+                                key={item.path}
+                                item={item}
+                                currentLocation={currentPath}
+                                currentRole={userRole}
+                            />
+                        )
+                )}
             </StyledList>
         </>
     );
 };
 
-const ProfileBox = () => {
-    const [profile, setProfile] = useState({
-        fullName: "John Doe",
-        role: "Administrator",
-    });
-
+const ProfileBox = ({ profile }) => {
     return (
         <Box p={1} height={50}>
             <Grid container>
                 <Grid container flexGrow={1} spacing={1}>
                     <Grid>
-                        <Avatar alt={profile.fullName} />
+                        <Avatar alt={profile.lastName} />
                     </Grid>
                     <Grid>
                         <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                            {profile.fullName}
+                            {profile.lastName} {profile.firstName}
                         </Typography>
                         <Typography
                             variant="caption"
                             sx={{ fontStyle: "italic" }}
                         >
-                            {profile.role}
+                            {constants.roles[profile.role]}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -268,7 +233,49 @@ const ProfileBox = () => {
     );
 };
 
+const LogoutButton = () => {
+    const { handleDeauth } = useContext(AuthContext);
+    const [loading, setLoading] = useState(false);
+    const handleLogoutClicked = async () => {
+        setLoading(true);
+        await new Promise((resolve) => setTimeout(resolve, 1350));
+        authService.logout().then((res) => {
+            console.log("Logout Res = ", res);
+            handleDeauth();
+            setLoading(false);
+        });
+    };
+
+    return (
+        <>
+            {loading && <LinearProgress />}
+            <ListItemButton
+                dense={true}
+                onClick={handleLogoutClicked}
+                disabled={loading}
+                sx={{
+                    py: 1,
+                    px: 2,
+                    opacity: loading ? 1 : 0.58,
+                    "&:hover": { opacity: 1 },
+                }}
+            >
+                <ListItemText primary="Logout" />
+                <ListItemIcon sx={{ minWidth: "initial" }}>
+                    <LogoutIcon />
+                </ListItemIcon>
+            </ListItemButton>
+        </>
+    );
+};
+
 const Sidenav = () => {
+    const {
+        userAuthentication: { user },
+    } = useContext(AuthContext);
+
+    console.log("List mapping = ", listItemsMapping)
+    
     return (
         <Grid
             container
@@ -284,15 +291,48 @@ const Sidenav = () => {
                 </Grid>
                 <Divider sx={{ margin: "0.5rem 0rem" }} />
                 <Grid>
-                    <NavigationList />
+                    <NavigationList userRole={constants.roles[user?.role]} />
                 </Grid>
             </Grid>
             <Divider sx={{ margin: "0.5rem 0rem" }} />
             <Grid>
-                <ProfileBox />
+                <ProfileBox profile={user} />
+            </Grid>
+            <Divider />
+            <Grid>
+                <LogoutButton />
             </Grid>
         </Grid>
     );
 };
 
 export default Sidenav;
+
+NavListButton.propTypes = {
+    item: PropTypes.shape({
+        path: PropTypes.string,
+        label: PropTypes.string,
+        sublist: PropTypes.arrayOf(
+            PropTypes.shape({
+                path: PropTypes.string,
+                label: PropTypes.string,
+                permittedRoles: PropTypes.array,
+            })
+        ),
+        permittedRoles: PropTypes.array,
+    }),
+    currentLocation: PropTypes.array,
+    currentRole: PropTypes.string,
+};
+
+NavigationList.propTypes = {
+    userRole: PropTypes.string.isRequired,
+};
+
+ProfileBox.propTypes = {
+    profile: PropTypes.shape({
+        firstName: PropTypes.string,
+        lastName: PropTypes.string,
+        role: PropTypes.string,
+    }),
+};

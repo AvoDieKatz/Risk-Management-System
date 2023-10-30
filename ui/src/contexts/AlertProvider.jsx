@@ -17,7 +17,10 @@ export const AlertProvider = ({ children }) => {
     const [message, setMessage] = useState("");
     const [severity, setSeverity] = useState(constants.notification.INFO);
 
+    const [openModal, setOpenModal] = useState(false)
+
     CustomAlertContext.setOpen = setOpen;
+    CustomAlertContext.setOpenModal = setOpenModal;
     CustomAlertContext.setMessage = setMessage;
     CustomAlertContext.setSeverity = setSeverity;
 
@@ -27,9 +30,11 @@ export const AlertProvider = ({ children }) => {
                 open,
                 message,
                 severity,
+                openModal,
                 setOpen,
                 setMessage,
                 setSeverity,
+                setOpenModal
             }}
         >
             {children}

@@ -9,7 +9,7 @@ import {
     AlertProvider,
     CustomAlertContext,
 } from "./contexts/AlertProvider.jsx";
-import { Notification } from "./components";
+import { ExpirationDialog, Notification } from "./components";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { RoutedApp } from "./routes";
 import { MemoryRouter as RouterProvider } from "react-router-dom";
@@ -17,6 +17,8 @@ import constants from "./shared/constants";
 import { ThemeProvider } from "@mui/material";
 import { appTheme } from "./shared/styles.js";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -36,13 +38,20 @@ const queryClient = new QueryClient({
             }
         },
         onError: (error, query) => {
-            if (query.meta.errorMessage) {
+            if (error.response.status === 401) {
+                // Modal dialog appear
+                CustomAlertContext.setOpenModal(true)
+            }
+            
+            if (query.meta?.errorMessage) {
                 CustomAlertContext.setMessage(
                     query?.meta?.errorMessage ?? constants.messages.ERROR
                 );
-                CustomAlertContext.setSeverity(constants.notification.ERROR);
-                CustomAlertContext.setOpen(true);
+            } else {
+                CustomAlertContext.setMessage(`${error.response.data.message}`);
             }
+            CustomAlertContext.setSeverity(constants.notification.ERROR);
+            CustomAlertContext.setOpen(true);
         },
     }),
 });
@@ -54,16 +63,19 @@ const AppSetup = ({ children }) => {
         <ThemeProvider theme={appTheme}>
             <RouterProvider>
                 <QueryClientProvider client={queryClient}>
-                    <AuthProvider>
-                        <AlertProvider>
-                            {children}
-                            <Notification />
-                            <ReactQueryDevtools
-                                initialIsOpen={false}
-                                position="bottom-right"
-                            />
-                        </AlertProvider>
-                    </AuthProvider>
+                    <LocalizationProvider dateAdapter={AdapterMoment}>
+                        <AuthProvider>
+                            <AlertProvider>
+                                {children}
+                                <Notification />
+                                <ExpirationDialog />
+                                <ReactQueryDevtools
+                                    initialIsOpen={false}
+                                    position="bottom-right"
+                                />
+                            </AlertProvider>
+                        </AuthProvider>
+                    </LocalizationProvider>
                 </QueryClientProvider>
             </RouterProvider>
         </ThemeProvider>
