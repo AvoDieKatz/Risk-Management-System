@@ -11,6 +11,7 @@ import {
     IconButton,
     Box,
     Link,
+    CircularProgress,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Controller, useForm } from "react-hook-form";
@@ -79,7 +80,7 @@ const LoginForm = () => {
         control,
         watch,
         setError,
-        formState: { errors },
+        formState: { isSubmitting, errors },
     } = useForm({
         defaultValues: {
             username: "",
@@ -101,7 +102,7 @@ const LoginForm = () => {
                 if (token) {
                     setTokenToStorage(token);
                     const claims = jwtDecode(token);
-                    console.log("login claims = ", claims)
+                    console.log("login claims = ", claims);
                     setUserAuthentication(claims);
                 }
             })
@@ -160,7 +161,16 @@ const LoginForm = () => {
                         watch("username") === "" || watch("password") === ""
                     }
                 >
-                    LOGIN
+                    LOGIN{" "}
+                    {isSubmitting && (
+                        <CircularProgress
+                            as="span"
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden="true"
+                        />
+                    )}
                 </Button>
 
                 {errors.root?.serverError?.type === 401 && (

@@ -25,4 +25,7 @@ export * from "./Dialog/AppDialog.jsx";
 export { default as ExpirationDialog } from "./Dialog/ExpirationDialog.jsx";
 export * from "./Dialog/ExpirationDialog.jsx";
 
+export { default as Panel } from "./Panel/Panel.jsx";
+export * from "./Panel/Panel.jsx";
+
 export { default } from "./Container/StyledContainer.jsx";

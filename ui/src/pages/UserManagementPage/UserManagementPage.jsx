@@ -5,21 +5,101 @@ import {
     DataTable,
     ErrorIndicator,
     LoadingIndicator,
+    Panel,
     RmsButton,
 } from "../../components";
 import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
-import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import AddIcon from "@mui/icons-material/Add";
 import { Link } from "react-router-dom";
 import accountService from "../../services/AccountService";
+import { Avatar, Stack, Typography } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { getAge, upFirstChar } from "../../utils/utils";
+import moment from "moment";
 
 const DataSidePanel = ({ data }) => {
     return (
-        <Paper elevation={4} sx={{ p: 3 }}>
-            {JSON.stringify(data, null, 2)}
-        </Paper>
+        <Panel>
+            <Stack spacing={3}>
+                <Stack spacing={2} alignItems={"center"}>
+                    <Grid>
+                        <Avatar
+                            alt={data.fullName}
+                            sx={{ width: 112, height: 112 }}
+                        />
+                    </Grid>
+                    <Grid textAlign={"center"}>
+                        <Typography
+                            sx={{ fontSize: "1.5rem", fontWeight: 500 }}
+                        >
+                            {data.fullName}
+                        </Typography>
+                        <Typography
+                            variant="subtitle1"
+                            sx={{ fontStyle: "italic" }}
+                        >
+                            # {data.username}
+                        </Typography>
+                        <Typography variant="subtitle2">{data.role}</Typography>
+                    </Grid>
+                </Stack>
+                <Stack spacing={1}>
+                    <Typography
+                        textAlign={"center"}
+                        sx={{
+                            fontWeight: "600",
+                            backgroundColor: "primary.light",
+                            color: "primary.contrastText",
+                            fontSize: "1.2rem",
+                        }}
+                    >
+                        Demography
+                    </Typography>
+                    <Typography>
+                        Date of Birth: {moment(data.dob).format("DD/MM/YYYY")}{" "}
+                        (Age: {getAge(data.dob)})
+                    </Typography>
+                    <Typography>Gender: {upFirstChar(data.gender)}</Typography>
+                </Stack>
+                <Stack spacing={1}>
+                    <Typography
+                        textAlign={"center"}
+                        sx={{
+                            fontWeight: "600",
+                            backgroundColor: "primary.light",
+                            color: "primary.contrastText",
+                            fontSize: "1.2rem",
+                        }}
+                    >
+                        Contact
+                    </Typography>
+                    <Typography>Phone: {data.phone}</Typography>
+                    <Typography>Email: {data.email}</Typography>
+                </Stack>
+
+                <Stack spacing={1}>
+                    <RmsButton
+                        variant="outlined"
+                        color="info"
+                        sx={{ width: "100%" }}
+                        startIcon={<EditIcon />}
+                    >
+                        Modify
+                    </RmsButton>
+                    <RmsButton
+                        variant="outlined"
+                        color="error"
+                        sx={{ width: "100%" }}
+                        startIcon={<DeleteIcon />}
+                    >
+                        Remove
+                    </RmsButton>
+                </Stack>
+            </Stack>
+        </Panel>
     );
 };
 

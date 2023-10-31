@@ -321,9 +321,8 @@ const AddForm = () => {
                     sx={{ marginLeft: 3 }}
                     disabled={isSubmitting}
                 >
-                    {!isSubmitting ? (
-                        "Submit"
-                    ) : (
+                    Submit{" "}
+                    {isSubmitting && (
                         <CircularProgress
                             as="span"
                             animation="border"

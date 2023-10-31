@@ -85,12 +85,12 @@ const listItemsMapping = [
      * Below routes are for development purposes only
      *
      */
-    {
-        path: "test",
-        label: "Test Page",
-        sublist: [],
-        permittedRoles: [ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_CRO],
-    },
+    // {
+    //     path: "test",
+    //     label: "Test Page",
+    //     sublist: [],
+    //     permittedRoles: [ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_CRO],
+    // },
     {
         path: "login",
         label: "Login Page",
