@@ -25,7 +25,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -97,7 +99,7 @@ public class ThreadServiceImpl implements ThreadService {
         // Check if the category is changed before fetching new category
         if (thread.getCategory().getId() != request.categoryId()) {
             Category newCategory = categoryRepository.findById(request.categoryId()).orElseThrow(
-                    () -> new InvalidRequestBodyException(List.of("The selected category does not exists."))
+                    () -> new InvalidRequestBodyException((HashMap<String, String>) Map.of("category", "The selected category does not exist."))
             );
 
             // Update Thread's category
@@ -181,7 +183,7 @@ public class ThreadServiceImpl implements ThreadService {
                 Thread savedThread = threadRepository.save(thread);
                 return new ThreadDTO(savedThread);
             } else {
-                throw new InvalidRequestBodyException(List.of("New Risk Owner cannot be the same person."));
+                throw new InvalidRequestBodyException((HashMap<String, String>) Map.of("ownerId", "New Risk Owner cannot be the same person."));
             }
         }
         throw new UnsatisfiedConditionException("Cannot change the thread's risk owner now.(Reason: thread is not active).");

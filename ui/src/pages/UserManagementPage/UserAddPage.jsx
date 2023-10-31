@@ -54,7 +54,7 @@ const GenderSelect = ({ field, invalid, error }) => {
     ];
 
     return (
-        <FormControl error={invalid}>
+        <FormControl error={invalid} required>
             <InputLabel id="gender-label">Gender</InputLabel>
             <Select
                 {...field}
@@ -117,7 +117,7 @@ const NumberTextField = ({ field, invalid, error }) => {
 
 const StyledBoxForm = styled(Box)(() => ({
     "& .MuiGrid2-root": {
-        marginBottom: 20,
+        marginBottom: 40,
         width: "100%",
     },
     "& .MuiFormControl-root": {
@@ -156,10 +156,13 @@ const schema = yup.object({
 
 const AddForm = () => {
     const navigate = useNavigate();
+    const handleReturn = () => navigate("/admin/user", { replace: true });
 
     const {
         control,
         handleSubmit,
+        reset,
+        setError,
         formState: { isSubmitting },
     } = useForm({
         defaultValues: {
@@ -196,19 +199,25 @@ const AddForm = () => {
         return mutation
             .mutateAsync(request)
             .then((res) => {
-				console.log("Axios res add account", res)
+                console.log("Axios res add account", res);
                 setMessage("Account successfully added!");
                 setSeverity(constants.notification.SUCCESS);
                 setOpen(true);
+                reset(), handleReturn();
             })
             .catch((err) => {
                 setMessage(err.response?.data?.message ?? err.message);
                 setSeverity(constants.notification.ERROR);
                 setOpen(true);
+
+                const errorMap = err.response.data.errorsMap;
+
+                for (const [key, value] of Object.entries(errorMap)) {
+                    console.log(`Key = ${key}; Value = ${value}`);
+                    setError(key, { message: value });
+                }
             });
     };
-
-    const handleReturn = () => navigate("/admin/user", { replace: true });
 
     return (
         <StyledBoxForm
@@ -242,15 +251,6 @@ const AddForm = () => {
                             error={error}
                             label={"Last Name"}
                         />
-                        // <TextField
-                        //     {...field}
-                        //     value={field.value}
-                        //     onChange={field.onChange}
-                        //     error={invalid}
-                        //     helperText={error?.message}
-                        //     required
-                        //     label="Last Name"
-                        // />
                     )}
                 />
             </Grid>
@@ -306,23 +306,6 @@ const AddForm = () => {
                     )}
                 />
             </Grid>
-            {/* <Grid>
-                <Controller
-                    control={control}
-                    name="role"
-                    render={({ field, fieldState: { invalid, error } }) => (
-                        <TextField
-                            {...field}
-                            value={field.value}
-                            onChange={field.onChange}
-                            error={invalid}
-                            helperText={error?.message}
-                            required
-                            label="Role"
-                        />
-                    )}
-                />
-            </Grid> */}
 
             <Grid container justifyContent={"flex-end"} mt={4}>
                 <Button

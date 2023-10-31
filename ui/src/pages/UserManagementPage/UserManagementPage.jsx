@@ -13,8 +13,6 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import AddIcon from "@mui/icons-material/Add";
 import { Link } from "react-router-dom";
-import { getUsers } from "../../services/TestService";
-import { getAccounts } from "../../services/AccountService";
 import accountService from "../../services/AccountService";
 
 const DataSidePanel = ({ data }) => {
@@ -37,7 +35,6 @@ const UserManagementPage = () => {
         queryKey: ["accounts"],
         queryFn: async () => {
             await new Promise((resolve) => setTimeout(resolve, 550));
-            // const response = await getUsers();
             const response = await accountService.getAccounts();
             return response.data;
         },
@@ -50,20 +47,21 @@ const UserManagementPage = () => {
 
     const columns = [
         tableColumnHelper.accessor("id", {
+            header: () => "ID",
             cell: (info) => info.getValue(),
-            footer: (info) => info.column.id,
         }),
         tableColumnHelper.accessor("fullName", {
-            cell: (info) => <i>{info.getValue()}</i>,
             header: () => <span>Name</span>,
+            cell: (info) => info.getValue(),
         }),
         tableColumnHelper.accessor("gender", {
-            cell: (info) => <i>{info.getValue().substring(0, 1)}</i>,
             header: () => <span>Gender</span>,
+            cell: (info) => info.getValue().substring(0, 1),
         }),
         tableColumnHelper.accessor("dob", {
-            cell: (info) => <i>{info.getValue()}</i>,
             header: () => <span>Date of Birth</span>,
+            cell: (info) => info.getValue(),
+            enableGlobalFilter: false,
         }),
         tableColumnHelper.accessor("username", {
             header: () => "Username",
@@ -77,37 +75,6 @@ const UserManagementPage = () => {
             cell: (info) => info.getValue(),
         }),
     ];
-
-    // const columns = [
-    //     tableColumnHelper.accessor("id", {
-    //         cell: (info) => info.getValue(),
-    //         footer: (info) => info.column.id,
-    //     }),
-    //     tableColumnHelper.accessor((row) => row.name, {
-    //         id: "name",
-    //         cell: (info) => <i>{info.getValue()}</i>,
-    //         header: () => <span>Name</span>,
-    //         footer: (info) => info.column.id,
-    //     }),
-    //     tableColumnHelper.accessor("username", {
-    //         header: () => "Username",
-    //         cell: (info) => info.renderValue(),
-    //         footer: (info) => info.column.id,
-    //     }),
-    //     tableColumnHelper.accessor("phone", {
-    //         header: () => <span>Phone</span>,
-    //         footer: (info) => info.column.id,
-    //     }),
-    //     tableColumnHelper.accessor("address.city", {
-    //         header: "City",
-    //         footer: (info) => info.column.id,
-    //         enableGlobalFilter: false,
-    //     }),
-    //     tableColumnHelper.accessor("company.name", {
-    //         header: "Company",
-    //         footer: (info) => info.column.id,
-    //     }),
-    // ];
 
     return (
         <Grid container disableEqualOverflow spacing={1}>

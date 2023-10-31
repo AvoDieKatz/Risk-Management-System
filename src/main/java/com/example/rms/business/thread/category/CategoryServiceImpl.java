@@ -10,9 +10,7 @@ import com.example.rms.exceptions.UnsatisfiedConditionException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -43,7 +41,9 @@ public class CategoryServiceImpl implements CategoryService {
             Category savedCategory = categoryRepository.save(newCategory);
             return DTOConverter.convertToDTO(savedCategory, CategoryDTO.class);
         }
-        throw new InvalidRequestBodyException(new ArrayList<>(List.of("Name already exists")));
+//        throw new InvalidRequestBodyException(new ArrayList<>(List.of("Name already exists")));
+
+        throw new InvalidRequestBodyException((HashMap<String, String>) Map.of("name", "Name already exists."));
     }
 
     @Override
@@ -52,7 +52,8 @@ public class CategoryServiceImpl implements CategoryService {
         if (optional.isPresent()) {
             Category foundCategory = optional.get();
             if (categoryRepository.existsByName(request.name())) {
-                throw new InvalidRequestBodyException(List.of("Name `" + request.name() + "` is already taken"));
+//                throw new InvalidRequestBodyException(List.of("Name `" + request.name() + "` is already taken"));
+                throw new InvalidRequestBodyException((HashMap<String, String>) Map.of("name", "Name is already taken."));
             }
             foundCategory.setName(request.name());
             Category updatedCategory = categoryRepository.save(foundCategory);

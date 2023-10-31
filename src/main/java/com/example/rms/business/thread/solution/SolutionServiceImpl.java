@@ -15,7 +15,9 @@ import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @Service
@@ -43,7 +45,8 @@ public class SolutionServiceImpl implements SolutionService {
         List<Solution> currentSolutions = thread.getSolutions();
         for (Solution existedSolution : currentSolutions) {
             if (existedSolution.getType() == request.type()) {
-                throw new InvalidRequestBodyException(List.of("This type of solution has already been provided."));
+//                throw new InvalidRequestBodyException(List.of("This type of solution has already been provided."));
+                throw new InvalidRequestBodyException((HashMap<String, String>) Map.of("value", "This type of solution has already been provided."));
             }
         }
 

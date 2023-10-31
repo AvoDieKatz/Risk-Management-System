@@ -10,7 +10,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     // Under the hood
     // @Query("select u from User u where u.username = ?1")
     Optional<User> findByUsername(String username);
-    List<UserSlim> findByRemovedFalse();
+    List<UserSlim> findByRemovedFalseOrderByCreatedAtDesc();
     boolean existsByEmail(String email);
     boolean existsByPhone(String phone);
     boolean existsByEmailAndIdNot(String email, Integer userId);

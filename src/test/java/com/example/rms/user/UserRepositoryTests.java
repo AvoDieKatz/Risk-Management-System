@@ -75,7 +75,7 @@ public class UserRepositoryTests {
 
     @Test
     void GivenNothing_GetUserList_ReturnUsers() {
-        List<UserSlim> userList = userRepository.findByRemovedFalse();
+        List<UserSlim> userList = userRepository.findByRemovedFalseOrderByCreatedAtDesc();
         Assertions.assertThat(userList).isNotNull();
         Assertions.assertThat(userList.size()).isGreaterThanOrEqualTo(2);
     }

@@ -7,14 +7,13 @@ import com.example.rms.user.dto.UserDTO;
 import com.example.rms.user.dto.UserSlim;
 import com.example.rms.user.request.UserRequest;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserSlim> getUserList() {
-        return userRepository.findByRemovedFalse();
+        return userRepository.findByRemovedFalseOrderByCreatedAtDesc();
     }
 
     @Override
@@ -112,16 +111,16 @@ public class UserServiceImpl implements UserService {
     *----------------------------------------*/
 
     private void isEmailAndPhoneValid(String email, String phone, Integer updatingId) {
-        List<String> errorList = new ArrayList<>();
+        HashMap<String, String> errorMap = new HashMap<>();
 
         if (isEmailExists(email, updatingId)) {
-            errorList.add("The email is taken (Custom Exception)");
+            errorMap.put("email", "The email is taken.");
         }
         if (isPhoneExists(phone, updatingId)) {
-            errorList.add("The phone number is taken (Custom Exception");
+            errorMap.put("phone", "The phone number is taken.");
         }
-        if (errorList.size() > 0) {
-            throw new InvalidRequestBodyException(errorList);
+        if (errorMap.size() > 0) {
+            throw new InvalidRequestBodyException(errorMap);
         }
     }
 

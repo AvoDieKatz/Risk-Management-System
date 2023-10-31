@@ -11,7 +11,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -24,7 +26,8 @@ public class AssessServiceImpl implements AssessService {
     @Override
     public <Type> Type performAssess(byte value, Thread thread, Class<Type> classType) {
         if (1 > value || value > 5) {
-            throw new InvalidRequestBodyException(List.of("Value should range from 1-5"));
+//            throw new InvalidRequestBodyException(List.of("Value should range from 1-5"));
+            throw new InvalidRequestBodyException((HashMap<String, String>) Map.of("assessment", "Value should range from 1-5."));
         }
 
         try {

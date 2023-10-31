@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.io.Serial;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -12,13 +13,13 @@ public class InvalidRequestBodyException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private List<String> errors;
+    private HashMap<String, String> errors;
 
-    public InvalidRequestBodyException(List<String> errors) {
+    public InvalidRequestBodyException(HashMap<String, String> errors) {
         this.errors = errors;
     }
 
-    public List<String> getErrors() {
+    public HashMap<String, String> getErrors() {
         return this.errors;
     }
 
