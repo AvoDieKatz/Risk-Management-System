@@ -19,6 +19,9 @@ export * from "./Button/RmsButton.jsx";
 export { default as DataTable } from "./Table/DataTable.jsx";
 export * from "./Table/DataTable.jsx";
 
+export { default as DataList } from "./Table/DataList.jsx";
+export * from "./Table/DataList.jsx";
+
 export { default as AppDialog } from "./Dialog/AppDialog.jsx";
 export * from "./Dialog/AppDialog.jsx";
 

@@ -159,34 +159,34 @@ const UserManagementPage = () => {
     return (
         <Grid container disableEqualOverflow spacing={1}>
             <Grid flex={3}>
-                {/* <Paper elevation={4} sx={{ p: 3 }}> */}
-                {isPaused ? (
-                    <AwaitConnectionIndicator />
-                ) : isLoading ? (
-                    <LoadingIndicator />
-                ) : isError ? (
-                    <ErrorIndicator />
-                ) : (
-                    <>
-                        <RmsButton
-                            component={Link}
-                            to={"add"}
-                            size={"small"}
-                            startIcon={<AddIcon />}
-                            sx={{
-                                position: "absolute",
-                            }}
-                        >
-                            Add User
-                        </RmsButton>
-                        <DataTable
-                            data={fetchedData}
-                            columns={columns}
-                            setSelectedData={setSelectedData}
-                        />
-                    </>
-                )}
-                {/* </Paper> */}
+                <Panel>
+                    {isPaused ? (
+                        <AwaitConnectionIndicator />
+                    ) : isLoading ? (
+                        <LoadingIndicator />
+                    ) : isError ? (
+                        <ErrorIndicator />
+                    ) : (
+                        <>
+                            <RmsButton
+                                component={Link}
+                                to={"add"}
+                                size={"small"}
+                                startIcon={<AddIcon />}
+                                sx={{
+                                    position: "absolute",
+                                }}
+                            >
+                                Add User
+                            </RmsButton>
+                            <DataTable
+                                data={fetchedData}
+                                columns={columns}
+                                setSelectedData={setSelectedData}
+                            />
+                        </>
+                    )}
+                </Panel>
             </Grid>
 
             {selectedData && (
