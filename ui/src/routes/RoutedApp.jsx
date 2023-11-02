@@ -11,6 +11,7 @@ import {
     ThreadPage,
     UserManagementPage,
     UserAddPage,
+    CategoryManagementPage,
 } from "../pages";
 
 /**
@@ -57,6 +58,7 @@ const RoutedApp = () => {
                             <Route index element={<UserManagementPage />} />
                             <Route path="add" element={<UserAddPage />} />
                         </Route>
+                        <Route path="category" element={<CategoryManagementPage />} />
                     </Route>
                 </Route>
             </Route>

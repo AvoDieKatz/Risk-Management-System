@@ -42,8 +42,10 @@ public class CategoryServiceImpl implements CategoryService {
             return DTOConverter.convertToDTO(savedCategory, CategoryDTO.class);
         }
 //        throw new InvalidRequestBodyException(new ArrayList<>(List.of("Name already exists")));
-
-        throw new InvalidRequestBodyException((HashMap<String, String>) Map.of("name", "Name already exists."));
+        HashMap<String, String> errorMap = new HashMap<>();
+        errorMap.put("name", "Name already exists.");
+        throw new InvalidRequestBodyException(errorMap);
+        //        throw new InvalidRequestBodyException((HashMap<String, String>) Map.of("name", "Name already exists."));
     }
 
     @Override
@@ -52,8 +54,12 @@ public class CategoryServiceImpl implements CategoryService {
         if (optional.isPresent()) {
             Category foundCategory = optional.get();
             if (categoryRepository.existsByName(request.name())) {
+                HashMap<String, String> errorMap = new HashMap<>();
+                errorMap.put("name", "Name already exists.");
+                throw new InvalidRequestBodyException(errorMap);
+
 //                throw new InvalidRequestBodyException(List.of("Name `" + request.name() + "` is already taken"));
-                throw new InvalidRequestBodyException((HashMap<String, String>) Map.of("name", "Name is already taken."));
+//                throw new InvalidRequestBodyException((HashMap<String, String>) Map.of("name", "Name is already taken."));
             }
             foundCategory.setName(request.name());
             Category updatedCategory = categoryRepository.save(foundCategory);

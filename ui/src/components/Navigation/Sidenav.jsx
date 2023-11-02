@@ -76,6 +76,11 @@ const listItemsMapping = [
                 label: "User Management",
                 permittedRoles: [ROLE_ADMIN],
             },
+            {
+                path: "category",
+                label: "Category Management",
+                permittedRoles: [ROLE_MANAGER, ROLE_ADMIN]
+            }
         ],
         permittedRoles: [ROLE_ADMIN],
     },

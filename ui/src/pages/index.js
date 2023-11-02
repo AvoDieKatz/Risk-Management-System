@@ -7,8 +7,8 @@
 // export { default as HomePage } from "./AppPage/HomePage.jsx";
 // export * from "./AppPage/HomePage.jsx";
 
-export { default as ThreadPage } from "./ThreadPage.jsx";
-export * from "./ThreadPage.jsx";
+export { default as ThreadPage } from "./ThreadPage/ThreadPage.jsx";
+export * from "./ThreadPage/ThreadPage.jsx";
 
 export { default as MeetingPage } from "./MeetingPage.jsx";
 export * from "./MeetingPage.jsx";
@@ -27,3 +27,4 @@ export * from "./ContactPage.jsx";
 
 export * from "./AppPage";
 export * from "./UserManagementPage";
+export * from "./CategoryPage";
