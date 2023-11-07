@@ -51,7 +51,14 @@ public class SecurityConfig {
                     ex.authenticationEntryPoint(authEntryPoint)
                 )
                 .authorizeHttpRequests((request) -> request.requestMatchers(antMatcher("/api/auth/**")).permitAll()
-                        .requestMatchers(antMatcher("/api/**")).hasRole(Role.ADMIN.name())
+
+                        .requestMatchers(antMatcher("/api/admin/**")).hasRole(Role.ADMIN.name())
+                        .requestMatchers(antMatcher("/api/category/**")).hasAnyRole(Role.ADMIN.name(), Role.MANAGER.name())
+
+                        .requestMatchers(antMatcher("/api/thread/**")).hasAnyRole(Role.ADMIN.name(), Role.MANAGER.name(), Role.ANALYST.name())
+
+                        // ALLOW ALL, DEVELOPMENT ONLY
+//                        .requestMatchers(antMatcher("/api/**")).hasRole(Role.ADMIN.name())
 
                         // Setting up authorization
 //                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/thread")).hasRole(Role.ANALYST.name())

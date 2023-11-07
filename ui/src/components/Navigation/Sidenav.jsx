@@ -68,39 +68,21 @@ const listItemsMapping = [
         permittedRoles: [ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_CRO],
     },
     {
-        path: "admin",
-        label: "Admin",
+        path: "management",
+        label: "Management",
         sublist: [
             {
                 path: "user",
-                label: "User Management",
+                label: "Users",
                 permittedRoles: [ROLE_ADMIN],
             },
             {
                 path: "category",
-                label: "Category Management",
-                permittedRoles: [ROLE_MANAGER, ROLE_ADMIN]
-            }
+                label: "Categories",
+                permittedRoles: [ROLE_MANAGER, ROLE_ADMIN],
+            },
         ],
-        permittedRoles: [ROLE_ADMIN],
-    },
-
-    /**
-     *
-     * Below routes are for development purposes only
-     *
-     */
-    // {
-    //     path: "test",
-    //     label: "Test Page",
-    //     sublist: [],
-    //     permittedRoles: [ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_CRO],
-    // },
-    {
-        path: "login",
-        label: "Login Page",
-        sublist: [],
-        permittedRoles: [ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_CRO],
+        permittedRoles: [ROLE_ADMIN, ROLE_MANAGER],
     },
 ];
 
@@ -187,8 +169,8 @@ const NavigationList = ({ userRole }) => {
     const path = useLocation();
     const currentPath = path.pathname.split("/");
 
-    console.log("List role = ", userRole)
-    
+    console.log("List role = ", userRole);
+
     return (
         <>
             <StyledList disablePadding={true}>
@@ -279,8 +261,8 @@ const Sidenav = () => {
         userAuthentication: { user },
     } = useContext(AuthContext);
 
-    console.log("List mapping = ", listItemsMapping)
-    
+    console.log("List mapping = ", listItemsMapping);
+
     return (
         <Grid
             container
