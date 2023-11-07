@@ -12,6 +12,7 @@ import {
     UserManagementPage,
     UserAddPage,
     CategoryManagementPage,
+    PersonalAssignmentsPage,
 } from "../pages";
 
 /**
@@ -41,7 +42,18 @@ const RoutedApp = () => {
                 <Route index element={<HomePage />} />
                 <Route path="/test" element={<TestPage />} />
 
-                <Route path="/thread" element={<ThreadPage />} />
+                <Route path="/thread">
+                    <Route index element={<ThreadPage />} />
+
+                    <Route path="assignments" element={<PersonalAssignmentsPage />} />
+
+                    {/* <Route element={<ProtectedRoute allowedRoles={[ROLE_MANAGER]} />}>
+                        <Route path="proposal" element={<} />
+                    </Route> */}
+
+                </Route>
+
+
                 <Route path="/meeting" element={<MeetingPage />} />
                 <Route path="/policy" element={<PolicyPage />} />
 
@@ -61,7 +73,7 @@ const RoutedApp = () => {
 
                         <Route
                             element={
-                                <ProtectedRoute allowedRoles={[ROLE_MANAGER]} />
+                                <ProtectedRoute allowedRoles={[ROLE_ADMIN, ROLE_MANAGER]} />
                             }
                         >
                             <Route

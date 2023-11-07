@@ -57,6 +57,12 @@ public class ThreadServiceImpl implements ThreadService {
     }
 
     @Override
+    public List<ThreadCompactProjection> getPersonalThreads() {
+        User requestUser = authService.getAuthenticatedUser();
+        return threadRepository.findByAuthorOrRiskOwnerOrderByCreatedAtDesc(requestUser, requestUser, ThreadCompactProjection.class);
+    }
+
+    @Override
     public ThreadDTO createThread(ThreadRequest request) {
         User requestUser = authService.getAuthenticatedUser();
 

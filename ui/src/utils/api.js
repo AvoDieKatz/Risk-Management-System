@@ -21,6 +21,17 @@ instance.interceptors.request.use((config) => {
 });
 
 // instance.interceptors.response.use(
+//     (response) => response,
+//     (error) => {
+//         if (error.response.status >= 500) {
+//             window.location.href = "/servererror"
+//         } else {
+
+//         }
+//     }
+// )
+
+// instance.interceptors.response.use(
 //     (response) => {
 //         return response;
 //     },

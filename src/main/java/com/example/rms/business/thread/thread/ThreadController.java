@@ -31,6 +31,11 @@ public class ThreadController {
         return ResponseEntity.ok(threadService.getThreadDetail(threadId));
     }
 
+    @GetMapping("/personal")
+    public ResponseEntity<Iterable<ThreadCompactProjection>> getPersonalThreads() {
+        return ResponseEntity.ok(threadService.getPersonalThreads());
+    }
+
     @PostMapping("/{threadId}/assess")
     public ResponseEntity<AssessmentDTO> assessThread(@PathVariable("threadId") int threadId, @RequestBody @Valid AssessmentRequest request) {
         return new ResponseEntity<>(threadService.assessThread(threadId, request), HttpStatus.CREATED);

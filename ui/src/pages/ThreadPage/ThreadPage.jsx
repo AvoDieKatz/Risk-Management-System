@@ -1,85 +1,22 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import {
     AwaitConnectionIndicator,
     DataTable,
-    DataList,
     ErrorIndicator,
     LoadingIndicator,
     Panel,
-    RmsButton as Button,
-} from "../components";
-import { Link } from "react-router-dom";
+} from "../../components";
 import { useQuery } from "@tanstack/react-query";
-import threadService from "../services/ThreadService";
+import threadService from "../../services/ThreadService";
 import { createColumnHelper } from "@tanstack/react-table";
-import {
-    Unstable_Grid2 as Grid,
-    ToggleButton,
-    ToggleButtonGroup,
-} from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import TableViewIcon from "@mui/icons-material/TableView";
-import ViewListIcon from "@mui/icons-material/ViewList";
 
 const MainPanel = ({ ...props }) => {
-    const [viewStyle, setViewStyle] = useState("list");
-
-    const handleViewStyle = (e, style) => {
-        if (style !== null) {
-            setViewStyle(style);
-        }
-    };
-
     return (
-        <Panel>
-            <Grid
-                container
-                spacing={2}
-                sx={{
-                    position: "absolute",
-                }}
-            >
-                <Grid>
-                    <Button
-                        component={Link}
-                        to={"add"}
-                        size={"small"}
-                        startIcon={<AddIcon />}
-                    >
-                        New Thread
-                    </Button>
-                </Grid>
-
-                <Grid>
-                    <ToggleButtonGroup
-                        value={viewStyle}
-                        exclusive
-                        size="small"
-                        onChange={handleViewStyle}
-                        aria-label="view style"
-                        sx={{
-                            position: "absolute",
-                        }}
-                    >
-                        <ToggleButton value="list" aria-label="list view">
-                            <ViewListIcon />
-                        </ToggleButton>
-                        <ToggleButton value="table" aria-label="table view">
-                            <TableViewIcon />
-                        </ToggleButton>
-                    </ToggleButtonGroup>
-                </Grid>
-            </Grid>
-
-            {/* {viewStyle === "list" ? (
-                <DataList {...props} />
-            ) : (
+        <>
+            <Panel>
                 <DataTable {...props} />
-            )} */}
-
-            <DataList {...props} />
-        </Panel>
+            </Panel>
+        </>
     );
 };
 

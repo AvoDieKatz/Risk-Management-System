@@ -15,6 +15,9 @@ public interface ThreadService {
     // Analyst methods
     List<ThreadCompactProjection> getThreads(ThreadStatus status);
     ThreadCompactProjection getThreadDetail(int threadId);
+    List<ThreadCompactProjection> getPersonalThreads();
+
+
     ThreadDTO createThread(ThreadRequest request);
 
     // This method only update the CONTENT of the Thread, it does not contain the Risk Assessment(Likelihood, Severity)

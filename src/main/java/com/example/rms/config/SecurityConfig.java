@@ -53,6 +53,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((request) -> request.requestMatchers(antMatcher("/api/auth/**")).permitAll()
 
                         .requestMatchers(antMatcher("/api/admin/**")).hasRole(Role.ADMIN.name())
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/category")).hasRole(Role.ANALYST.name())
                         .requestMatchers(antMatcher("/api/category/**")).hasAnyRole(Role.ADMIN.name(), Role.MANAGER.name())
 
                         .requestMatchers(antMatcher("/api/thread/**")).hasAnyRole(Role.ADMIN.name(), Role.MANAGER.name(), Role.ANALYST.name())

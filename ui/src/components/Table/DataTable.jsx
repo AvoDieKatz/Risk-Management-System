@@ -13,8 +13,14 @@ import {
     Button,
     TableSortLabel,
     TablePagination,
+    ToggleButton,
+    ToggleButtonGroup,
+    Typography,
+    Avatar,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import ViewListIcon from "@mui/icons-material/ViewList";
+import TableChartIcon from "@mui/icons-material/TableChart";
 import {
     getCoreRowModel,
     flexRender,
@@ -70,6 +76,13 @@ const DataTable = ({ data, columns, setSelectedData }) => {
         pageSize: 5,
     });
     const [selectedRow, setSelectedRow] = useState(-1);
+    const [viewStyle, setViewStyle] = useState("list");
+
+    const handleViewStyle = (e, style) => {
+        if (style !== null) {
+            setViewStyle(style);
+        }
+    };
 
     const pagination = useMemo(
         () => ({ pageIndex, pageSize }),
@@ -122,9 +135,6 @@ const DataTable = ({ data, columns, setSelectedData }) => {
                 alignItems={"flex-end"}
                 columnSpacing={2}
             >
-                {/* <Grid flexGrow={2}>
-                    <AddRecordButton label={"Add User"} />
-                </Grid> */}
                 <Grid>
                     <FilterOption size={"small"} />
                 </Grid>
@@ -143,80 +153,155 @@ const DataTable = ({ data, columns, setSelectedData }) => {
                 </Grid>
             </Grid>
 
-            <TableContainer component={Paper} elevation={2} sx={{ my: 2 }}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id} align="right">
-                                {headerGroup.headers.map((header) => (
-                                    <TableCell key={header.id}>
-                                        <TableSortLabel
-                                            // getIsSorted() return false | enum SortDirection so use sc evaluation to surpress warning
-                                            active={
-                                                header.column.getIsSorted() &&
-                                                true
-                                            }
-                                            direction={
-                                                header.column.getIsSorted()
-                                                    ? header.column.getIsSorted()
-                                                    : "asc"
-                                            }
-                                            onClick={header.column.getToggleSortingHandler()}
+            {viewStyle === "table" ? (
+                <TableContainer component={Paper} elevation={2} sx={{ my: 2 }}>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                        <TableHead>
+                            {table.getHeaderGroups().map((headerGroup) => (
+                                <TableRow key={headerGroup.id} align="right">
+                                    {headerGroup.headers.map((header) => (
+                                        <TableCell key={header.id}>
+                                            <TableSortLabel
+                                                // getIsSorted() return false | enum SortDirection so use sc evaluation to surpress warning
+                                                active={
+                                                    header.column.getIsSorted() &&
+                                                    true
+                                                }
+                                                direction={
+                                                    header.column.getIsSorted()
+                                                        ? header.column.getIsSorted()
+                                                        : "asc"
+                                                }
+                                                onClick={header.column.getToggleSortingHandler()}
+                                            >
+                                                {header.isPlaceholder
+                                                    ? null
+                                                    : flexRender(
+                                                          header.column
+                                                              .columnDef.header,
+                                                          header.getContext()
+                                                      )}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            ))}
+                        </TableHead>
+                        <TableBody>
+                            {table.getRowModel().rows.map((row) => (
+                                <TableRow
+                                    key={row.id}
+                                    hover
+                                    onClick={(event) =>
+                                        handleRowClick(event, row)
+                                    }
+                                    selected={selectedRow === row.id}
+                                    sx={{
+                                        "&:last-child td, &:last-child th": {
+                                            border: 0,
+                                        },
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    {row.getVisibleCells().map((cell) => (
+                                        <TableCell
+                                            key={cell.id}
+                                            component="th"
+                                            scope="row"
                                         >
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(
-                                                      header.column.columnDef
-                                                          .header,
-                                                      header.getContext()
-                                                  )}
-                                        </TableSortLabel>
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        ))}
-                    </TableHead>
-                    <TableBody>
-                        {table.getRowModel().rows.map((row) => (
-                            <TableRow
-                                key={row.id}
-                                hover
-                                onClick={(event) => handleRowClick(event, row)}
-                                selected={selectedRow === row.id}
-                                sx={{
-                                    "&:last-child td, &:last-child th": {
-                                        border: 0,
-                                    },
-                                    cursor: "pointer",
-                                }}
-                            >
-                                {row.getVisibleCells().map((cell) => (
-                                    <TableCell
-                                        key={cell.id}
-                                        component="th"
-                                        scope="row"
-                                    >
-                                        {flexRender(
-                                            cell.column.columnDef.cell,
-                                            cell.getContext()
-                                        )}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        ))}
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext()
+                                            )}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            ))}
 
-                        {emptyRows > 0 && (
-                            <TableRow
-                                style={{
-                                    height: 52 * emptyRows, // 52px by MUI Guidelines
-                                }}
-                            >
-                                <TableCell colSpan={6} />
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                            {emptyRows > 0 && (
+                                <TableRow
+                                    style={{
+                                        height: 52 * emptyRows, // 52px by MUI Guidelines
+                                    }}
+                                >
+                                    <TableCell colSpan={6} />
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            ) : (
+                <>
+                    {table.getRowModel().rows.map((row) => (
+                        <Paper
+                            key={row.id}
+                            elevation={3}
+                            sx={{
+                                my: 2,
+                                p: 2,
+                                cursor: "pointer",
+                                "&:hover": {
+                                    backgroundColor: "rgba(0,0,0,0.04)",
+                                },
+                            }}
+                        >
+                            <Grid container direction={"column"}>
+                                <Grid
+                                    container
+                                    justifyContent={"space-between"}
+                                    sx={{ color: "rgba(0,0,0,0.4)" }}
+                                >
+                                    <Typography>#{row.original.id}</Typography>
+                                    <Typography>
+                                        Status: {row.original.status}
+                                    </Typography>
+                                </Grid>
+                                <Grid container>
+                                    <Grid
+                                        container
+                                        direction={"column"}
+                                        flexGrow={5}
+                                    >
+                                        <Typography
+                                            sx={{
+                                                fontWeight: 600,
+                                                fontSize: "1.5rem",
+                                            }}
+                                        >
+                                            {row.original.title}
+                                        </Typography>
+                                        <Typography
+                                            sx={{
+                                                fontStyle: "italic",
+                                                color: "rgba(0,0,0,0.6)",
+                                            }}
+                                        >
+                                            Category:{" "}
+                                            {row.original.category.name}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid
+                                        container
+                                        alignItems={"center"}
+                                        flexGrow={1}
+                                    >
+                                        Owner:{" "}
+                                        <Avatar
+                                            alt={
+                                                row.original.riskOwner.fullName
+                                            }
+                                            sx={{ ml: 1, mr: 2 }}
+                                        />
+                                        <Typography component={"span"}>
+                                            {row.original.riskOwner.fullName}
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Paper>
+                    ))}
+                </>
+            )}
 
             <Grid
                 container
@@ -224,6 +309,23 @@ const DataTable = ({ data, columns, setSelectedData }) => {
                 alignItems={"center"}
                 spacing={2}
             >
+                <Grid>
+                    <ToggleButtonGroup
+                        value={viewStyle}
+                        exclusive
+                        size="small"
+                        onChange={handleViewStyle}
+                        aria-label="view style"
+                    >
+                        <ToggleButton value="list" aria-label="list view">
+                            <ViewListIcon />
+                        </ToggleButton>
+                        <ToggleButton value="table" aria-label="table view">
+                            <TableChartIcon />
+                        </ToggleButton>
+                    </ToggleButtonGroup>
+                </Grid>
+
                 <Grid>
                     <DataTablePagination table={table} />
                 </Grid>

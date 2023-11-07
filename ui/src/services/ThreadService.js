@@ -2,10 +2,13 @@ import api from "../utils/api.js";
 
 const basePath = "/thread";
 export default {
-    getThreads: () => api.get(`${basePath}`),
+    getThreads: (paramStatus = "ACTIVE") =>
+        api.get(`${basePath}`, { params: { status: paramStatus } }),
 
     getSingleThread: (threadId) => api.get(`${basePath}/${threadId}`),
 
+    getPersonalThreads: () => api.get(`${basePath}/personal`),
+    
     createThread: (request) => api.post(`${basePath}`, request),
 
     updateThread: (threadId, request) =>
