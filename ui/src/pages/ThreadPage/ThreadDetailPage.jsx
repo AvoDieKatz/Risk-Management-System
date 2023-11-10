@@ -43,7 +43,7 @@ import constants from "../../shared/constants";
 
 const AssessmentRatingBar = ({ data }) => {
     const reversedDataArr = [...data].reverse();
-    return <AssessmentRating defaultValue={reversedDataArr[0].value} />;
+    return <AssessmentRating value={reversedDataArr[0].value} />;
 };
 
 const AssessmentLineChart = ({ data }) => {
@@ -222,7 +222,7 @@ const Assessment = ({ threadId }) => {
                     open={openDialog}
                     handleClose={handleDialogClose}
                     threadData={{
-                        id: 1,
+                        id: threadId,
                         likelihoodList: data.likelihoodList,
                         severityList: data.severityList,
                     }}

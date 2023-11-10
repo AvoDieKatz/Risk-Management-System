@@ -4,16 +4,19 @@ INSERT INTO tbl_user (id, first_name, last_name, gender, email,
                       removed, created_at, updated_at, role)
 VALUES (1, 'Tung', 'Tran', 'MALE', 'tung@mail.com',
         'tungdoe', '$2a$12$4VuBx1.kGOggu0B/kBA0duL9zyjF4.2g5rsCj9rWBLB01L8..TfEm',
-        '01234455678', '1999-02-20', FALSE, NOW(), NOW(), 'ADMIN'),
-       (2, 'Avo', 'Tran', 'MALE', 'avo@mail.com',
+        '01234455670', '1999-02-20', FALSE, NOW(), NOW(), 'ADMIN'),
+       (2, 'Avo', 'Tran', 'OTHERS', 'avo@mail.com',
         'avodoe', '$2a$12$4VuBx1.kGOggu0B/kBA0duL9zyjF4.2g5rsCj9rWBLB01L8..TfEm',
-        '02234455678', '1999-11-10', FALSE, NOW(), NOW(), 'ANALYST'),
+        '02234455987', '1999-11-10', FALSE, NOW(), NOW(), 'ANALYST'),
        (3, 'Man', 'Tran', 'MALE', 'man@mail.com',
         'managerdoe', '$2a$12$4VuBx1.kGOggu0B/kBA0duL9zyjF4.2g5rsCj9rWBLB01L8..TfEm',
-        '03234455678', '1999-11-10', FALSE, NOW(), NOW(), 'MANAGER'),
+        '03234133678', '1999-11-10', FALSE, NOW(), NOW(), 'MANAGER'),
        (4, 'Ceo', 'Tran', 'FEMALE', 'ceo@mail.com',
         'ceodoe', '$2a$12$4VuBx1.kGOggu0B/kBA0duL9zyjF4.2g5rsCj9rWBLB01L8..TfEm',
-        '04234455678', '1999-11-10', FALSE, NOW(), NOW(), 'OFFICER');
+        '04234412278', '1999-11-10', FALSE, NOW(), NOW(), 'OFFICER'),
+       (5, 'Ana', 'Tran', 'FEMALE', 'ana@mail.com',
+        'anadoe', '$2a$12$4VuBx1.kGOggu0B/kBA0duL9zyjF4.2g5rsCj9rWBLB01L8..TfEm',
+        '04234455699', '1999-11-10', FALSE, NOW(), NOW(), 'ANALYST');
 
 
 /**

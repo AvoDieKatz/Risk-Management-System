@@ -86,15 +86,13 @@ const IconContainer = (props) => {
 
 const AssessmentRating = (props) => {
     return (
-        <>
-            <StyledRating
-                {...props}
-                name="assessment rating bar"
-                readOnly
-                IconContainerComponent={IconContainer}
-                getLabelText={(value) => customIcons[value].label}
-            />
-        </>
+        <StyledRating
+            {...props}
+            name="assessment rating bar"
+            readOnly
+            IconContainerComponent={IconContainer}
+            getLabelText={(value) => customIcons[value].label}
+        />
     );
 };
 
