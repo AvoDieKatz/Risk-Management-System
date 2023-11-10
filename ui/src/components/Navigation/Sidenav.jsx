@@ -169,8 +169,6 @@ const NavigationList = ({ userRole }) => {
     const path = useLocation();
     const currentPath = path.pathname.split("/");
 
-    console.log("List role = ", userRole);
-
     return (
         <>
             <StyledList disablePadding={true}>
@@ -192,7 +190,7 @@ const NavigationList = ({ userRole }) => {
 
 const ProfileBox = ({ profile }) => {
     return (
-        <Box p={1} height={50}>
+        <Box p={1}>
             <Grid container>
                 <Grid container flexGrow={1} spacing={1}>
                     <Grid>
@@ -226,8 +224,7 @@ const LogoutButton = () => {
     const handleLogoutClicked = async () => {
         setLoading(true);
         await new Promise((resolve) => setTimeout(resolve, 1350));
-        authService.logout().then((res) => {
-            console.log("Logout Res = ", res);
+        authService.logout().then(() => {
             handleDeauth();
             setLoading(false);
         });
@@ -261,15 +258,13 @@ const Sidenav = () => {
         userAuthentication: { user },
     } = useContext(AuthContext);
 
-    console.log("List mapping = ", listItemsMapping);
-
     return (
         <Grid
             container
             flexDirection={"column"}
             borderRight={`1px solid rgba(0, 0, 0, .2)`}
             sx={{
-                height: "100%",
+                height: "100vh",
             }}
         >
             <Grid container flexGrow={1} flexDirection={"column"}>

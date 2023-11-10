@@ -68,7 +68,7 @@ const DataTablePagination = ({ table }) => {
     );
 };
 
-const DataTable = ({ data, columns, setSelectedData }) => {
+const DataTable = ({ data, columns, setSelectedData, handleItemClick }) => {
     const [sorting, setSorting] = useState();
     const [globalFilter, setGlobalFilter] = useState("");
     const [{ pageIndex, pageSize }, setPagination] = useState({
@@ -192,9 +192,12 @@ const DataTable = ({ data, columns, setSelectedData }) => {
                                 <TableRow
                                     key={row.id}
                                     hover
-                                    onClick={(event) =>
-                                        handleRowClick(event, row)
-                                    }
+                                    
+                                    // onClick={(event) =>
+                                    //     handleRowClick(event, row)
+                                    // }
+                                    onClick={(event) => handleItemClick(event, row.original)}
+                                    
                                     selected={selectedRow === row.id}
                                     sx={{
                                         "&:last-child td, &:last-child th": {
@@ -244,6 +247,9 @@ const DataTable = ({ data, columns, setSelectedData }) => {
                                     backgroundColor: "rgba(0,0,0,0.04)",
                                 },
                             }}
+
+                            onClick={(event) => handleItemClick(event, row.original)}
+                            
                         >
                             <Grid container direction={"column"}>
                                 <Grid
@@ -346,6 +352,7 @@ DataTable.propTypes = {
     data: PropTypes.array.isRequired,
     columns: PropTypes.array.isRequired,
     setSelectedData: PropTypes.func,
+    handleItemClick: PropTypes.func,
 };
 
 export default DataTable;

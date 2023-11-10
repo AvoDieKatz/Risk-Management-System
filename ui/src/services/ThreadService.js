@@ -8,6 +8,8 @@ export default {
     getSingleThread: (threadId) => api.get(`${basePath}/${threadId}`),
 
     getPersonalThreads: () => api.get(`${basePath}/personal`),
+
+    getThreadAssessment: (threadId) => api.get(`${basePath}/${threadId}/assess`),
     
     createThread: (request) => api.post(`${basePath}`, request),
 

@@ -2,6 +2,7 @@ package com.example.rms.business.thread.thread;
 
 import com.example.rms.business.thread.assessment.AssessmentRequest;
 import com.example.rms.business.thread.assessment.AssessmentDTO;
+import com.example.rms.business.thread.thread.dto.ThreadAssessmentResponse;
 import com.example.rms.business.thread.thread.dto.ThreadDTO;
 import com.example.rms.business.thread.thread.dto.ThreadCompactProjection;
 import com.example.rms.business.thread.thread.dto.ThreadRequest;
@@ -29,6 +30,11 @@ public class ThreadController {
     @GetMapping("/{threadId}")
     public ResponseEntity<ThreadCompactProjection> getThreadDetail(@PathVariable("threadId") int threadId) {
         return ResponseEntity.ok(threadService.getThreadDetail(threadId));
+    }
+
+    @GetMapping("/{threadId}/assess")
+    public ResponseEntity<ThreadAssessmentResponse> getThreadAssessments(@PathVariable("threadId") int threadId) {
+        return ResponseEntity.ok(threadService.getThreadAssessments(threadId));
     }
 
     @GetMapping("/personal")

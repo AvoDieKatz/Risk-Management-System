@@ -14,7 +14,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { RoutedApp } from "./routes";
 import { MemoryRouter as RouterProvider } from "react-router-dom";
 import constants from "./shared/constants";
-import { ThemeProvider } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { appTheme } from "./shared/styles.js";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -24,7 +24,7 @@ const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
             staleTime: 1000 * 60 * 5,
-            retry: 1
+            retry: 0,
         },
     },
     queryCache: new QueryCache({
@@ -41,9 +41,9 @@ const queryClient = new QueryClient({
         onError: (error, query) => {
             if (error.response.status === 401) {
                 // Modal dialog appear
-                CustomAlertContext.setOpenModal(true)
+                CustomAlertContext.setOpenModal(true);
             }
-            
+
             if (query.meta?.errorMessage) {
                 CustomAlertContext.setMessage(
                     query?.meta?.errorMessage ?? constants.messages.ERROR
@@ -58,10 +58,9 @@ const queryClient = new QueryClient({
 });
 
 const AppSetup = ({ children }) => {
-    console.log("Setup rendered");
-
     return (
         <ThemeProvider theme={appTheme}>
+            <CssBaseline />
             <RouterProvider>
                 <QueryClientProvider client={queryClient}>
                     <LocalizationProvider dateAdapter={AdapterMoment}>

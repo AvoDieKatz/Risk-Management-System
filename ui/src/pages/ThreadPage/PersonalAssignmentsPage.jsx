@@ -1,9 +1,7 @@
-import React, { useContext, useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState } from "react";
 import {
     AwaitConnectionIndicator,
     DataTable,
-    DataList,
     ErrorIndicator,
     LoadingIndicator,
     Panel,
@@ -12,11 +10,10 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import threadService from "../../services/ThreadService";
 import { createColumnHelper } from "@tanstack/react-table";
-import {
-    Unstable_Grid2 as Grid,
-} from "@mui/material";
+import { Unstable_Grid2 as Grid } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { AddThreadDialog } from "./";
+import { useNavigate } from "react-router-dom";
 
 const MainPanel = ({ ...props }) => {
     const [viewType, setViewType] = useState("assigned");
@@ -72,7 +69,6 @@ const MainPanel = ({ ...props }) => {
 };
 
 const PersonalAssignmentsPage = () => {
-
     const {
         isLoading,
         isError,
@@ -91,6 +87,12 @@ const PersonalAssignmentsPage = () => {
     });
 
     const tableColumnHelper = createColumnHelper();
+
+    const navigate = useNavigate();
+
+    const handleItemClick = (event, item) => {
+        navigate(`/thread/${item.id}`);
+    };
 
     const columns = [
         tableColumnHelper.accessor("id", {
@@ -116,9 +118,6 @@ const PersonalAssignmentsPage = () => {
         tableColumnHelper.accessor("riskOwner.fullName", {
             header: () => <span>Risk Owner</span>,
         }),
-        tableColumnHelper.accessor("riskOwner.fullName", {
-            header: () => <span>Risk Owner</span>,
-        }),
         // tableColumnHelper.display({
         //     id: "action",
         //     cell: ({ row }) => (
@@ -136,7 +135,11 @@ const PersonalAssignmentsPage = () => {
     ) : isError ? (
         <ErrorIndicator />
     ) : (
-        <MainPanel data={fetchedData} columns={columns} />
+        <MainPanel
+            data={fetchedData}
+            columns={columns}
+            handleItemClick={handleItemClick}
+        />
     );
 };
 

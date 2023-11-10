@@ -13,6 +13,7 @@ import {
     UserAddPage,
     CategoryManagementPage,
     PersonalAssignmentsPage,
+    ThreadDetailPage,
 } from "../pages";
 
 /**
@@ -47,6 +48,8 @@ const RoutedApp = () => {
 
                     <Route path="assignments" element={<PersonalAssignmentsPage />} />
 
+                    <Route path=":id" element={<ThreadDetailPage />} />
+                    
                     {/* <Route element={<ProtectedRoute allowedRoles={[ROLE_MANAGER]} />}>
                         <Route path="proposal" element={<} />
                     </Route> */}

@@ -3,16 +3,31 @@
 body {
     font-family: "Poppins", "Open Sans", "sans-serif", "-apple-system";
     margin: 0;
+    height: 100%;
+    overflow: hidden;
 }
 
-p {
-    font-weight: 400;
+/* width */
+::-webkit-scrollbar {
+    width: 2px;
 }
 
-p.text-thin {
-    font-weight: 200;
+::-webkit-scrollbar:hover {
+    width: 4px;
 }
 
-p.text-bold {
-    font-weight: 600;
+/* Track */
+::-webkit-scrollbar-track {
+    opacity: 0;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgba(113, 113, 113, 0.4);
+    border-radius: 24px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(107, 107, 107, 0.6);
 }

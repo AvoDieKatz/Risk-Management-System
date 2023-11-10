@@ -11,10 +11,13 @@ export const appTheme = createTheme({
     },
     typography: {
         fontFamily: "Poppins",
-        fontWeightLight: 200,
-        fontWeightRegular: 400,
-        fontWeightMedium: 500,
-        fontWeightBold: 600,
+        fontWeightLight: 400,
+        fontWeightRegular: 500,
+        fontWeightMedium: 700,
+        fontWeightBold: 900,
+        dimmed: {
+            color: '#696969'
+        }
     },
 
     components: {

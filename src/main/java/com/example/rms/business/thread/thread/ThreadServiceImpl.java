@@ -1,11 +1,14 @@
 package com.example.rms.business.thread.thread;
 
 import com.example.rms.business.auth.AuthenticationService;
+import com.example.rms.business.thread.assessment.likelihood.LikelihoodProjection;
+import com.example.rms.business.thread.assessment.severity.SeverityProjection;
 import com.example.rms.business.thread.category.Category;
 import com.example.rms.business.thread.category.CategoryRepository;
 import com.example.rms.business.thread.assessment.AssessServiceImpl;
 import com.example.rms.business.thread.assessment.AssessmentDTO;
 import com.example.rms.business.thread.assessment.AssessmentRequest;
+import com.example.rms.business.thread.thread.dto.ThreadAssessmentResponse;
 import com.example.rms.business.thread.thread.dto.ThreadDTO;
 import com.example.rms.business.thread.thread.dto.ThreadCompactProjection;
 import com.example.rms.business.thread.feedback.ThreadFeedback;
@@ -52,6 +55,19 @@ public class ThreadServiceImpl implements ThreadService {
         Optional<ThreadCompactProjection> optional = threadRepository.findById(threadId, ThreadCompactProjection.class);
         if (optional.isPresent()) {
             return optional.get();
+        }
+        throw new ResourceNotFoundException("Thread with id " + threadId + " could not be found");
+    }
+
+    @Override
+    public ThreadAssessmentResponse getThreadAssessments(int threadId) {
+        Optional<ThreadCompactProjection> optional = threadRepository.findById(threadId, ThreadCompactProjection.class);
+        if (optional.isPresent()) {
+
+            List<LikelihoodProjection> likelihoodList = assessService.getThreadLikelihoodInLast7Days(threadId);
+            List<SeverityProjection> severityList = assessService.getThreadSeverityInLast7Days(threadId);
+
+            return new ThreadAssessmentResponse(likelihoodList, severityList);
         }
         throw new ResourceNotFoundException("Thread with id " + threadId + " could not be found");
     }

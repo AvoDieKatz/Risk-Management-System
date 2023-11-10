@@ -2,6 +2,7 @@ package com.example.rms.business.thread.thread;
 
 import com.example.rms.business.thread.assessment.AssessmentDTO;
 import com.example.rms.business.thread.assessment.AssessmentRequest;
+import com.example.rms.business.thread.thread.dto.ThreadAssessmentResponse;
 import com.example.rms.business.thread.thread.dto.ThreadDTO;
 import com.example.rms.business.thread.thread.dto.ThreadCompactProjection;
 import com.example.rms.business.thread.thread.dto.ThreadRequest;
@@ -16,6 +17,7 @@ public interface ThreadService {
     List<ThreadCompactProjection> getThreads(ThreadStatus status);
     ThreadCompactProjection getThreadDetail(int threadId);
     List<ThreadCompactProjection> getPersonalThreads();
+    ThreadAssessmentResponse getThreadAssessments(int threadId);
 
 
     ThreadDTO createThread(ThreadRequest request);
