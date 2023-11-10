@@ -13,7 +13,14 @@ import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import {
     Avatar,
     Box,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    InputLabel,
     Skeleton,
+    Slider,
     Stack,
     Tab,
     Tabs,
@@ -21,9 +28,12 @@ import {
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { ResponsiveLine } from "@nivo/line";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import threadService from "../../services/ThreadService";
 import moment from "moment";
+import { Controller, useForm } from "react-hook-form";
+import { useAlert } from "../../contexts";
+import constants from "../../shared/constants";
 
 /**
  *
@@ -129,6 +139,17 @@ const AssessmentLineChart = ({ data }) => {
 };
 
 const Assessment = ({ threadId }) => {
+    const [openDialog, setOpenDialog] = useState(false);
+
+    const handleClick = () => setOpenDialog(true);
+
+    const handleDialogClose = (event, reason) => {
+        if (reason === "backdropClick") {
+            return;
+        }
+        setOpenDialog(false);
+    };
+
     const { isLoading, isError, data } = useQuery({
         queryKey: ["threads", threadId, "assessment"],
         queryFn: async () => {
@@ -187,7 +208,203 @@ const Assessment = ({ threadId }) => {
                     </Box>
                 )}
             </Grid>
+
+            <Button
+                variant={"outlined"}
+                disabled={isLoading}
+                onClick={handleClick}
+            >
+                Assess
+            </Button>
+
+            {openDialog && (
+                <AssessDialog
+                    open={openDialog}
+                    handleClose={handleDialogClose}
+                    threadData={{
+                        id: 1,
+                        likelihoodList: data.likelihoodList,
+                        severityList: data.severityList,
+                    }}
+                />
+            )}
         </>
+    );
+};
+
+const AssessDialog = ({ open, handleClose, threadData }) => {
+    const { id, likelihoodList, severityList } = threadData;
+
+    const revLikelihoodList = [...likelihoodList].reverse();
+    const revSeverityList = [...severityList].reverse();
+    
+    const {
+        control,
+        handleSubmit,
+        reset,
+        formState: { isSubmitting, isDirty },
+    } = useForm({
+        defaultValues: {
+            likelihood: revLikelihoodList[0].value,
+            severity: revSeverityList[0].value,
+        },
+    });
+
+    const queryClient = useQueryClient();
+    const mutation = useMutation({
+        mutationFn: (request) => threadService.assessThread(id, request),
+        onSuccess: () => queryClient.invalidateQueries(["threads", id, "assessment"]),
+    });
+
+    const { setOpen, setMessage, setSeverity } = useAlert();
+
+    const onSubmit = async (data) => {
+        const request = { ...data };
+
+        return mutation
+            .mutateAsync(request)
+            .then(() => {
+                setMessage("Assess Thread!");
+                setSeverity(constants.notification.SUCCESS);
+            })
+            .catch((err) => {
+                setMessage(err.response?.data?.message ?? err.message);
+                setSeverity(constants.notification.ERROR);
+            })
+            .finally(() => {
+                reset();
+                handleClose(), setOpen(true);
+            });
+    };
+
+    const likelihoodMarks = [
+        {
+            value: 1,
+            label: "1",
+        },
+        {
+            value: 2,
+            label: "2",
+        },
+        {
+            value: 3,
+            label: "3",
+        },
+        {
+            value: 4,
+            label: "4",
+        },
+        {
+            value: 5,
+            label: "5",
+        },
+    ];
+
+    const severityMarks = [
+        {
+            value: 1,
+            label: "1",
+        },
+        {
+            value: 2,
+            label: "2",
+        },
+        {
+            value: 3,
+            label: "3",
+        },
+        {
+            value: 4,
+            label: "4",
+        },
+        {
+            value: 5,
+            label: "5",
+        },
+    ];
+
+    return (
+        <Dialog open={open} onClose={handleClose} fullWidth maxWidth={"sm"}>
+            <DialogTitle>Assessment for {moment().format("DD/MM/YYYY")}</DialogTitle>
+            <Box
+                component="form"
+                noValidate
+                autoComplete="off"
+                onSubmit={handleSubmit(onSubmit)}
+            >
+                <DialogContent>
+                    <Grid container spacing={4}>
+                        <Grid xs={12}>
+                            <Controller
+                                control={control}
+                                name="likelihood"
+                                render={({ field }) => (
+                                    <>
+                                        <InputLabel id="likelihood">
+                                            Likelihood
+                                        </InputLabel>
+                                        <Slider
+                                            {...field}
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                            aria-label="Likelihood"
+                                            defaultValue={field.value}
+                                            valueLabelDisplay="auto"
+                                            step={1}
+                                            marks={likelihoodMarks}
+                                            min={1}
+                                            max={5}
+                                        />
+                                    </>
+                                )}
+                            />
+                        </Grid>
+                        <Grid xs={12}>
+                            <Controller
+                                control={control}
+                                name="severity"
+                                render={({ field }) => (
+                                    <>
+                                        <InputLabel id="Severity">
+                                            Severity
+                                        </InputLabel>
+                                        <Slider
+                                            {...field}
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                            aria-label="Severity"
+                                            defaultValue={field.value}
+                                            valueLabelDisplay="auto"
+                                            step={1}
+                                            marks={severityMarks}
+                                            min={1}
+                                            max={5}
+                                        />
+                                    </>
+                                )}
+                            />
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="error">
+                        Cancel
+                    </Button>
+                    <Button type={"submit"} disabled={!isDirty || isSubmitting}>
+                        Create{" "}
+                        {isSubmitting && (
+                            <CircularProgress
+                                as="span"
+                                animation="border"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                            />
+                        )}
+                    </Button>
+                </DialogActions>
+            </Box>
+        </Dialog>
     );
 };
 
@@ -517,7 +734,6 @@ const MainPanel = ({ threadId }) => {
                         </Grid>
 
                         <Assessment threadId={threadId} />
-                        <Button variant={"outlined"}>Assess</Button>
 
                         <Typography variant="h6">Detail</Typography>
                         <Typography variant="body1">
@@ -549,8 +765,6 @@ const ThreadDetailPage = () => {
     );
 };
 
-export default ThreadDetailPage;
-
 MainPanel.propTypes = {
     threadId: PropTypes.string.isRequired,
 };
@@ -576,3 +790,11 @@ AssessmentLineChart.propTypes = {
 AssessmentRatingBar.propTypes = {
     data: PropTypes.array.isRequired,
 };
+
+AssessDialog.propTypes = {
+    open: PropTypes.bool.isRequired,
+    handleClose: PropTypes.func.isRequired,
+    threadData: PropTypes.object.isRequired,
+};
+
+export default ThreadDetailPage;

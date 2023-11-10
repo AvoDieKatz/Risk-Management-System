@@ -31,6 +31,4 @@ export * from "./Panel/Panel.jsx";
 export { default as AssessmentRating } from "./Rating/AssessmentRating.jsx";
 export * from "./Rating/AssessmentRating.jsx";
 
-export { default as TextCard } from "./Card/TextCard.jsx"
-
 export { default } from "./Container/StyledContainer.jsx";
