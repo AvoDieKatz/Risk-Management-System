@@ -41,7 +41,7 @@ import constants from "../../shared/constants";
  *
  */
 
-const AssessmentRatingBar = ({ data }) => {
+export const AssessmentRatingBar = ({ data }) => {
     const reversedDataArr = [...data].reverse();
     return <AssessmentRating value={reversedDataArr[0].value} />;
 };
@@ -668,6 +668,12 @@ const SidePanel = ({ threadId }) => {
  */
 
 const MainPanel = ({ threadId }) => {
+
+    /**
+     * 
+     * Get current user role == Manager and thread status == identified
+     */
+    
     const { isLoading, isError, isPaused, data } = useQuery({
         queryKey: ["threads", threadId],
         queryFn: async () => {

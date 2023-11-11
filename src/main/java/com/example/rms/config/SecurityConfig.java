@@ -56,6 +56,7 @@ public class SecurityConfig {
                         .requestMatchers(antMatcher("/api/admin/**")).hasRole(Role.ADMIN.name())
                         .requestMatchers(antMatcher("/api/category/**")).hasAnyRole(Role.ADMIN.name(), Role.MANAGER.name(), Role.OFFICER.name())
 
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/thread/review")).hasRole(Role.MANAGER.name())
                         .requestMatchers(antMatcher("/api/thread/**")).hasAnyRole(Role.ADMIN.name(), Role.MANAGER.name(), Role.ANALYST.name())
 
                         // ALLOW ALL, DEVELOPMENT ONLY
