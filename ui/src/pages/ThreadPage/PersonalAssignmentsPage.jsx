@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import {
     AwaitConnectionIndicator,
-    DataTable,
     ErrorIndicator,
     LoadingIndicator,
     Panel,
     RmsButton as Button,
+    DataDisplay,
 } from "../../components";
 import { useQuery } from "@tanstack/react-query";
 import threadService from "../../services/ThreadService";
@@ -16,8 +16,15 @@ import { AddThreadDialog } from "./";
 import { useNavigate } from "react-router-dom";
 
 const MainPanel = ({ ...props }) => {
+    const [viewStyle, setViewStyle] = useState("list");
     const [viewType, setViewType] = useState("assigned");
     const [openDialog, setOpenDialog] = useState(false);
+
+    const handleViewStyleChange = (e, style) => {
+        if (style !== null) {
+            setViewStyle(style);
+        }
+    };
 
     const handleViewType = (e, type) => {
         if (type != null) {
@@ -55,7 +62,11 @@ const MainPanel = ({ ...props }) => {
                     </Grid>
                 </Grid>
 
-                <DataTable {...props} />
+                <DataDisplay
+                    {...props}
+                    viewStyle={viewStyle}
+                    onViewStyleChange={handleViewStyleChange}
+                />
             </Panel>
 
             {openDialog && (

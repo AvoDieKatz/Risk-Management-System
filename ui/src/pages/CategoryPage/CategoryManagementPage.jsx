@@ -15,7 +15,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
     AwaitConnectionIndicator,
-    DataTable,
+    DataDisplay,
     ErrorIndicator,
     LoadingIndicator,
     Panel,
@@ -228,6 +228,8 @@ const CategoryManagementPage = () => {
         },
     });
 
+    console.log("Categories = ", fetchedData)
+
     const handleClick = () => {
         setOpenDialog(true);
     };
@@ -275,7 +277,7 @@ const CategoryManagementPage = () => {
                             >
                                 Add Category
                             </Button>
-                            <DataTable
+                            <DataDisplay
                                 data={fetchedData}
                                 columns={columns}
                                 setSelectedData={setSelectedData}

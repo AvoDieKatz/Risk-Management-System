@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import {
+    Avatar,
     Paper,
     Table,
     TableContainer,
@@ -13,10 +14,9 @@ import {
     Button,
     TableSortLabel,
     TablePagination,
-    ToggleButton,
     ToggleButtonGroup,
+    ToggleButton,
     Typography,
-    Avatar,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import ViewListIcon from "@mui/icons-material/ViewList";
@@ -68,26 +68,36 @@ const DataTablePagination = ({ table }) => {
     );
 };
 
-const DataTable = ({ data, columns, setSelectedData, handleItemClick }) => {
+const DataTable = ({
+    data,
+    columns,
+    handleItemClick,
+    viewStyle = "table",
+    onViewStyleChange,
+}) => {
     const [sorting, setSorting] = useState();
     const [globalFilter, setGlobalFilter] = useState("");
     const [{ pageIndex, pageSize }, setPagination] = useState({
         pageIndex: 0,
         pageSize: 5,
     });
-    const [selectedRow, setSelectedRow] = useState(-1);
-    const [viewStyle, setViewStyle] = useState("list");
-
-    const handleViewStyle = (e, style) => {
-        if (style !== null) {
-            setViewStyle(style);
-        }
-    };
 
     const pagination = useMemo(
         () => ({ pageIndex, pageSize }),
         [pageIndex, pageSize]
     );
+
+    const [selectedRow, setSelectedRow] = useState(-1);
+    const handleRowSelected = (event, row) => {
+        if (selectedRow == row.id) {
+            setSelectedRow(-1);
+            if (typeof handleItemClick == "function") handleItemClick(null);
+        } else {
+            setSelectedRow(row.id);
+            if (typeof handleItemClick == "function")
+                handleItemClick(event, row.original);
+        }
+    };
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
@@ -116,16 +126,6 @@ const DataTable = ({ data, columns, setSelectedData, handleItemClick }) => {
         getPaginationRowModel: getPaginationRowModel(),
         getCoreRowModel: getCoreRowModel(),
     });
-
-    const handleRowClick = (event, row) => {
-        if (selectedRow == row.id) {
-            setSelectedRow(-1);
-            setSelectedData(null);
-        } else {
-            setSelectedRow(row.id);
-            setSelectedData(row.original);
-        }
-    };
 
     return (
         <>
@@ -192,12 +192,10 @@ const DataTable = ({ data, columns, setSelectedData, handleItemClick }) => {
                                 <TableRow
                                     key={row.id}
                                     hover
-                                    
-                                    // onClick={(event) =>
-                                    //     handleRowClick(event, row)
-                                    // }
-                                    onClick={(event) => handleItemClick(event, row.original)}
-                                    
+                                    onClick={(event) => {
+                                        // handleItemClick(event, row.original);
+                                        handleRowSelected(event, row);
+                                    }}
                                     selected={selectedRow === row.id}
                                     sx={{
                                         "&:last-child td, &:last-child th": {
@@ -247,9 +245,9 @@ const DataTable = ({ data, columns, setSelectedData, handleItemClick }) => {
                                     backgroundColor: "rgba(0,0,0,0.04)",
                                 },
                             }}
-
-                            onClick={(event) => handleItemClick(event, row.original)}
-                            
+                            onClick={(event) =>
+                                handleItemClick(event, row.original)
+                            }
                         >
                             <Grid container direction={"column"}>
                                 <Grid
@@ -315,22 +313,24 @@ const DataTable = ({ data, columns, setSelectedData, handleItemClick }) => {
                 alignItems={"center"}
                 spacing={2}
             >
-                <Grid>
-                    <ToggleButtonGroup
-                        value={viewStyle}
-                        exclusive
-                        size="small"
-                        onChange={handleViewStyle}
-                        aria-label="view style"
-                    >
-                        <ToggleButton value="list" aria-label="list view">
-                            <ViewListIcon />
-                        </ToggleButton>
-                        <ToggleButton value="table" aria-label="table view">
-                            <TableChartIcon />
-                        </ToggleButton>
-                    </ToggleButtonGroup>
-                </Grid>
+                {onViewStyleChange && (
+                    <Grid>
+                        <ToggleButtonGroup
+                            value={viewStyle}
+                            exclusive
+                            size="small"
+                            onChange={onViewStyleChange}
+                            aria-label="view style"
+                        >
+                            <ToggleButton value="list" aria-label="list view">
+                                <ViewListIcon />
+                            </ToggleButton>
+                            <ToggleButton value="table" aria-label="table view">
+                                <TableChartIcon />
+                            </ToggleButton>
+                        </ToggleButtonGroup>
+                    </Grid>
+                )}
 
                 <Grid>
                     <DataTablePagination table={table} />
@@ -351,8 +351,9 @@ DataTablePagination.propTypes = {
 DataTable.propTypes = {
     data: PropTypes.array.isRequired,
     columns: PropTypes.array.isRequired,
-    setSelectedData: PropTypes.func,
     handleItemClick: PropTypes.func,
+    viewStyle: PropTypes.oneOf(["list", "table"]),
+    onViewStyleChange: PropTypes.func,
 };
 
 export default DataTable;

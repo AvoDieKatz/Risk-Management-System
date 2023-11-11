@@ -52,6 +52,11 @@ const listItemsMapping = [
                 label: "Assignments",
                 permittedRoles: [ROLE_ANALYST],
             },
+            {
+                path: "proposals",
+                label: "Proposals",
+                permittedRoles: [ROLE_MANAGER, ROLE_CRO],
+            }
         ],
         permittedRoles: [ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_CRO],
     },

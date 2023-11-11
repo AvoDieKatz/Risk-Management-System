@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import {
     AwaitConnectionIndicator,
-    DataTable,
+    DataDisplay,
     ErrorIndicator,
     LoadingIndicator,
     Panel,
@@ -106,6 +106,12 @@ const DataSidePanel = ({ data }) => {
 const UserManagementPage = () => {
     const [selectedData, setSelectedData] = useState(null);
 
+    const handleItemClick = (e, value) => {
+        if (value !== null) {
+            setSelectedData(value);
+        }
+    };
+
     const {
         isLoading,
         isError,
@@ -179,10 +185,10 @@ const UserManagementPage = () => {
                             >
                                 Add User
                             </RmsButton>
-                            <DataTable
+                            <DataDisplay
                                 data={fetchedData}
                                 columns={columns}
-                                setSelectedData={setSelectedData}
+                                handleItemClick={handleItemClick}
                             />
                         </>
                     )}

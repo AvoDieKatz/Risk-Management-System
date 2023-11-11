@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     AwaitConnectionIndicator,
-    DataTable,
+    DataDisplay,
     ErrorIndicator,
     LoadingIndicator,
     Panel,
@@ -9,18 +9,34 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import threadService from "../../services/ThreadService";
 import { createColumnHelper } from "@tanstack/react-table";
+import { useNavigate } from "react-router-dom";
 
 const MainPanel = ({ ...props }) => {
+    const [viewStyle, setViewStyle] = useState("list");
+
+    const handleViewStyleChange = (e, style) => {
+        if (style !== null) {
+            setViewStyle(style);
+        }
+    };
+
     return (
-        <>
-            <Panel>
-                <DataTable {...props} />
-            </Panel>
-        </>
+        <Panel>
+            <DataDisplay
+                {...props}
+                viewStyle={viewStyle}
+                onViewStyleChange={handleViewStyleChange}
+            />
+        </Panel>
     );
 };
 
 const ThreadPage = () => {
+    const navigate = useNavigate();
+    const handleItemClick = (event, item) => {
+        navigate(`/thread/${item.id}`);
+    };
+
     const {
         isLoading,
         isError,
@@ -64,9 +80,6 @@ const ThreadPage = () => {
         tableColumnHelper.accessor("riskOwner.fullName", {
             header: () => <span>Risk Owner</span>,
         }),
-        tableColumnHelper.accessor("riskOwner.fullName", {
-            header: () => <span>Risk Owner</span>,
-        }),
         // tableColumnHelper.display({
         //     id: "action",
         //     cell: ({ row }) => (
@@ -84,7 +97,11 @@ const ThreadPage = () => {
     ) : isError ? (
         <ErrorIndicator />
     ) : (
-        <MainPanel data={fetchedData} columns={columns} />
+        <MainPanel
+            data={fetchedData}
+            columns={columns}
+            handleItemClick={handleItemClick}
+        />
     );
 };
 

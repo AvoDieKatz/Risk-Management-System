@@ -14,6 +14,7 @@ import {
     CategoryManagementPage,
     PersonalAssignmentsPage,
     ThreadDetailPage,
+    ProposalsPage,
 } from "../pages";
 
 /**
@@ -49,10 +50,10 @@ const RoutedApp = () => {
                     <Route path="assignments" element={<PersonalAssignmentsPage />} />
 
                     <Route path=":id" element={<ThreadDetailPage />} />
-                    
-                    {/* <Route element={<ProtectedRoute allowedRoles={[ROLE_MANAGER]} />}>
-                        <Route path="proposal" element={<} />
-                    </Route> */}
+
+                    <Route element={<ProtectedRoute allowedRoles={[ROLE_MANAGER, ROLE_CRO]} />}>
+                        <Route path="proposals" element={<ProposalsPage /> } />
+                    </Route>
 
                 </Route>
 

@@ -7,4 +7,7 @@ export * from "./ThreadDetailPage.jsx";
 export { default as PersonalAssignmentsPage } from "./PersonalAssignmentsPage.jsx";
 export * from "./PersonalAssignmentsPage.jsx";
 
+export { default as ProposalsPage } from "./ProposalsPage.jsx";
+export * from "./ProposalsPage.jsx";
+
 export { default as AddThreadDialog } from "./AddThreadDialog.jsx";
