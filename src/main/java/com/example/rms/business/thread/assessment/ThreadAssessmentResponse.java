@@ -1,4 +1,4 @@
-package com.example.rms.business.thread.thread.dto;
+package com.example.rms.business.thread.assessment;
 
 import com.example.rms.business.thread.assessment.likelihood.LikelihoodProjection;
 import com.example.rms.business.thread.assessment.severity.SeverityProjection;

@@ -8,7 +8,7 @@ import com.example.rms.business.thread.category.CategoryRepository;
 import com.example.rms.business.thread.assessment.AssessServiceImpl;
 import com.example.rms.business.thread.assessment.AssessmentDTO;
 import com.example.rms.business.thread.assessment.AssessmentRequest;
-import com.example.rms.business.thread.thread.dto.ThreadAssessmentResponse;
+import com.example.rms.business.thread.assessment.ThreadAssessmentResponse;
 import com.example.rms.business.thread.thread.dto.ThreadDTO;
 import com.example.rms.business.thread.thread.dto.ThreadCompactProjection;
 import com.example.rms.business.thread.feedback.ThreadFeedback;
@@ -28,10 +28,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -67,6 +65,7 @@ public class ThreadServiceImpl implements ThreadService {
             List<LikelihoodProjection> likelihoodList = assessService.getThreadLikelihoodInLast7Days(threadId);
             List<SeverityProjection> severityList = assessService.getThreadSeverityInLast7Days(threadId);
 
+            // need to perform formatting here
             return new ThreadAssessmentResponse(likelihoodList, severityList);
         }
         throw new ResourceNotFoundException("Thread with id " + threadId + " could not be found");
@@ -114,12 +113,11 @@ public class ThreadServiceImpl implements ThreadService {
         Thread thread = threadRepository.findById(threadId).orElseThrow(
                 () -> new ResourceNotFoundException("Thread with Id " + threadId + " cannot be found")
         );
-        User requestUser = authService.getAuthenticatedUser();
 
-        checkUpdateAllowance(thread.getRiskOwner().getId(), requestUser.getId(), thread.getStatus());
+        checkUpdateAllowance(thread.getRiskOwner().getId(), thread.getStatus());
 
         // Check if the category is changed before fetching new category
-        if (thread.getCategory().getId() != request.categoryId()) {
+        if (!Objects.equals(thread.getCategory().getId(), request.categoryId())) {
             Category newCategory = categoryRepository.findById(request.categoryId()).orElseThrow(
                     () -> new InvalidRequestBodyException((HashMap<String, String>) Map.of("category", "The selected category does not exist."))
             );
@@ -133,15 +131,6 @@ public class ThreadServiceImpl implements ThreadService {
         thread.setDescription(request.description());
 
         return new ThreadDTO(threadRepository.save(thread));
-    }
-
-    private void checkUpdateAllowance(int threadOwnerId, int requestUserId, ThreadStatus status) {
-        if (threadOwnerId == requestUserId) {
-            if (status == ThreadStatus.REJECTED || status == ThreadStatus.RESOLVED)
-                throw new UnsatisfiedConditionException("Current Thread is no longer active, alteration is forbidden.");
-        } else {
-            throw new ForbiddenActionException("You do not have permission to alter this thread.");
-        }
     }
 
     @Override
@@ -167,6 +156,8 @@ public class ThreadServiceImpl implements ThreadService {
         Thread thread = threadRepository.findById(threadId).orElseThrow(
                 () -> new ResourceNotFoundException("Thread id " + threadId + " could not be found")
         );
+
+        checkUpdateAllowance(thread.getRiskOwner().getId(), thread.getStatus());
 
         Likelihood assessedLikelihood = assessService.performAssess(
                 request.likelihood(), thread, Likelihood.class
@@ -245,6 +236,17 @@ public class ThreadServiceImpl implements ThreadService {
             }
         } else {
             throw new UnsatisfiedConditionException("The thread does not except review now.");
+        }
+    }
+
+    private void checkUpdateAllowance(int threadOwnerId, ThreadStatus status) {
+        User requestUser = authService.getAuthenticatedUser();
+
+        if (threadOwnerId == requestUser.getId()) {
+            if (status == ThreadStatus.REJECTED || status == ThreadStatus.RESOLVED)
+                throw new UnsatisfiedConditionException("Current Thread is no longer active, alteration is forbidden.");
+        } else {
+            throw new ForbiddenActionException("You do not have permission to alter this thread.");
         }
     }
 }
