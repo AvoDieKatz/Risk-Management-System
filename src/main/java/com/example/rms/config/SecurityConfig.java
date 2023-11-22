@@ -51,13 +51,33 @@ public class SecurityConfig {
                     ex.authenticationEntryPoint(authEntryPoint)
                 )
                 .authorizeHttpRequests((request) -> request.requestMatchers(antMatcher("/api/auth/**")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/category/**")).authenticated()
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/thread/**")).authenticated()
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/thread")).authenticated()
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/thread/**/assess")).authenticated()
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/thread/**/assess")).authenticated()
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/thread/**/comment")).authenticated()
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/thread/**/comment")).authenticated()
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/thread/**/solution")).authenticated()
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/thread/**/solution")).authenticated()
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/thread/**/review")).authenticated()
 
-                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/category")).authenticated()
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/admin/user")).hasAnyRole(Role.ADMIN.name(), Role.MANAGER.name())
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/category")).hasRole(Role.MANAGER.name())
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/thread/**/review")).hasRole(Role.MANAGER.name())
+                        .requestMatchers(antMatcher(HttpMethod.PUT, "/api/thread/**/owner")).hasRole(Role.MANAGER.name())
+
                         .requestMatchers(antMatcher("/api/admin/**")).hasRole(Role.ADMIN.name())
-                        .requestMatchers(antMatcher("/api/category/**")).hasAnyRole(Role.ADMIN.name(), Role.MANAGER.name(), Role.OFFICER.name())
 
-                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/thread/review")).hasRole(Role.MANAGER.name())
-                        .requestMatchers(antMatcher("/api/thread/**")).hasAnyRole(Role.ADMIN.name(), Role.MANAGER.name(), Role.ANALYST.name())
+
+                        // Current working
+//                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/category")).authenticated()
+//                        .requestMatchers(antMatcher("/api/admin/**")).hasRole(Role.ADMIN.name())
+//                        .requestMatchers(antMatcher("/api/category/**")).hasAnyRole(Role.ADMIN.name(), Role.MANAGER.name(), Role.OFFICER.name())
+//
+//                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/thread/review")).hasRole(Role.MANAGER.name())
+//                        .requestMatchers(antMatcher("/api/thread/**")).hasAnyRole(Role.ADMIN.name(), Role.MANAGER.name(), Role.ANALYST.name())
+
 
                         // ALLOW ALL, DEVELOPMENT ONLY
 //                        .requestMatchers(antMatcher("/api/**")).hasRole(Role.ADMIN.name())

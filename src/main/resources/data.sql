@@ -41,10 +41,19 @@ VALUES ('Thread 0', 'Lorem ipsum', 'IDENTIFIED', 1, 2, 2, SUBDATE(NOW(), 10), SU
        ('Talent retention issue', 'Lorem ipsum', 'ACTIVE', 3, 2, 2, SUBDATE(NOW(), 4), SUBDATE(NOW(), 4)),
        ('Code quality', 'Lorem ipsum', 'ACTIVE', 1, 5, 5, SUBDATE(NOW(), 3), SUBDATE(NOW(), 3)),
        ('Legal issues', 'Lorem ipsum', 'ACTIVE', 3, 2, 2, SUBDATE(NOW(), 2), SUBDATE(NOW(), 2)),
-       ('Lost of assets', 'Lorem ipsum', 'ACTIVE', 3, 5, 5, SUBDATE(NOW(), 1), SUBDATE(NOW(), 1));
+       ('Lost of assets', 'Lorem ipsum', 'ACTIVE', 3, 5, 5, SUBDATE(NOW(), 1), SUBDATE(NOW(), 1)),
 
---        ('Legal issues', 'Lorem ipsum', 'REJECTED', 3, 2, 2, SUBDATE(NOW(), 2), SUBDATE(NOW(), 2)),
---        ('Lost of assets', 'Lorem ipsum', 'REJECTED', 3, 5, 5, SUBDATE(NOW(), 1), SUBDATE(NOW(), 1));
+       ('Changes in government rules', 'Lorem ipsum', 'REJECTED', 3, 2, 2, SUBDATE(NOW(), 3), SUBDATE(NOW(), 3)),
+       ('Bad weather', 'Lorem ipsum', 'REJECTED', 3, 5, 5, SUBDATE(NOW(), 2), SUBDATE(NOW(), 2));
+
+INSERT INTO tbl_thread_feedback (content, approval, reviewer_id, thread_id, created_at)
+    VALUES ('LGTM!', true, 3, 5,  SUBDATE(ADDTIME(NOW(), "4:00"), 3)),
+           ('LGTM!', true, 3, 6,  SUBDATE(ADDTIME(NOW(), "3:46"), 3)),
+           ('LGTM!', true, 3, 7,  SUBDATE(ADDTIME(NOW(), "2:39"), 1)),
+           ('LGTM!', true, 3, 8,  SUBDATE(ADDTIME(NOW(), "3:08"), 1)),
+           ('Need more revision', false, 3, 9,  SUBDATE(ADDTIME(NOW(), "1:18"), 2)),
+           ('Not feasible', false, 3, 10,  SUBDATE(ADDTIME(NOW(), "3:31"), 1));
+
 
 /**
   Seed tbl_thread_likelihood
