@@ -15,7 +15,7 @@ public interface LikelihoodRepository extends JpaRepository<Likelihood, Integer>
             "FROM tbl_thread_likelihood WHERE tbl_thread_likelihood.thread_id = ?1 " +
             "GROUP BY DATE(updated_at)) a2 ON a1.updated_at = a2.max) " +
             "INNER JOIN tbl_user u1 ON a1.assessor_id = u1.id " +
-            "ORDER BY a1.id DESC LIMIT 7;",
+            "ORDER BY a1.updated_at ASC LIMIT 7;",
             nativeQuery = true)
     List<LikelihoodProjection> findThreadLikelihoodInLast7Days(int threadId);
 }
