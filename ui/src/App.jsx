@@ -29,7 +29,6 @@ const queryClient = new QueryClient({
     },
     queryCache: new QueryCache({
         onSuccess: (data, query) => {
-            console.log("QUERY FROM QUERY CACHE = ", query);
             if (query.state.dataUpdateCount == 1) {
                 CustomAlertContext.setMessage(
                     query?.meta?.successMessage ?? constants.messages.SUCCESS

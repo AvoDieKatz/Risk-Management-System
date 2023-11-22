@@ -48,6 +48,11 @@ const listItemsMapping = [
                 ],
             },
             {
+                path: "submissions",
+                label: "Submissions",
+                permittedRoles: [ROLE_ANALYST],
+            },
+            {
                 path: "assignments",
                 label: "Assignments",
                 permittedRoles: [ROLE_ANALYST],

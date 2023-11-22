@@ -9,6 +9,7 @@ import com.example.rms.business.thread.assessment.AssessServiceImpl;
 import com.example.rms.business.thread.assessment.AssessmentDTO;
 import com.example.rms.business.thread.assessment.AssessmentRequest;
 import com.example.rms.business.thread.assessment.ThreadAssessmentResponse;
+import com.example.rms.business.thread.feedback.ThreadFeedbackProjection;
 import com.example.rms.business.thread.thread.dto.ThreadDTO;
 import com.example.rms.business.thread.thread.dto.ThreadCompactProjection;
 import com.example.rms.business.thread.feedback.ThreadFeedback;
@@ -72,8 +73,13 @@ public class ThreadServiceImpl implements ThreadService {
     }
 
     @Override
-    public List<ThreadCompactProjection> getPersonalThreads() {
+    public List<ThreadCompactProjection> getPersonalThreads(String type) {
         User requestUser = authService.getAuthenticatedUser();
+        if (type.equals("assignments")) {
+            return threadRepository.findByRiskOwnerOrderByCreatedAtDesc(requestUser, ThreadCompactProjection.class);
+        } else if (type.equals("submissions")) {
+            return threadRepository.findByAuthorOrderByCreatedAtDesc(requestUser, ThreadCompactProjection.class);
+        }
         return threadRepository.findByAuthorOrRiskOwnerOrderByCreatedAtDesc(requestUser, requestUser, ThreadCompactProjection.class);
     }
 
@@ -200,6 +206,18 @@ public class ThreadServiceImpl implements ThreadService {
             }
         }
         throw new UnsatisfiedConditionException("Cannot change the thread's risk owner now.(Reason: thread is not active).");
+    }
+
+
+    @Override
+    public ThreadFeedbackProjection getThreadFeedback(int threadId) {
+        Thread thread = threadRepository.findById(threadId).orElseThrow(
+                () -> new ResourceNotFoundException("Thread '" + threadId + "' does not exist.")
+        );
+
+        return threadFeedbackRepository.findByThread(thread).orElseThrow(
+                () -> new ResourceNotFoundException("Can't find feedback for thread id " + threadId + "!")
+        );
     }
 
     @Override

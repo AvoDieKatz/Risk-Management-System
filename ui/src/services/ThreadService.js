@@ -7,7 +7,7 @@ export default {
 
     getSingleThread: (threadId) => api.get(`${basePath}/${threadId}`),
 
-    getPersonalThreads: () => api.get(`${basePath}/personal`),
+    getPersonalThreads: (type) => api.get(`${basePath}/personal`, { params: { type: type }}),
 
     getThreadAssessment: (threadId) => api.get(`${basePath}/${threadId}/assess`),
     
@@ -26,6 +26,8 @@ export default {
             params: { newOwnerId: paramOwnerId },
         }),
 
-    reviewThread: (threadId, request) =>
+    getThreadReview: (threadId) => api.get(`${basePath}/${threadId}/review`),
+        
+    reviewThread: (threadId, request) => 
         api.post(`${basePath}/${threadId}/review`, request),
 };

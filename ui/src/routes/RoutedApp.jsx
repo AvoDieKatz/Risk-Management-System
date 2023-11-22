@@ -12,7 +12,8 @@ import {
     UserManagementPage,
     UserAddPage,
     CategoryManagementPage,
-    PersonalAssignmentsPage,
+    AssignmentsPage,
+    SubmissionsPage,
     ThreadDetailPage,
     ProposalsPage,
 } from "../pages";
@@ -47,7 +48,10 @@ const RoutedApp = () => {
                 <Route path="/thread">
                     <Route index element={<ThreadPage />} />
 
-                    <Route path="assignments" element={<PersonalAssignmentsPage />} />
+                    <Route element={<ProtectedRoute allowedRoles={[ROLE_ANALYST]}/>}>
+                        <Route path="submissions" element={<SubmissionsPage />} />
+                        <Route path="assignments" element={<AssignmentsPage />} />
+                    </Route>
 
                     <Route path=":id" element={<ThreadDetailPage />} />
 

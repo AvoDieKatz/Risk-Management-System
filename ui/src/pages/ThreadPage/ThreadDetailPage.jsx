@@ -237,7 +237,7 @@ const AssessDialog = ({ open, handleClose, threadData }) => {
 
     const revLikelihoodList = [...likelihoodList].reverse();
     const revSeverityList = [...severityList].reverse();
-    
+
     const {
         control,
         handleSubmit,
@@ -253,7 +253,8 @@ const AssessDialog = ({ open, handleClose, threadData }) => {
     const queryClient = useQueryClient();
     const mutation = useMutation({
         mutationFn: (request) => threadService.assessThread(id, request),
-        onSuccess: () => queryClient.invalidateQueries(["threads", id, "assessment"]),
+        onSuccess: () =>
+            queryClient.invalidateQueries(["threads", id, "assessment"]),
     });
 
     const { setOpen, setMessage, setSeverity } = useAlert();
@@ -325,7 +326,9 @@ const AssessDialog = ({ open, handleClose, threadData }) => {
 
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth={"sm"}>
-            <DialogTitle>Assessment for {moment().format("DD/MM/YYYY")}</DialogTitle>
+            <DialogTitle>
+                Assessment for {moment().format("DD/MM/YYYY")}
+            </DialogTitle>
             <Box
                 component="form"
                 noValidate
@@ -668,12 +671,11 @@ const SidePanel = ({ threadId }) => {
  */
 
 const MainPanel = ({ threadId }) => {
-
     /**
-     * 
+     *
      * Get current user role == Manager and thread status == identified
      */
-    
+
     const { isLoading, isError, isPaused, data } = useQuery({
         queryKey: ["threads", threadId],
         queryFn: async () => {
@@ -697,6 +699,7 @@ const MainPanel = ({ threadId }) => {
                     flex: "1 1 0",
                     overflowY: "auto",
                     overflowX: "hidden",
+                    position: "relative"
                 }}
             >
                 {isPaused ? (
@@ -706,46 +709,64 @@ const MainPanel = ({ threadId }) => {
                 ) : isError ? (
                     <ErrorIndicator />
                 ) : (
-                    <Stack spacing={2}>
-                        <Grid container>
-                            <Button
-                                variant="text"
-                                size="small"
-                                startIcon={<ChevronLeftIcon />}
-                                onClick={handleBackNavigation}
+                    <>
+                        {data?.status === "IDENTIFIED" && (
+                            <Box
+                                sx={{
+                                    width: "100%",
+                                    p: 2,
+                                    bgcolor: "warning.light",
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                }}
                             >
-                                Back to list
-                            </Button>
-                        </Grid>
-                        <Grid container justifyContent={"space-between"}>
-                            <Typography variant="dimmed">
-                                #{data?.id} by {data?.author?.fullName} on{" "}
-                                {moment(data?.createdAt).format(
-                                    "DD/MM/YYYY, HH:mm"
-                                )}
-                            </Typography>
-                            <Typography variant="dimmed">
-                                Status: {data?.status}
-                            </Typography>
-                        </Grid>
+                                <Typography>
+                                    This Thread is being reviewed.
+                                </Typography>
+                            </Box>
+                        )}
+                        <Stack spacing={2} sx={{pt: data?.status === "IDENTIFIED" ? 6 : 0}}>
+                            <Grid container>
+                                <Button
+                                    variant="text"
+                                    size="small"
+                                    startIcon={<ChevronLeftIcon />}
+                                    onClick={handleBackNavigation}
+                                >
+                                    Back to list
+                                </Button>
+                            </Grid>
+                            <Grid container justifyContent={"space-between"}>
+                                <Typography variant="dimmed">
+                                    #{data?.id} by {data?.author?.fullName} on{" "}
+                                    {moment(data?.createdAt).format(
+                                        "DD/MM/YYYY, HH:mm"
+                                    )}
+                                </Typography>
+                                <Typography variant="dimmed">
+                                    Status: {data?.status}
+                                </Typography>
+                            </Grid>
 
-                        <Typography variant="h5">{data?.title}</Typography>
-                        <Grid container justifyContent={"space-between"}>
-                            <Typography>
-                                Category: {data?.category?.name}
-                            </Typography>
-                            <Typography>
-                                Risk Owner: {data?.riskOwner?.fullName}
-                            </Typography>
-                        </Grid>
+                            <Typography variant="h5">{data?.title}</Typography>
+                            <Grid container justifyContent={"space-between"}>
+                                <Typography>
+                                    Category: {data?.category?.name}
+                                </Typography>
+                                <Typography>
+                                    Risk Owner: {data?.riskOwner?.fullName}
+                                </Typography>
+                            </Grid>
 
-                        <Assessment threadId={threadId} />
+                            <Assessment threadId={threadId} />
 
-                        <Typography variant="h6">Detail</Typography>
-                        <Typography variant="body1">
-                            {data?.description}
-                        </Typography>
-                    </Stack>
+                            <Typography variant="h6">Detail</Typography>
+                            <Typography variant="body1">
+                                {data?.description}
+                            </Typography>
+                        </Stack>
+                    </>
                 )}
             </Panel>
         </Box>

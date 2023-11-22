@@ -12,7 +12,7 @@ import threadService from "../../services/ThreadService";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Unstable_Grid2 as Grid } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { AddThreadDialog } from "./";
+import { AddThreadDialog } from ".";
 import { useNavigate } from "react-router-dom";
 
 const MainPanel = ({ ...props }) => {
@@ -79,17 +79,17 @@ const MainPanel = ({ ...props }) => {
     );
 };
 
-const PersonalAssignmentsPage = () => {
+const AssignmentsPage = () => {
     const {
         isLoading,
         isError,
         isPaused,
         data: fetchedData,
     } = useQuery({
-        queryKey: ["threads", "personal"],
+        queryKey: ["threads", "assignments"],
         queryFn: async () => {
             await new Promise((resolve) => setTimeout(resolve, 550));
-            const response = await threadService.getPersonalThreads();
+            const response = await threadService.getPersonalThreads("assignments");
             return response.data;
         },
         meta: {
@@ -154,4 +154,4 @@ const PersonalAssignmentsPage = () => {
     );
 };
 
-export default PersonalAssignmentsPage;
+export default AssignmentsPage;

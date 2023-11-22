@@ -91,7 +91,7 @@ const DataTable = ({
     const handleRowSelected = (event, row) => {
         if (selectedRow == row.id) {
             setSelectedRow(-1);
-            if (typeof handleItemClick == "function") handleItemClick(null);
+            // if (typeof handleItemClick == "function") handleItemClick(null);
         } else {
             setSelectedRow(row.id);
             if (typeof handleItemClick == "function")
@@ -260,11 +260,10 @@ const DataTable = ({
                                         Status: {row.original.status}
                                     </Typography>
                                 </Grid>
-                                <Grid container>
+                                <Grid container justifyContent={"space-between"}>
                                     <Grid
                                         container
                                         direction={"column"}
-                                        flexGrow={5}
                                     >
                                         <Typography
                                             sx={{
@@ -287,7 +286,6 @@ const DataTable = ({
                                     <Grid
                                         container
                                         alignItems={"center"}
-                                        flexGrow={1}
                                     >
                                         Owner:{" "}
                                         <Avatar
