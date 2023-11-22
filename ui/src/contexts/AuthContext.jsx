@@ -1,33 +1,24 @@
 import React, { createContext, useState } from "react";
 import PropTypes from "prop-types";
-import constants from "../shared/constants";
+import jwtDecode from "jwt-decode";
+import { getTokenFromStorage, removeTokenFromStorage } from "../utils/storage";
 
 const AuthContext = createContext();
 
-const getUserAuthentication = () => {
-    return { name: "Tung", role: constants.roles.CRO };
-    // return null;
-};
-
 const AuthProvider = ({ children }) => {
+    const token = getTokenFromStorage();
     const [userAuthentication, setUserAuthentication] = useState(
-        getUserAuthentication()
+        token && jwtDecode(token)
     );
 
-    // const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-    // useEffect(() => {
-    //     // const token = localStorage.getItem("token");
-    //     // Validate token with the server and set isAuthenticated accordingly
-
-    //     const token = "JWT Token";
-
-    //     setIsAuthenticated(!!token);
-    // }, []);
+    const handleDeauth = () => {
+        setUserAuthentication(null);
+        removeTokenFromStorage();
+    };
 
     return (
         <AuthContext.Provider
-            value={{ userAuthentication, setUserAuthentication }}
+            value={{ userAuthentication, setUserAuthentication, handleDeauth }}
         >
             {children}
         </AuthContext.Provider>

@@ -7,12 +7,13 @@ import com.example.rms.user.dto.UserDTO;
 import com.example.rms.user.dto.UserSlim;
 import com.example.rms.user.request.UserRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,10 +23,11 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
+    private PasswordEncoder encoder;
 
     @Override
     public List<UserSlim> getUserList() {
-        return userRepository.findByRemovedFalse();
+        return userRepository.findByRemovedFalseOrderByCreatedAtDesc();
     }
 
     @Override
@@ -57,10 +59,10 @@ public class UserServiceImpl implements UserService {
                 .dob(request.dob())
                 .phone(request.phone())
                 .email(request.email())
-                .username(generateUsername(request))
+                .username(generateUsername(request.email()))
                 .password(generatePassword(request))
                 .removed(false)
-                .role(request.role())
+                .role(Role.ANALYST)
                 .build();
 
         User savedUser = userRepository.save(newUser);
@@ -83,7 +85,6 @@ public class UserServiceImpl implements UserService {
             user.setDob(request.dob());
             user.setEmail(request.email());
             user.setPhone(request.phone());
-            user.setRole(request.role());
 
             User savedUser = userRepository.save(user);
             return DTOConverter.convertToDTO(savedUser, UserDTO.class);
@@ -110,58 +111,32 @@ public class UserServiceImpl implements UserService {
     *----------------------------------------*/
 
     private void isEmailAndPhoneValid(String email, String phone, Integer updatingId) {
-        List<String> errorList = new ArrayList<>();
+        HashMap<String, String> errorMap = new HashMap<>();
 
         if (isEmailExists(email, updatingId)) {
-            errorList.add("The email is taken (Custom Exception)");
+            errorMap.put("email", "The email is taken.");
         }
         if (isPhoneExists(phone, updatingId)) {
-            errorList.add("The phone number is taken (Custom Exception");
+            errorMap.put("phone", "The phone number is taken.");
         }
-        if (errorList.size() > 0) {
-            throw new InvalidRequestBodyException(errorList);
+        if (errorMap.size() > 0) {
+            throw new InvalidRequestBodyException(errorMap);
         }
     }
 
-    private String generateUsername(UserRequest request) {
-        final String lastName = request.lastName();
-        final String firstName = request.firstName();
-        final LocalDate dob = request.dob();
-        final Role role = request.role();
-
-        String lastNameShortened = lastName.substring(0, 1).toLowerCase();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyy");
-        String dobFormatted = formatter.format(dob);
-
-        //Role: Analyst = AN; Manager: MG; Admin: AD; CRO: CO
-        String roleAbbreviation = "";
-        switch (role) {
-            case ANALYST -> roleAbbreviation = "an";
-            case MANAGER -> roleAbbreviation = "mg";
-            case ADMIN -> roleAbbreviation = "ad";
-            case OFFICER -> roleAbbreviation = "co";
-        }
-
-        //
-
-        String createdUsername = firstName + lastNameShortened + dobFormatted + roleAbbreviation;
-
-        // check for username existence
-        // count number of occurrences with such username
-        // +1 to the total number
-
-        return createdUsername;
+    private String generateUsername(String email) {
+        return email.substring(0, email.indexOf("@"));
     }
 
     private String generatePassword(UserRequest request) {
-        final String firstName = request.firstName();
+        final String firstName = request.firstName().toLowerCase();
         final LocalDate dob = request.dob();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyy");
 
         String dobFormatted = formatter.format(dob);
 
-        return firstName + "@" + dobFormatted;
+        return encoder.encode(firstName + "@" + dobFormatted);
     }
 
     private boolean isPhoneExists(String phone, Integer updatingId) {

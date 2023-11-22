@@ -26,7 +26,7 @@ public record UserRequest(
                 message = "Phone number must contain only digits and must be exactly 10 digits")
         @NotBlank(message = "Phone Number is required.")
         String phone,
-        @NotNull(message = "Role is required.")
+//        @NotNull(message = "Role is required.")
         Role role
 ) {
 }

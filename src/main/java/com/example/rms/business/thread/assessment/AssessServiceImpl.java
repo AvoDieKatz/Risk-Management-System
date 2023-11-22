@@ -1,6 +1,8 @@
 package com.example.rms.business.thread.assessment;
 
 import com.example.rms.business.auth.AuthenticationService;
+import com.example.rms.business.thread.assessment.likelihood.LikelihoodProjection;
+import com.example.rms.business.thread.assessment.severity.SeverityProjection;
 import com.example.rms.business.thread.thread.Thread;
 import com.example.rms.business.thread.assessment.likelihood.Likelihood;
 import com.example.rms.business.thread.assessment.likelihood.LikelihoodRepository;
@@ -11,7 +13,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -24,7 +28,8 @@ public class AssessServiceImpl implements AssessService {
     @Override
     public <Type> Type performAssess(byte value, Thread thread, Class<Type> classType) {
         if (1 > value || value > 5) {
-            throw new InvalidRequestBodyException(List.of("Value should range from 1-5"));
+//            throw new InvalidRequestBodyException(List.of("Value should range from 1-5"));
+            throw new InvalidRequestBodyException((HashMap<String, String>) Map.of("assessment", "Value should range from 1-5."));
         }
 
         try {
@@ -52,5 +57,15 @@ public class AssessServiceImpl implements AssessService {
                 IllegalAccessException exception) {
             throw new RuntimeException("Error while performing assessment.");
         }
+    }
+
+    @Override
+    public List<LikelihoodProjection> getThreadLikelihoodInLast7Days(int threadId) {
+        return likelihoodRepository.findThreadLikelihoodInLast7Days(threadId);
+    }
+
+    @Override
+    public List<SeverityProjection> getThreadSeverityInLast7Days(int threadId) {
+        return severityRepository.findThreadSeverityInLast7Days(threadId);
     }
 }

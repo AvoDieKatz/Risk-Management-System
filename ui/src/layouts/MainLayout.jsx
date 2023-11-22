@@ -5,19 +5,24 @@ import { Sidenav } from "../components";
 
 const MainLayout = () => {
     return (
-        <Grid container disableEqualOverflow sx={{ height: "100vh" }}>
+        // <Grid container disableEqualOverflow sx={{ height: "100vh" }}>
+        <Grid container disableEqualOverflow>
             <Grid sx={{ display: { xs: "none", md: "block" }, minWidth: 220 }}>
                 <Sidenav />
             </Grid>
-            <Grid
+            {/* <Grid
                 container
                 disableEqualOverflow
                 direction={"column"}
-                sx={{ flex: 1, height: "100%", overflowY: "auto" }}
+                sx={{ flex: 1, height: "100%" }}
             >
                 <Grid flexGrow={1} sx={{ m: 2 }}>
                     <Outlet />
                 </Grid>
+            </Grid> */}
+
+            <Grid flex={1} sx={{ m: 2 }}>
+                <Outlet />
             </Grid>
         </Grid>
     );

@@ -2,6 +2,8 @@ package com.example.rms.business.thread.thread;
 
 import com.example.rms.business.thread.assessment.AssessmentRequest;
 import com.example.rms.business.thread.assessment.AssessmentDTO;
+import com.example.rms.business.thread.assessment.ThreadAssessmentResponse;
+import com.example.rms.business.thread.feedback.ThreadFeedbackProjection;
 import com.example.rms.business.thread.thread.dto.ThreadDTO;
 import com.example.rms.business.thread.thread.dto.ThreadCompactProjection;
 import com.example.rms.business.thread.thread.dto.ThreadRequest;
@@ -31,6 +33,18 @@ public class ThreadController {
         return ResponseEntity.ok(threadService.getThreadDetail(threadId));
     }
 
+    @GetMapping("/{threadId}/assess")
+    public ResponseEntity<ThreadAssessmentResponse> getThreadAssessments(@PathVariable("threadId") int threadId) {
+        return ResponseEntity.ok(threadService.getThreadAssessments(threadId));
+    }
+
+    @GetMapping("/personal")
+    public ResponseEntity<Iterable<ThreadCompactProjection>> getPersonalThreads(
+            @RequestParam String type
+    ) {
+        return ResponseEntity.ok(threadService.getPersonalThreads(type));
+    }
+
     @PostMapping("/{threadId}/assess")
     public ResponseEntity<AssessmentDTO> assessThread(@PathVariable("threadId") int threadId, @RequestBody @Valid AssessmentRequest request) {
         return new ResponseEntity<>(threadService.assessThread(threadId, request), HttpStatus.CREATED);
@@ -44,6 +58,11 @@ public class ThreadController {
     @PutMapping("/{threadId}")
     public ResponseEntity<ThreadDTO> updateThread(@PathVariable("threadId") int threadId, @RequestBody @Valid ThreadRequest request) {
         return new ResponseEntity<>(threadService.updateThread(threadId, request), HttpStatus.OK);
+    }
+
+    @GetMapping("/{threadId}/review")
+    public ResponseEntity<ThreadFeedbackProjection> getThreadReview(@PathVariable("threadId") int threadId) {
+        return ResponseEntity.ok(threadService.getThreadFeedback(threadId));
     }
 
     @PostMapping("/{threadId}/review")

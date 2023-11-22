@@ -22,5 +22,11 @@ module.exports = {
         ROLE_CRO: "CRO",
         ROLE_MANAGER: "Manager",
         ROLE_ANALYST: "Analyst"
+    },
+    status: {
+        IDENTIFIED: "IDENTIFIED",
+        ACTIVE: "ACTIVE",
+        REJECTED: "REJECTED",
+        RESOLVED: "RESOLVED"
     }
 };

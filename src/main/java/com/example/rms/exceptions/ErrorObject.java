@@ -8,6 +8,7 @@ import java.util.*;
 public class ErrorObject {
 
     private List<String> errors;
+    private HashMap<String, String> errorsMap;
     private String message;
     private Integer status;
     private Date timestamp;
@@ -15,6 +16,14 @@ public class ErrorObject {
 
     public ErrorObject(List<String> errors, String message, Integer status, Date timestamp, String path) {
         this.errors = errors;
+        this.message = message;
+        this.status = status;
+        this.timestamp = timestamp;
+        this.path = path;
+    }
+
+    public ErrorObject(HashMap<String, String> errorsMap, String message, Integer status, Date timestamp, String path) {
+        this.errorsMap = errorsMap;
         this.message = message;
         this.status = status;
         this.timestamp = timestamp;

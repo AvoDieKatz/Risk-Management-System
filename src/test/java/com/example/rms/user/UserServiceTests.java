@@ -83,7 +83,7 @@ public class UserServiceTests {
     @Test
     void givenNone_findAllActiveUsers_returnAllActiveUsers() {
         // Arrange
-        given(repository.findByRemovedFalse()).willReturn(userList);
+        given(repository.findByRemovedFalseOrderByCreatedAtDesc()).willReturn(userList);
 
         // Act
         List<UserSlim> savedUser = service.getUserList();
