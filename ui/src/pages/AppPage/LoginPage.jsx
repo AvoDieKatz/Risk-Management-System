@@ -89,12 +89,15 @@ const LoginForm = () => {
         resolver: yupResolver(schema),
     });
 
-    const onSubmit = (data) => {
+    console.log("FORM LOGIN isSubmitting = ", isSubmitting);
+
+    const onSubmit = async (data) => {
         const request = {
             username: data.username,
             password: data.password,
         };
 
+        await new Promise((resolve) => setTimeout(resolve, 650));
         authService
             .authenticate(request)
             .then((res) => {
@@ -158,18 +161,14 @@ const LoginForm = () => {
                     variant="contained"
                     sx={{ marginTop: 12 }}
                     disabled={
-                        watch("username") === "" || watch("password") === ""
+                        watch("username") === "" ||
+                        watch("password") === "" ||
+                        isSubmitting
                     }
                 >
                     LOGIN{" "}
                     {isSubmitting && (
-                        <CircularProgress
-                            as="span"
-                            animation="border"
-                            size="sm"
-                            role="status"
-                            aria-hidden="true"
-                        />
+                        <CircularProgress color={"primary"} size={16} />
                     )}
                 </Button>
 

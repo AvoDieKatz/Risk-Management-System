@@ -75,7 +75,10 @@ VALUES (3, 2, 1, SUBDATE(NOW(), 10)),
        (5, 2, 5, SUBDATE(ADDTIME(NOW(), "2:30"), 3)),
        (2, 5, 6, SUBDATE(ADDTIME(NOW(), "2:15"), 2)),
        (2, 2, 7, SUBDATE(ADDTIME(NOW(), "2:00"), 1)),
-       (4, 5, 8, NOW());
+       (4, 5, 8, NOW()),
+
+       (1, 2, 9, SUBDATE(NOW(), 3)),
+       (4, 5, 10, SUBDATE(NOW(), 2));
 
 
 /**
@@ -99,4 +102,7 @@ VALUES (1, 2, 1, SUBDATE(NOW(), 10)),
        (3, 2, 5, SUBDATE(ADDTIME(NOW(), "2:30"), 3)),
        (1, 5, 6, SUBDATE(ADDTIME(NOW(), "2:30"), 2)),
        (3, 2, 7, SUBDATE(ADDTIME(NOW(), "2:30"), 1)),
-       (3, 5, 8, NOW());
+       (3, 5, 8, NOW()),
+
+       (2, 2, 9, SUBDATE(NOW(), 3)),
+       (3, 5, 10, SUBDATE(NOW(), 2));
