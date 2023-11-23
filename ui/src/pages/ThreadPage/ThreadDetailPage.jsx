@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -7,6 +7,7 @@ import {
     RmsButton as Button,
     ErrorIndicator,
     LoadingIndicator,
+    EmptyDataIndicator,
     Panel,
 } from "../../components";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
@@ -32,7 +33,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import threadService from "../../services/ThreadService";
 import moment from "moment";
 import { Controller, useForm } from "react-hook-form";
-import { useAlert } from "../../contexts";
+import { AuthContext, useAlert } from "../../contexts";
 import constants from "../../shared/constants";
 
 /**
@@ -43,7 +44,11 @@ import constants from "../../shared/constants";
 
 export const AssessmentRatingBar = ({ data }) => {
     const reversedDataArr = [...data].reverse();
-    return <AssessmentRating value={reversedDataArr[0].value} />;
+    return data.length > 0 ? (
+        <AssessmentRating value={reversedDataArr[0].value} />
+    ) : (
+        <EmptyDataIndicator />
+    );
 };
 
 const AssessmentLineChart = ({ data }) => {
@@ -141,6 +146,9 @@ const AssessmentLineChart = ({ data }) => {
 const Assessment = ({ threadId }) => {
     const [openDialog, setOpenDialog] = useState(false);
 
+    const { userAuthentication } = useContext(AuthContext);
+    console.log("Detail USER = ", userAuthentication);
+
     const handleClick = () => setOpenDialog(true);
 
     const handleDialogClose = (event, reason) => {
@@ -209,13 +217,14 @@ const Assessment = ({ threadId }) => {
                 )}
             </Grid>
 
-            <Button
-                variant={"outlined"}
-                disabled={isLoading}
-                onClick={handleClick}
-            >
-                Assess
-            </Button>
+            {userAuthentication?.user?.id === data?.riskOwner?.id && (
+                <Button
+                    disabled={isLoading}
+                    onClick={handleClick}
+                >
+                    Assess
+                </Button>
+            )}
 
             {openDialog && (
                 <AssessDialog
@@ -699,7 +708,7 @@ const MainPanel = ({ threadId }) => {
                     flex: "1 1 0",
                     overflowY: "auto",
                     overflowX: "hidden",
-                    position: "relative"
+                    position: "relative",
                 }}
             >
                 {isPaused ? (
@@ -726,7 +735,10 @@ const MainPanel = ({ threadId }) => {
                                 </Typography>
                             </Box>
                         )}
-                        <Stack spacing={2} sx={{pt: data?.status === "IDENTIFIED" ? 6 : 0}}>
+                        <Stack
+                            spacing={2}
+                            sx={{ pt: data?.status === "IDENTIFIED" ? 6 : 0 }}
+                        >
                             <Grid container>
                                 <Button
                                     variant="text"
@@ -745,7 +757,28 @@ const MainPanel = ({ threadId }) => {
                                     )}
                                 </Typography>
                                 <Typography variant="dimmed">
-                                    Status: {data?.status}
+                                    Status:{" "}
+                                    <Typography
+                                        component={"span"}
+                                        color={() => {
+                                            const value = data?.status;
+                                            switch (value) {
+                                                case constants.status
+                                                    .IDENTIFIED:
+                                                    return "warning.main";
+                                                case constants.status.ACTIVE:
+                                                    return "primary.main";
+                                                case constants.status.REJECTED:
+                                                    return "error.main";
+                                                case constants.status.RESOLVED:
+                                                    return "success.main";
+                                                default:
+                                                    return "";
+                                            }
+                                        }}
+                                    >
+                                        {data?.status}
+                                    </Typography>
                                 </Typography>
                             </Grid>
 

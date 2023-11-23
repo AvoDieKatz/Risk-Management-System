@@ -13,6 +13,9 @@ export * from "./Indicator/LoadingIndicator.jsx";
 export { default as ErrorIndicator } from "./Indicator/ErrorIndicator.jsx";
 export * from "./Indicator/ErrorIndicator.jsx";
 
+export { default as EmptyDataIndicator } from "./Indicator/EmptyDataIndicator.jsx";
+export * from "./Indicator/EmptyDataIndicator.jsx";
+
 export { default as RmsButton } from "./Button/RmsButton.jsx";
 export * from "./Button/RmsButton.jsx";
 
