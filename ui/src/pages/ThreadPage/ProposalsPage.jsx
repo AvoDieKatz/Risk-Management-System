@@ -36,7 +36,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import CloseIcon from "@mui/icons-material/Close";
 import { Controller, useForm } from "react-hook-form";
 import moment from "moment";
-import { AssessmentRatingBar } from "./";
+import { RatingBar } from "./ThreadDetail/components/Assessment.jsx";
 import { useAlert } from "../../contexts";
 import constants from "../../shared/constants";
 import { useNavigate } from "react-router-dom";
@@ -194,9 +194,7 @@ const ThreadDetail = ({ data }) => {
                     ) : isError ? (
                         <ErrorIndicator />
                     ) : (
-                        <AssessmentRatingBar
-                            data={assessmentData.likelihoodList}
-                        />
+                        <RatingBar data={assessmentData.likelihoodList} />
                     )}
                 </Grid>
                 <Grid flex={1}>
@@ -206,9 +204,7 @@ const ThreadDetail = ({ data }) => {
                     ) : isError ? (
                         <ErrorIndicator />
                     ) : (
-                        <AssessmentRatingBar
-                            data={assessmentData.severityList}
-                        />
+                        <RatingBar data={assessmentData.severityList} />
                     )}
                 </Grid>
             </Grid>
@@ -246,6 +242,7 @@ const ReviewDialog = ({ open, handleClose, selectedData }) => {
         mutationFn: (request) =>
             threadService.reviewThread(selectedData.id, request),
         onSuccess: (res) => {
+            queryClient.invalidateQueries(["threads"]);
             queryClient.invalidateQueries(["threads", selectedData.id]);
             queryClient.invalidateQueries(["threads", "proposals"]);
             setMessage(res?.response?.data?.message ?? "Feedback Provided!");

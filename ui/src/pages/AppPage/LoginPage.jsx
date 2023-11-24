@@ -89,8 +89,6 @@ const LoginForm = () => {
         resolver: yupResolver(schema),
     });
 
-    console.log("FORM LOGIN isSubmitting = ", isSubmitting);
-
     const onSubmit = async (data) => {
         const request = {
             username: data.username,
