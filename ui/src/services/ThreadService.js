@@ -21,9 +21,9 @@ export default {
     assessThread: (threadId, request) =>
         api.post(`${basePath}/${threadId}/assess`, request),
 
-    assignThreadOwner: (threadId, paramOwnerId) =>
-        api.put(`${basePath}/${threadId}/owner`, {
-            params: { newOwnerId: paramOwnerId },
+    assignThreadOwner: (threadId, paramOwnerId) => 
+        api.put(`${basePath}/${threadId}/owner`, null, {
+            params: { newOwnerId: paramOwnerId }
         }),
 
     getThreadReview: (threadId) => api.get(`${basePath}/${threadId}/review`),

@@ -9,7 +9,7 @@ import {
     LoadingIndicator,
     EmptyDataIndicator,
     Panel,
-} from "../../components";
+} from "../../../components";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import {
     Avatar,
@@ -30,11 +30,12 @@ import {
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { ResponsiveLine } from "@nivo/line";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import threadService from "../../services/ThreadService";
+import threadService from "../../../services/ThreadService";
 import moment from "moment";
 import { Controller, useForm } from "react-hook-form";
-import { AuthContext, useAlert } from "../../contexts";
-import constants from "../../shared/constants";
+import { AuthContext, useAlert } from "../../../contexts";
+import constants from "../../../shared/constants";
+import OwnerSelect from "./components/OwnerSelect.jsx";
 
 /**
  *
@@ -143,11 +144,8 @@ const AssessmentLineChart = ({ data }) => {
     );
 };
 
-const Assessment = ({ threadId }) => {
+const Assessment = ({ threadId, user }) => {
     const [openDialog, setOpenDialog] = useState(false);
-
-    const { userAuthentication } = useContext(AuthContext);
-    console.log("Detail USER = ", userAuthentication);
 
     const handleClick = () => setOpenDialog(true);
 
@@ -217,11 +215,8 @@ const Assessment = ({ threadId }) => {
                 )}
             </Grid>
 
-            {userAuthentication?.user?.id === data?.riskOwner?.id && (
-                <Button
-                    disabled={isLoading}
-                    onClick={handleClick}
-                >
+            {user?.id === data?.riskOwner?.id && (
+                <Button disabled={isLoading} onClick={handleClick}>
                     Assess
                 </Button>
             )}
@@ -680,10 +675,9 @@ const SidePanel = ({ threadId }) => {
  */
 
 const MainPanel = ({ threadId }) => {
-    /**
-     *
-     * Get current user role == Manager and thread status == identified
-     */
+    const {
+        userAuthentication: { user },
+    } = useContext(AuthContext);
 
     const { isLoading, isError, isPaused, data } = useQuery({
         queryKey: ["threads", threadId],
@@ -783,16 +777,23 @@ const MainPanel = ({ threadId }) => {
                             </Grid>
 
                             <Typography variant="h5">{data?.title}</Typography>
-                            <Grid container justifyContent={"space-between"}>
-                                <Typography>
-                                    Category: {data?.category?.name}
-                                </Typography>
+
+                            <Typography>
+                                Category: {data?.category?.name}
+                            </Typography>
+
+                            {user?.role === "ROLE_MANAGER" ? (
+                                <OwnerSelect
+                                    currentThreadId={data?.id}
+                                    currentOwnerId={data?.riskOwner?.id}
+                                />
+                            ) : (
                                 <Typography>
                                     Risk Owner: {data?.riskOwner?.fullName}
                                 </Typography>
-                            </Grid>
+                            )}
 
-                            <Assessment threadId={threadId} />
+                            <Assessment threadId={threadId} user={user} />
 
                             <Typography variant="h6">Detail</Typography>
                             <Typography variant="body1">
@@ -841,6 +842,7 @@ SidePanelTab.propTypes = {
 
 Assessment.propTypes = {
     threadId: PropTypes.string.isRequired,
+    user: PropTypes.object.isRequired,
 };
 
 AssessmentLineChart.propTypes = {

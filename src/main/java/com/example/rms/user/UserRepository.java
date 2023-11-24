@@ -11,6 +11,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     // @Query("select u from User u where u.username = ?1")
     Optional<User> findByUsername(String username);
     List<UserSlim> findByRemovedFalseOrderByCreatedAtDesc();
+    List<UserSlim> findByRoleAndRemovedFalse(Role role);
     boolean existsByEmail(String email);
     boolean existsByPhone(String phone);
     boolean existsByEmailAndIdNot(String email, Integer userId);

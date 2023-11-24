@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface UserService {
     List<UserSlim> getUserList();
+    List<UserSlim> getUserList(Role role);
     UserDTO getUserBy(String username);
     UserDTO getUserBy(Integer userId);
     UserDTO createUser(UserRequest request);

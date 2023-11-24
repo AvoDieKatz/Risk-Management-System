@@ -22,9 +22,13 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<UserSlim>> getUserList() {
+    public ResponseEntity<Iterable<UserSlim>> getUserList(@RequestParam(required = false) Role role) {
         // Static Method Way
-        return ResponseEntity.ok(userService.getUserList());
+        if (role != null) {
+            return ResponseEntity.ok(userService.getUserList(role));
+        } else {
+            return ResponseEntity.ok(userService.getUserList());
+        }
     }
 
     @GetMapping("u")

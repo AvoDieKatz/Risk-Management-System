@@ -31,6 +31,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserSlim> getUserList(Role role) {
+        return userRepository.findByRoleAndRemovedFalse(role);
+    }
+
+    @Override
     public UserDTO getUserBy(String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (optionalUser.isPresent()) {
