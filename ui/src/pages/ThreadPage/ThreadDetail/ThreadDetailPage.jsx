@@ -19,8 +19,11 @@ import constants from "../../../shared/constants";
 import OwnerSelect from "./components/OwnerSelect.jsx";
 import Assessment from "./components/Assessment.jsx";
 import SidePanel from "./components/SidePanel.jsx";
+import ActionPlanDrawer from "./components/ActionPlanDrawer.jsx";
 
 const MainPanel = ({ threadId }) => {
+    const navigate = useNavigate();
+
     const {
         userAuthentication: { user },
     } = useContext(AuthContext);
@@ -37,18 +40,24 @@ const MainPanel = ({ threadId }) => {
         },
     });
 
-    const navigate = useNavigate();
     const handleBackNavigation = () => navigate(-1);
 
     return (
-        <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <Box
+            id={"detail-container"}
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+                position: "relative",
+            }}
+        >
             <Panel
                 sx={{
                     p: 2,
                     flex: "1 1 0",
                     overflowY: "auto",
                     overflowX: "hidden",
-                    position: "relative",
                 }}
             >
                 {isPaused ? (
@@ -77,7 +86,10 @@ const MainPanel = ({ threadId }) => {
                         )}
                         <Stack
                             spacing={2}
-                            sx={{ pt: data?.status === "IDENTIFIED" ? 6 : 0 }}
+                            sx={{
+                                pt: data?.status === "IDENTIFIED" ? 6 : 0,
+                                pb: 6,
+                            }}
                         >
                             <Grid container>
                                 <Button
@@ -139,8 +151,6 @@ const MainPanel = ({ threadId }) => {
                                 </Typography>
                             )}
 
-                            {/* <Assessment threadId={threadId} user={user} /> */}
-
                             <Assessment
                                 threadId={threadId}
                                 user={user}
@@ -152,6 +162,10 @@ const MainPanel = ({ threadId }) => {
                                 {data?.description}
                             </Typography>
                         </Stack>
+                        <ActionPlanDrawer
+                            threadId={data?.id}
+                            ownerId={data?.riskOwner?.id}
+                        />
                     </>
                 )}
             </Panel>

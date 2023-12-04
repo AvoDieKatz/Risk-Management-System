@@ -6,6 +6,7 @@ import com.example.rms.business.thread.solution.dto.SolutionRequest;
 import com.example.rms.business.thread.thread.Thread;
 import com.example.rms.business.thread.thread.ThreadRepository;
 import com.example.rms.business.thread.thread.ThreadStatus;
+import com.example.rms.exceptions.ForbiddenActionException;
 import com.example.rms.exceptions.InvalidRequestBodyException;
 import com.example.rms.exceptions.ResourceNotFoundException;
 import com.example.rms.exceptions.UnsatisfiedConditionException;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @AllArgsConstructor
 @Service
@@ -42,15 +44,21 @@ public class SolutionServiceImpl implements SolutionService {
                 () -> new ResourceNotFoundException("Thread "+threadId+" cannot be found.")
         );
 
+        User requestingUser = authService.getAuthenticatedUser();
+
+        Integer threadOwnerId = thread.getRiskOwner().getId();
+
+        if (!requestingUser.getId().equals(threadOwnerId)) {
+            throw new ForbiddenActionException("You are not allowed to provide solution for this thread.");
+        }
+
         List<Solution> currentSolutions = thread.getSolutions();
         for (Solution existedSolution : currentSolutions) {
             if (existedSolution.getType() == request.type()) {
-//                throw new InvalidRequestBodyException(List.of("This type of solution has already been provided."));
-                throw new InvalidRequestBodyException((HashMap<String, String>) Map.of("value", "This type of solution has already been provided."));
+                throw new InvalidRequestBodyException(Map.of("reason", "This type of solution has already been provided."));
             }
         }
 
-        User requestingUser = authService.getAuthenticatedUser();
         Solution newSolution =  Solution.builder()
                 .content(request.content())
                 .type(request.type())

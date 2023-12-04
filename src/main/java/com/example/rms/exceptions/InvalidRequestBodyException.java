@@ -6,6 +6,7 @@ import java.io.Serial;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 public class InvalidRequestBodyException extends RuntimeException {
@@ -13,13 +14,13 @@ public class InvalidRequestBodyException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private HashMap<String, String> errors;
+    private Map<String, String> errors;
 
-    public InvalidRequestBodyException(HashMap<String, String> errors) {
+    public InvalidRequestBodyException(Map<String, String> errors) {
         this.errors = errors;
     }
 
-    public HashMap<String, String> getErrors() {
+    public Map<String, String> getErrors() {
         return this.errors;
     }
 
