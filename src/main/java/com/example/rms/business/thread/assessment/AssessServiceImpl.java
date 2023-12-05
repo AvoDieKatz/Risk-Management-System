@@ -27,6 +27,8 @@ public class AssessServiceImpl implements AssessService {
 
     @Override
     public <Type> Type performAssess(byte value, Thread thread, Class<Type> classType) {
+
+        // Might not need this if, values validation is performed in AssessRequest.java
         if (1 > value || value > 5) {
 //            throw new InvalidRequestBodyException(List.of("Value should range from 1-5"));
             throw new InvalidRequestBodyException((HashMap<String, String>) Map.of("assessment", "Value should range from 1-5."));

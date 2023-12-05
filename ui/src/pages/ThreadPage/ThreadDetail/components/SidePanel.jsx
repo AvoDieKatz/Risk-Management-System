@@ -2,7 +2,18 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Panel } from "../../../../components";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import { Avatar, Box, Stack, Tab, Tabs, Typography } from "@mui/material";
+import {
+    Avatar,
+    Box,
+    IconButton,
+    InputAdornment,
+    Stack,
+    Tab,
+    Tabs,
+    TextField,
+    Typography,
+} from "@mui/material";
+import { Send } from "@mui/icons-material";
 
 const SidePanelTab = (props) => {
     const { children, value, index, ...others } = props;
@@ -21,179 +32,228 @@ const SidePanelTab = (props) => {
 
 const CommentTab = () => {
     return (
-        <Stack spacing={2}>
-            <Panel elevation={2}>
-                <Grid container direction={"column"} sx={{ minHeight: 120 }}>
-                    <Grid container spacing={1}>
-                        <Grid>
-                            <Avatar />
+        <>
+            <Stack spacing={2} flexGrow={1}>
+                {/* <Panel elevation={2}>
+                    <Grid
+                        container
+                        direction={"column"}
+                        sx={{ minHeight: 120 }}
+                    >
+                        <Grid container spacing={1}>
+                            <Grid>
+                                <Avatar />
+                            </Grid>
+                            <Grid>
+                                <Typography
+                                    variant="body2"
+                                    sx={{ fontWeight: 500 }}
+                                >
+                                    John Doe
+                                </Typography>
+                                <Typography
+                                    variant="caption"
+                                    sx={{ fontStyle: "italic" }}
+                                >
+                                    Analyst
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid flexGrow={1}>
+                            <Typography variant="body1">
+                                Lorem Ipsum is simply dummy text of the printing
+                                and typesetting industry.
+                            </Typography>
                         </Grid>
                         <Grid>
-                            <Typography
-                                variant="body2"
-                                sx={{ fontWeight: 500 }}
-                            >
-                                John Doe
-                            </Typography>
-                            <Typography
-                                variant="caption"
-                                sx={{ fontStyle: "italic" }}
-                            >
-                                Analyst
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                    <Grid flexGrow={1}>
-                        <Typography variant="body1">
-                            Lorem Ipsum is simply dummy text of the printing and
-                            typesetting industry.
-                        </Typography>
-                    </Grid>
-                    <Grid>
-                        <Typography variant="caption">
-                            09/11/2023 at 10:30 PM
-                        </Typography>
-                    </Grid>
-                </Grid>
-            </Panel>
-            <Panel elevation={2}>
-                <Grid container direction={"column"} sx={{ minHeight: 136 }}>
-                    <Grid container spacing={1}>
-                        <Grid>
-                            <Avatar />
-                        </Grid>
-                        <Grid>
-                            <Typography
-                                variant="body2"
-                                sx={{ fontWeight: 500 }}
-                            >
-                                John Doe
-                            </Typography>
-                            <Typography
-                                variant="caption"
-                                sx={{ fontStyle: "italic" }}
-                            >
-                                Analyst
+                            <Typography variant="caption">
+                                09/11/2023 at 10:30 PM
                             </Typography>
                         </Grid>
                     </Grid>
-                    <Grid flexGrow={1}>
-                        <Typography variant="body1">
-                            I have tested that particular example, but @Value
-                            annotation seems to be neglected. I am not
-                            interested in using @Query annotation to provide
-                            custom constructor.
-                        </Typography>
-                    </Grid>
-                    <Grid>
-                        <Typography variant="caption">
-                            09/11/2023 at 10:30 PM
-                        </Typography>
-                    </Grid>
-                </Grid>
-            </Panel>
-            <Panel elevation={2}>
-                <Grid container direction={"column"} sx={{ minHeight: 136 }}>
-                    <Grid container spacing={1}>
-                        <Grid>
-                            <Avatar />
+                </Panel>
+                <Panel elevation={2}>
+                    <Grid
+                        container
+                        direction={"column"}
+                        sx={{ minHeight: 136 }}
+                    >
+                        <Grid container spacing={1}>
+                            <Grid>
+                                <Avatar />
+                            </Grid>
+                            <Grid>
+                                <Typography
+                                    variant="body2"
+                                    sx={{ fontWeight: 500 }}
+                                >
+                                    John Doe
+                                </Typography>
+                                <Typography
+                                    variant="caption"
+                                    sx={{ fontStyle: "italic" }}
+                                >
+                                    Analyst
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid flexGrow={1}>
+                            <Typography variant="body1">
+                                I have tested that particular example, but
+                                @Value annotation seems to be neglected. I am
+                                not interested in using @Query annotation to
+                                provide custom constructor.
+                            </Typography>
                         </Grid>
                         <Grid>
-                            <Typography
-                                variant="body2"
-                                sx={{ fontWeight: 500 }}
-                            >
-                                John Doe
-                            </Typography>
-                            <Typography
-                                variant="caption"
-                                sx={{ fontStyle: "italic" }}
-                            >
-                                Analyst
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                    <Grid flexGrow={1}>
-                        <Typography variant="body1">
-                            It&apos;s not a bug, it&apos;s a feature.
-                        </Typography>
-                    </Grid>
-                    <Grid>
-                        <Typography variant="caption">
-                            09/11/2023 at 10:30 PM
-                        </Typography>
-                    </Grid>
-                </Grid>
-            </Panel>
-            <Panel elevation={2}>
-                <Grid container direction={"column"} sx={{ minHeight: 136 }}>
-                    <Grid container spacing={1}>
-                        <Grid>
-                            <Avatar />
-                        </Grid>
-                        <Grid>
-                            <Typography
-                                variant="body2"
-                                sx={{ fontWeight: 500 }}
-                            >
-                                John Doe
-                            </Typography>
-                            <Typography
-                                variant="caption"
-                                sx={{ fontStyle: "italic" }}
-                            >
-                                Analyst
+                            <Typography variant="caption">
+                                09/11/2023 at 10:30 PM
                             </Typography>
                         </Grid>
                     </Grid>
-                    <Grid flexGrow={1}>
-                        <Typography variant="body1">
-                            Lorem Ipsum is simply dummy text of the printing and
-                            typesetting industry.
-                        </Typography>
-                    </Grid>
-                    <Grid>
-                        <Typography variant="caption">
-                            09/11/2023 at 10:30 PM
-                        </Typography>
-                    </Grid>
-                </Grid>
-            </Panel>
-            <Panel elevation={2}>
-                <Grid container direction={"column"} sx={{ minHeight: 136 }}>
-                    <Grid container spacing={1}>
-                        <Grid>
-                            <Avatar />
+                </Panel>
+                <Panel elevation={2}>
+                    <Grid
+                        container
+                        direction={"column"}
+                        sx={{ minHeight: 136 }}
+                    >
+                        <Grid container spacing={1}>
+                            <Grid>
+                                <Avatar />
+                            </Grid>
+                            <Grid>
+                                <Typography
+                                    variant="body2"
+                                    sx={{ fontWeight: 500 }}
+                                >
+                                    John Doe
+                                </Typography>
+                                <Typography
+                                    variant="caption"
+                                    sx={{ fontStyle: "italic" }}
+                                >
+                                    Analyst
+                                </Typography>
+                            </Grid>
                         </Grid>
-                        <Grid>
-                            <Typography
-                                variant="body2"
-                                sx={{ fontWeight: 500 }}
-                            >
-                                John Doe
-                            </Typography>
-                            <Typography
-                                variant="caption"
-                                sx={{ fontStyle: "italic" }}
-                            >
-                                Analyst
+                        <Grid flexGrow={1}>
+                            <Typography variant="body1">
+                                It&apos;s not a bug, it&apos;s a feature.
                             </Typography>
                         </Grid>
+                        <Grid>
+                            <Typography variant="caption">
+                                09/11/2023 at 10:30 PM
+                            </Typography>
+                        </Grid>
                     </Grid>
-                    <Grid flexGrow={1}>
-                        <Typography variant="body1">
-                            Lorem Ipsum is simply dummy text of the printing and
-                            typesetting industry.
-                        </Typography>
+                </Panel>
+                <Panel elevation={2}>
+                    <Grid
+                        container
+                        direction={"column"}
+                        sx={{ minHeight: 136 }}
+                    >
+                        <Grid container spacing={1}>
+                            <Grid>
+                                <Avatar />
+                            </Grid>
+                            <Grid>
+                                <Typography
+                                    variant="body2"
+                                    sx={{ fontWeight: 500 }}
+                                >
+                                    John Doe
+                                </Typography>
+                                <Typography
+                                    variant="caption"
+                                    sx={{ fontStyle: "italic" }}
+                                >
+                                    Analyst
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid flexGrow={1}>
+                            <Typography variant="body1">
+                                Lorem Ipsum is simply dummy text of the printing
+                                and typesetting industry.
+                            </Typography>
+                        </Grid>
+                        <Grid>
+                            <Typography variant="caption">
+                                09/11/2023 at 10:30 PM
+                            </Typography>
+                        </Grid>
                     </Grid>
-                    <Grid>
-                        <Typography variant="caption">
-                            09/11/2023 at 10:30 PM
-                        </Typography>
+                </Panel>
+                <Panel elevation={2}>
+                    <Grid
+                        container
+                        direction={"column"}
+                        sx={{ minHeight: 136 }}
+                    >
+                        <Grid container spacing={1}>
+                            <Grid>
+                                <Avatar />
+                            </Grid>
+                            <Grid>
+                                <Typography
+                                    variant="body2"
+                                    sx={{ fontWeight: 500 }}
+                                >
+                                    John Doe
+                                </Typography>
+                                <Typography
+                                    variant="caption"
+                                    sx={{ fontStyle: "italic" }}
+                                >
+                                    Analyst
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid flexGrow={1}>
+                            <Typography variant="body1">
+                                Lorem Ipsum is simply dummy text of the printing
+                                and typesetting industry.
+                            </Typography>
+                        </Grid>
+                        <Grid>
+                            <Typography variant="caption">
+                                09/11/2023 at 10:30 PM
+                            </Typography>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Panel>
-        </Stack>
+                </Panel> */}
+            </Stack>
+            <Box
+                sx={{
+                    position: "absolute",
+                    left: 0,
+                    bottom: 0,
+                    width: "100%",
+                    p: 1,
+                }}
+            >
+                <TextField
+                    fullWidth
+                    label="Comment"
+                    id="comment_tf"
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    edge="end"
+                                >
+                                    <Send />
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Box>
+        </>
     );
 };
 
@@ -218,7 +278,9 @@ const SidePanel = ({ threadId }) => {
                     overflowX: "hidden",
                 }}
             >
-                <Box sx={{ width: "100%" }}>
+                <Box
+                    sx={{ width: "100%", height: "100%", position: "relative" }}
+                >
                     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                         <Tabs
                             value={tabIndex}

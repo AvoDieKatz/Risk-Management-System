@@ -17,10 +17,12 @@ import {
     ToggleButtonGroup,
     ToggleButton,
     Typography,
+    IconButton,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import TableChartIcon from "@mui/icons-material/TableChart";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import {
     getCoreRowModel,
     flexRender,
@@ -31,7 +33,11 @@ import {
 } from "@tanstack/react-table";
 
 const FilterOption = ({ ...props }) => {
-    return <Button {...props}>Some filter</Button>;
+    return (
+        <IconButton {...props} aria-label="filter">
+            <FilterAltIcon />
+        </IconButton>
+    );
 };
 
 const AddRecordButton = ({ label, ...props }) => {
@@ -260,11 +266,11 @@ const DataTable = ({
                                         Status: {row.original.status}
                                     </Typography>
                                 </Grid>
-                                <Grid container justifyContent={"space-between"}>
-                                    <Grid
-                                        container
-                                        direction={"column"}
-                                    >
+                                <Grid
+                                    container
+                                    justifyContent={"space-between"}
+                                >
+                                    <Grid container direction={"column"}>
                                         <Typography
                                             sx={{
                                                 fontWeight: 600,
@@ -283,10 +289,7 @@ const DataTable = ({
                                             {row.original.category.name}
                                         </Typography>
                                     </Grid>
-                                    <Grid
-                                        container
-                                        alignItems={"center"}
-                                    >
+                                    <Grid container alignItems={"center"}>
                                         Owner:{" "}
                                         <Avatar
                                             alt={

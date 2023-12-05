@@ -66,7 +66,6 @@ public class ThreadServiceImpl implements ThreadService {
             List<LikelihoodProjection> likelihoodList = assessService.getThreadLikelihoodInLast7Days(threadId);
             List<SeverityProjection> severityList = assessService.getThreadSeverityInLast7Days(threadId);
 
-            // need to perform formatting here
             return new ThreadAssessmentResponse(likelihoodList, severityList);
         }
         throw new ResourceNotFoundException("Thread with id " + threadId + " could not be found");
@@ -202,7 +201,7 @@ public class ThreadServiceImpl implements ThreadService {
                 Thread savedThread = threadRepository.save(thread);
                 return new ThreadDTO(savedThread);
             } else {
-                throw new InvalidRequestBodyException((HashMap<String, String>) Map.of("ownerId", "New Risk Owner cannot be the same person."));
+                throw new InvalidRequestBodyException(Map.of("ownerId", "New Risk Owner cannot be the same person."));
             }
         }
         throw new UnsatisfiedConditionException("Cannot change the thread's risk owner now.(Reason: thread is not active).");

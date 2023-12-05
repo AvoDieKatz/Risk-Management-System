@@ -50,7 +50,6 @@ const AddCategoryDialog = ({ open, handleClose, defaultValues = null }) => {
     const queryClient = useQueryClient();
     const mutation = useMutation({
         mutationFn: (body) => {
-            console.log("mutFn body = ", body);
             const { action, ...request } = body;
 
             switch (action) {
@@ -78,7 +77,6 @@ const AddCategoryDialog = ({ open, handleClose, defaultValues = null }) => {
     });
 
     const onSubmit = async (data) => {
-        console.log(data);
         const request = {
             action: defaultValues ? "update" : "add",
             name: data.name,
@@ -88,7 +86,6 @@ const AddCategoryDialog = ({ open, handleClose, defaultValues = null }) => {
             const errorMap = err.response.data.errorsMap;
 
             for (const [key, value] of Object.entries(errorMap)) {
-                console.log(`Key = ${key}; Value = ${value}`);
                 setError(key, { message: value });
             }
 
@@ -99,7 +96,6 @@ const AddCategoryDialog = ({ open, handleClose, defaultValues = null }) => {
     };
 
     const handleDelete = () => {
-        console.log("Cate deleted");
         const request = {
             action: "delete",
         };
@@ -228,8 +224,6 @@ const CategoryManagementPage = () => {
         },
     });
 
-    console.log("Categories = ", fetchedData)
-
     const handleClick = () => {
         setOpenDialog(true);
     };
@@ -252,6 +246,16 @@ const CategoryManagementPage = () => {
         tableColumnHelper.accessor("name", {
             header: () => <span>Category Name</span>,
             cell: (info) => info.getValue(),
+        }),
+        tableColumnHelper.display({
+            id: 'actions',
+            cell: (info) => {
+                return (
+                    <IconButton color="error">
+                        <DeleteIcon />
+                    </IconButton>
+                )
+            },
         }),
     ];
 

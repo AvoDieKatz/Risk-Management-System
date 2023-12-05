@@ -35,19 +35,66 @@ export const RatingBar = ({ data }) => {
     );
 };
 
+const formatAssessData = (assessData) => {
+    const assessMap = new Map();
+    const currentDate = moment();
+    const startDate = moment(currentDate).subtract(6, "d");
+
+    // "latest date assessed but before start date"
+    let currentLatestBeforeDate = startDate;
+
+    // "latest item but before start date"
+    let itemBeforeStartDate = null
+    
+    for (let i = 0; i < 7; i++) {
+        const date = moment(startDate).add(i, "d");
+        let value = null;
+
+        for (const item of assessData) {
+            const itemUpdatedAt = moment(item.updatedAt)
+
+            if (itemUpdatedAt.isBefore(startDate, "date")) {
+                // Check if the current item is later than 
+                // the current "latest item but before start date"
+
+                // itemBeforeStartDate will be set here because once 'item' is before 'startDate'
+                // the below 'if' will surely run because 'currentLastestBeforeDate' is equal 'startDate'
+                if (itemUpdatedAt.diff(startDate) < currentLatestBeforeDate.diff(startDate)) {
+                    currentLatestBeforeDate = itemUpdatedAt
+                    itemBeforeStartDate = item;
+                } 
+
+                // Only set during first iteration because 
+                // this if statement is used to find the "latest item but before start date"
+                if (i === 0) {
+                    value = itemBeforeStartDate.value;
+                    break;
+                }
+
+            } else if (moment(item.updatedAt).isSame(date, "date")) {
+                value = item.value;
+                break;
+            }
+        }
+
+        if (value === null && i > 0) {
+            const previousDate = moment(date).subtract(1, "d");
+            value = assessMap.get(moment(previousDate).format("DD/MM"));
+        }
+
+        assessMap.set(moment(date).format("DD/MM"), value);
+    }
+
+    const arr = Array.from(assessMap, ([key, value]) => {
+        return { x: key, y: value };
+    });
+
+    return arr;
+};
+
 export const LineChart = ({ data }) => {
-    let likelihoodData = [];
-    let severityData = [];
-
-    data?.likelihoodList.forEach((el) => {
-        const time = moment(el.updatedAt).format("DD/MM");
-        likelihoodData.push({ x: time, y: el.value });
-    });
-
-    data?.severityList.forEach((el) => {
-        const time = moment(el.updatedAt).format("DD/MM");
-        severityData.push({ x: time, y: el.value });
-    });
+    let likelihoodData = formatAssessData(data.likelihoodList);
+    let severityData = formatAssessData(data.severityList);
 
     const formattedDataForLineChart = [
         {

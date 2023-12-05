@@ -1,80 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import {
     AwaitConnectionIndicator,
     ErrorIndicator,
     LoadingIndicator,
     Panel,
-    RmsButton as Button,
     DataDisplay,
 } from "../../components";
 import { useQuery } from "@tanstack/react-query";
 import threadService from "../../services/ThreadService";
 import { createColumnHelper } from "@tanstack/react-table";
-import { Unstable_Grid2 as Grid } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import { AddThreadDialog } from ".";
 import { useNavigate } from "react-router-dom";
 
 const MainPanel = ({ ...props }) => {
-    const [viewStyle, setViewStyle] = useState("list");
-    const [viewType, setViewType] = useState("assigned");
-    const [openDialog, setOpenDialog] = useState(false);
-
-    const handleViewStyleChange = (e, style) => {
-        if (style !== null) {
-            setViewStyle(style);
-        }
-    };
-
-    const handleViewType = (e, type) => {
-        if (type != null) {
-            setViewType(type);
-        }
-    };
-
-    const handleClick = () => setOpenDialog(true);
-
-    const handleDialogClose = (event, reason) => {
-        if (reason === "backdropClick") {
-            return;
-        }
-        setOpenDialog(false);
-    };
-
     return (
         <>
             <Panel>
-                <Grid
-                    container
-                    spacing={2}
-                    sx={{
-                        position: "absolute",
-                    }}
-                >
-                    <Grid>
-                        <Button
-                            size={"small"}
-                            startIcon={<AddIcon />}
-                            onClick={handleClick}
-                        >
-                            New Thread
-                        </Button>
-                    </Grid>
-                </Grid>
-
-                <DataDisplay
-                    {...props}
-                    viewStyle={viewStyle}
-                    onViewStyleChange={handleViewStyleChange}
-                />
+                <DataDisplay {...props} />
             </Panel>
-
-            {openDialog && (
-                <AddThreadDialog
-                    open={openDialog}
-                    handleClose={handleDialogClose}
-                />
-            )}
         </>
     );
 };
@@ -89,7 +31,9 @@ const AssignmentsPage = () => {
         queryKey: ["threads", "assignments"],
         queryFn: async () => {
             await new Promise((resolve) => setTimeout(resolve, 550));
-            const response = await threadService.getPersonalThreads("assignments");
+            const response = await threadService.getPersonalThreads(
+                "assignments"
+            );
             return response.data;
         },
         meta: {
@@ -129,14 +73,6 @@ const AssignmentsPage = () => {
         tableColumnHelper.accessor("riskOwner.fullName", {
             header: () => <span>Risk Owner</span>,
         }),
-        // tableColumnHelper.display({
-        //     id: "action",
-        //     cell: ({ row }) => (
-        //         <Button component={Link} to={`/${row.original.id}`}>
-        //             Detail
-        //         </Button>
-        //     ),
-        // }),
     ];
 
     return isPaused ? (
