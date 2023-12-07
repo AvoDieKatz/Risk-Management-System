@@ -23,12 +23,9 @@ import { AuthContext } from "../../../../contexts";
 import { useQuery } from "@tanstack/react-query";
 import threadService from "../../../../services/ThreadService";
 import moment from "moment";
+import AddSolutionStepper from "./AddSolutionStepper.jsx";
 
 const options = ["ACCEPT", "AVOID", "EXPLOIT", "MITIGATE", "TRANSFER"];
-
-const AddSolutionButton = () => {
-    return <Button variant="contained">Add Solution</Button>;
-};
 
 const PlanDetail = ({ selectedView, solutionList }) => {
     const solution = solutionList.find(
@@ -89,8 +86,6 @@ const PlanDetail = ({ selectedView, solutionList }) => {
 };
 
 const PlanChoices = ({ selectedView, handleChangeView, solutionList }) => {
-    console.log("losution list = ", solutionList);
-
     return (
         <ToggleButtonGroup
             orientation="vertical"
@@ -118,8 +113,12 @@ const PlanChoices = ({ selectedView, handleChangeView, solutionList }) => {
     );
 };
 
-const DrawerContent = (props) => {
-    const { threadId, ownerId } = props;
+const AddSolutionView = (props) => {
+    return <AddSolutionStepper {...props} />;
+};
+
+const SolutionView = (props) => {
+    const { threadId, ownerId, handleChangeVw } = props;
     const [selectedView, setSelectedView] = useState("");
 
     const {
@@ -138,7 +137,6 @@ const DrawerContent = (props) => {
             const response = await threadService.getThreadSolutions(threadId);
             return response.data;
         },
-        // enabled: !!selectedView,
     });
 
     const handleChangeView = (e, next) => {
@@ -148,7 +146,7 @@ const DrawerContent = (props) => {
     };
 
     return (
-        <Grid container columnSpacing={2}>
+        <>
             {isPaused ? (
                 <AwaitConnectionIndicator />
             ) : isLoading ? (
@@ -156,7 +154,7 @@ const DrawerContent = (props) => {
             ) : isError ? (
                 <ErrorIndicator />
             ) : (
-                <>
+                <Grid container columnSpacing={2}>
                     <Grid xs={3}>
                         <Stack justifyContent={"space-between"}>
                             <PlanChoices
@@ -165,23 +163,16 @@ const DrawerContent = (props) => {
                                 solutionList={solutions}
                             />
                             {parseInt(user.id) === ownerId && (
-                                <AddSolutionButton />
+                                <Button
+                                    variant="contained"
+                                    onClick={(e) => handleChangeVw(e, "add")}
+                                >
+                                    Add Solution
+                                </Button>
                             )}
                         </Stack>
                     </Grid>
                     <Grid xs={9}>
-                        {/* {isLoading ? (
-                        <LoadingIndicator />
-                    ) : isError ? (
-                        <ErrorIndicator />
-                    ) : selectedView !== "" ? (
-                        <PlanDetail />
-                    ) : (
-                        <Typography variant="dimmed">
-                            Select an option to view detail.
-                        </Typography>
-                    )} */}
-
                         {selectedView !== "" ? (
                             <PlanDetail
                                 selectedView={selectedView}
@@ -193,9 +184,27 @@ const DrawerContent = (props) => {
                             </Typography>
                         )}
                     </Grid>
-                </>
+                </Grid>
             )}
-        </Grid>
+        </>
+    );
+};
+
+const DrawerContent = (props) => {
+    const [view, setView] = useState("detail");
+
+    const handleChangeView = (e, v) => {
+        setView(v);
+    };
+
+    return (
+        <>
+            {view === "detail" ? (
+                <SolutionView {...props} handleChangeVw={handleChangeView} />
+            ) : (
+                <AddSolutionView {...props} handleChangeVw={handleChangeView} />
+            )}
+        </>
     );
 };
 
@@ -250,6 +259,17 @@ ActionPlanDrawer.propTypes = {
 DrawerContent.propTypes = {
     threadId: PropTypes.number.isRequired,
     ownerId: PropTypes.number.isRequired,
+};
+
+SolutionView.propTypes = {
+    threadId: PropTypes.number.isRequired,
+    ownerId: PropTypes.number.isRequired,
+    handleChangeVw: PropTypes.func.isRequired,
+};
+
+AddSolutionView.propTypes = {
+    threadId: PropTypes.number.isRequired,
+    handleChangeVw: PropTypes.func.isRequired,
 };
 
 PlanChoices.propTypes = {

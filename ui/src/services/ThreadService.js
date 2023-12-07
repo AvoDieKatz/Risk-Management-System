@@ -31,5 +31,7 @@ export default {
     reviewThread: (threadId, request) => 
         api.post(`${basePath}/${threadId}/review`, request),
 
-    getThreadSolutions: (threadId) => api.get(`${basePath}/${threadId}/solution`)
+    getThreadSolutions: (threadId) => api.get(`${basePath}/${threadId}/solution`),
+
+    createThreadSolution: (threadId, request) => api.post(`${basePath}/${threadId}/solution`, request)
 };
