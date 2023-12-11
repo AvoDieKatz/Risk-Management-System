@@ -24,14 +24,14 @@ import { AuthContext } from "../../contexts";
 import constants from "../../shared/constants";
 import authService from "../../services/AuthService";
 
-const { ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_CRO } = constants.roles;
+const { ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_OFFICER } = constants.roles;
 
 const listItemsMapping = [
     {
         path: "",
         label: "Dashboard",
         sublist: [],
-        permittedRoles: [ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_CRO],
+        permittedRoles: [ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_OFFICER],
     },
     {
         path: "thread",
@@ -44,7 +44,7 @@ const listItemsMapping = [
                     ROLE_ANALYST,
                     ROLE_MANAGER,
                     ROLE_ADMIN,
-                    ROLE_CRO,
+                    ROLE_OFFICER,
                 ],
             },
             {
@@ -60,22 +60,22 @@ const listItemsMapping = [
             {
                 path: "proposals",
                 label: "Proposals",
-                permittedRoles: [ROLE_MANAGER, ROLE_CRO],
+                permittedRoles: [ROLE_MANAGER, ROLE_OFFICER],
             }
         ],
-        permittedRoles: [ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_CRO],
+        permittedRoles: [ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_OFFICER],
     },
     {
         path: "meeting",
         label: "Meeting",
         sublist: [],
-        permittedRoles: [ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_CRO],
+        permittedRoles: [ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_OFFICER],
     },
     {
         path: "policy",
         label: "Policy",
         sublist: [],
-        permittedRoles: [ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_CRO],
+        permittedRoles: [ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_OFFICER],
     },
     {
         path: "management",

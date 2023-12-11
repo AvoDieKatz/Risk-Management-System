@@ -46,7 +46,7 @@ const ThreadPage = () => {
         queryKey: ["threads"],
         queryFn: async () => {
             await new Promise((resolve) => setTimeout(resolve, 550));
-            const response = await threadService.getThreads();
+            const response = await threadService.getThreads("ACTIVE");
             return response.data;
         },
         meta: {

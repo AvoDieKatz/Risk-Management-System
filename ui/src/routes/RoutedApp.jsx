@@ -32,7 +32,7 @@ import {
 import { PrivateRoute, ProtectedRoute, PublicRoute } from "./";
 import constants from "../shared/constants";
 
-const { ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_CRO } = constants.roles;
+const { ROLE_ANALYST, ROLE_MANAGER, ROLE_ADMIN, ROLE_OFFICER } = constants.roles;
 
 const RoutedApp = () => {
     return (
@@ -55,7 +55,7 @@ const RoutedApp = () => {
 
                     <Route path=":id" element={<ThreadDetailPage />} />
 
-                    <Route element={<ProtectedRoute allowedRoles={[ROLE_MANAGER, ROLE_CRO]} />}>
+                    <Route element={<ProtectedRoute allowedRoles={[ROLE_MANAGER, ROLE_OFFICER]} />}>
                         <Route path="proposals" element={<ProposalsPage /> } />
                     </Route>
 

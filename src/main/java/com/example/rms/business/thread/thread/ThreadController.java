@@ -22,10 +22,14 @@ public class ThreadController {
     private final ThreadServiceImpl threadService;
 
     @GetMapping
-    public ResponseEntity<Iterable<ThreadCompactProjection>> getAllThreads(
-            @RequestParam(required = false, defaultValue = ThreadStatus.Constant.ACTIVE) ThreadStatus status
+    public ResponseEntity<Iterable<ThreadCompactProjection>> getThreadsByStatus(
+            @RequestParam(required = false) ThreadStatus status
     ) {
-        return ResponseEntity.ok(threadService.getThreads(status));
+        if (status == null) {
+            return ResponseEntity.ok(threadService.getAllThreads());
+        } else {
+            return ResponseEntity.ok(threadService.getThreads(status));
+        }
     }
 
     @GetMapping("/{threadId}")

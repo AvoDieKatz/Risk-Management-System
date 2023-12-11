@@ -32,11 +32,11 @@ public class SolutionController {
         return new ResponseEntity<>(solutionService.createSolution(request, threadId), HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping("/choice")
     public ResponseEntity<SolutionCompact> acceptProposedSolution(
             @PathVariable("threadId") int threadId,
-            @RequestParam int choseSolution
+            @RequestParam int solutionId
     ) {
-        return new ResponseEntity<>(solutionService.acceptSolution(threadId, choseSolution), HttpStatus.OK);
+        return new ResponseEntity<>(solutionService.acceptSolution(threadId, solutionId), HttpStatus.OK);
     }
 }

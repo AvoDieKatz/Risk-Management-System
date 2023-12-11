@@ -20,7 +20,7 @@ module.exports = {
     },
     roles: {
         ROLE_ADMIN: "Administrator",
-        ROLE_CRO: "CRO",
+        ROLE_OFFICER: "Chief Risk Officer",
         ROLE_MANAGER: "Manager",
         ROLE_ANALYST: "Analyst",
     },

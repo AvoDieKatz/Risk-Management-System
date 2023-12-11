@@ -2,15 +2,17 @@ import api from "../utils/api.js";
 
 const basePath = "/thread";
 export default {
-    getThreads: (paramStatus = "ACTIVE") =>
+    getThreads: (paramStatus) =>
         api.get(`${basePath}`, { params: { status: paramStatus } }),
 
     getSingleThread: (threadId) => api.get(`${basePath}/${threadId}`),
 
-    getPersonalThreads: (type) => api.get(`${basePath}/personal`, { params: { type: type }}),
+    getPersonalThreads: (type) =>
+        api.get(`${basePath}/personal`, { params: { type: type } }),
 
-    getThreadAssessment: (threadId) => api.get(`${basePath}/${threadId}/assess`),
-    
+    getThreadAssessment: (threadId) =>
+        api.get(`${basePath}/${threadId}/assess`),
+
     createThread: (request) => api.post(`${basePath}`, request),
 
     updateThread: (threadId, request) =>
@@ -21,17 +23,24 @@ export default {
     assessThread: (threadId, request) =>
         api.post(`${basePath}/${threadId}/assess`, request),
 
-    assignThreadOwner: (threadId, paramOwnerId) => 
+    assignThreadOwner: (threadId, paramOwnerId) =>
         api.put(`${basePath}/${threadId}/owner`, null, {
-            params: { newOwnerId: paramOwnerId }
+            params: { newOwnerId: paramOwnerId },
         }),
 
     getThreadReview: (threadId) => api.get(`${basePath}/${threadId}/review`),
-        
-    reviewThread: (threadId, request) => 
+
+    reviewThread: (threadId, request) =>
         api.post(`${basePath}/${threadId}/review`, request),
 
-    getThreadSolutions: (threadId) => api.get(`${basePath}/${threadId}/solution`),
+    getThreadSolutions: (threadId) =>
+        api.get(`${basePath}/${threadId}/solution`),
 
-    createThreadSolution: (threadId, request) => api.post(`${basePath}/${threadId}/solution`, request)
+    createThreadSolution: (threadId, request) =>
+        api.post(`${basePath}/${threadId}/solution`, request),
+
+    chooseThreadSolution: (threadId, solutionId) =>
+        api.put(`${basePath}/${threadId}/solution/choice`, null, {
+            params: { solutionId: solutionId },
+        }),
 };

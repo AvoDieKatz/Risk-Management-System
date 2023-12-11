@@ -78,7 +78,6 @@ const OwnerSelectForm = ({ fetchedUsers, currentThreadId, currentOwnerId }) => {
         control,
         handleSubmit,
         watch,
-        reset,
         formState: { isSubmitting, isDirty},
     } = useForm({
         mode: "onChange",

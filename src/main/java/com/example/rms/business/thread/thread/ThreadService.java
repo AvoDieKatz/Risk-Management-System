@@ -15,6 +15,7 @@ import java.util.List;
 public interface ThreadService {
 
     // Analyst methods
+    List<ThreadCompactProjection> getAllThreads();
     List<ThreadCompactProjection> getThreads(ThreadStatus status);
     ThreadCompactProjection getThreadDetail(int threadId);
     List<ThreadCompactProjection> getPersonalThreads(String type);

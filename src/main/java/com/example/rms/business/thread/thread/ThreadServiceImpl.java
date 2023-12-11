@@ -29,7 +29,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -43,6 +42,11 @@ public class ThreadServiceImpl implements ThreadService {
 
     private AuthenticationService authService;
     private AssessServiceImpl assessService;
+
+    @Override
+    public List<ThreadCompactProjection> getAllThreads() {
+        return threadRepository.findBy(ThreadCompactProjection.class);
+    }
 
     @Override
     public List<ThreadCompactProjection> getThreads(ThreadStatus status) {

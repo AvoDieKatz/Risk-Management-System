@@ -100,8 +100,11 @@ public class SolutionServiceImpl implements SolutionService {
         solution.setAccepted(true);
         Solution savedSolution = solutionRepository.save(solution);
 
-        thread.setStatus(ThreadStatus.RESOLVED);
-        threadRepository.save(thread);
+        // DON'T immediately set status to RESOLVED because the thread need to continue monitored
+        // Problem: there is no indication that the thread has been chosen a solution
+
+        // thread.setStatus(ThreadStatus.RESOLVED);
+        // threadRepository.save(thread);
 
         ProjectionFactory projectionFactory = new SpelAwareProxyProjectionFactory();
         return projectionFactory.createProjection(SolutionCompact.class, savedSolution);

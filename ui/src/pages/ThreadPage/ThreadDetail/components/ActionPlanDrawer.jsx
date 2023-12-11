@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import {
     Accordion,
@@ -24,16 +24,13 @@ import { useQuery } from "@tanstack/react-query";
 import threadService from "../../../../services/ThreadService";
 import moment from "moment";
 import AddSolutionStepper from "./AddSolutionStepper.jsx";
+import ChooseSolutionButton from "./ChooseSolutionButton.jsx";
 
 const options = ["ACCEPT", "AVOID", "EXPLOIT", "MITIGATE", "TRANSFER"];
 
-const PlanDetail = ({ selectedView, solutionList }) => {
-    const solution = solutionList.find(
-        (solution) => solution.type === selectedView
-    );
-
+export const PlanDetail = ({ solution, ...stackProps }) => {
     return (
-        <Stack spacing={0}>
+        <Stack spacing={1} {...stackProps}>
             <Grid flex={1}>
                 <Panel variant={"outlined"} sx={{ p: 1 }}>
                     <Typography fontWeight={700} fontSize={20}>
@@ -56,7 +53,7 @@ const PlanDetail = ({ selectedView, solutionList }) => {
                             </Typography>
                         </Typography>
                         <Typography>
-                            Last modefied at:{" "}
+                            Last modified at:{" "}
                             <Typography component={"span"}>
                                 {moment(solution?.updatedAt).format(
                                     "DD/MM/YYYY, HH:mm"
@@ -120,6 +117,7 @@ const AddSolutionView = (props) => {
 const SolutionView = (props) => {
     const { threadId, ownerId, handleChangeVw } = props;
     const [selectedView, setSelectedView] = useState("");
+    const selectedSolution = useRef({});
 
     const {
         userAuthentication: { user },
@@ -142,6 +140,12 @@ const SolutionView = (props) => {
     const handleChangeView = (e, next) => {
         if (next !== null) {
             setSelectedView(next);
+
+            const solution = solutions.find(
+                (solution) => solution.type === next
+            );
+
+            selectedSolution.current = solution;
         }
     };
 
@@ -170,14 +174,32 @@ const SolutionView = (props) => {
                                     Add Solution
                                 </Button>
                             )}
+
+                            {selectedSolution.current?.accepted && (
+                                <Typography
+                                    color={"success.main"}
+                                    textAlign={"center"}
+                                >
+                                    This plan was accepted as the resolution
+                                    plan for this thread.
+                                </Typography>
+                            )}
+
+                            {user?.role === "ROLE_OFFICER" &&
+                                selectedView !== "" &&
+                                !selectedSolution.current?.accepted && (
+                                    <ChooseSolutionButton
+                                        selectedSolution={
+                                            selectedSolution.current
+                                        }
+                                        threadId={threadId}
+                                    />
+                                )}
                         </Stack>
                     </Grid>
                     <Grid xs={9}>
                         {selectedView !== "" ? (
-                            <PlanDetail
-                                selectedView={selectedView}
-                                solutionList={solutions}
-                            />
+                            <PlanDetail solution={selectedSolution.current} />
                         ) : (
                             <Typography variant="dimmed">
                                 Select an option to view detail.
@@ -279,8 +301,7 @@ PlanChoices.propTypes = {
 };
 
 PlanDetail.propTypes = {
-    selectedView: PropTypes.string.isRequired,
-    solutionList: PropTypes.array,
+    solution: PropTypes.object.isRequired,
 };
 
 export default ActionPlanDrawer;
