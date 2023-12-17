@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface CommentService {
     List<CommentResponse> getComments(int threadId);
-    CommentResponse createComment(CommentRequest request);
+    CommentResponse createComment(CommentRequest request, int threadId);
     void deleteComment(int threadID, int commentId);
 }

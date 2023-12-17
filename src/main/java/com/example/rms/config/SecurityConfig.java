@@ -51,6 +51,7 @@ public class SecurityConfig {
                     ex.authenticationEntryPoint(authEntryPoint)
                 )
                 .authorizeHttpRequests((request) -> request.requestMatchers(antMatcher("/api/auth/**")).permitAll()
+                        .requestMatchers(antMatcher("/websocket/**")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.GET, "/api/category/**")).authenticated()
                         .requestMatchers(antMatcher(HttpMethod.GET, "/api/thread/**")).authenticated()
                         .requestMatchers(antMatcher(HttpMethod.POST, "/api/thread")).authenticated()
@@ -70,31 +71,6 @@ public class SecurityConfig {
 
                         .requestMatchers(antMatcher("/api/admin/**")).hasRole(Role.ADMIN.name())
 
-
-                        // Current working
-//                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/category")).authenticated()
-//                        .requestMatchers(antMatcher("/api/admin/**")).hasRole(Role.ADMIN.name())
-//                        .requestMatchers(antMatcher("/api/category/**")).hasAnyRole(Role.ADMIN.name(), Role.MANAGER.name(), Role.OFFICER.name())
-//
-//                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/thread/review")).hasRole(Role.MANAGER.name())
-//                        .requestMatchers(antMatcher("/api/thread/**")).hasAnyRole(Role.ADMIN.name(), Role.MANAGER.name(), Role.ANALYST.name())
-
-
-                        // ALLOW ALL, DEVELOPMENT ONLY
-//                        .requestMatchers(antMatcher("/api/**")).hasRole(Role.ADMIN.name())
-
-                        // Setting up authorization
-//                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/thread")).hasRole(Role.ANALYST.name())
-//                        .requestMatchers(antMatcher("/api/thread/review")).hasRole(Role.MANAGER.name())
-
-
-//                        .requestMatchers(antMatcher("/api/admin/**")).hasRole(Role.ADMIN.name())
-//                        .requestMatchers(antMatcher("/api/analyst/**")).hasRole(Role.ADMIN.name())
-//                        .requestMatchers(antMatcher("/api/thread/**")).hasRole(Role.ADMIN.name())
-
-                        // Not working due to some severe Security 3 bug that I forgot which
-//                        .requestMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
-//                        .requestMatchers("/api/analyst/**").hasRole(Role.ANALYST.name())
                         .anyRequest().denyAll())
                 .authenticationProvider(authProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -113,6 +89,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("*"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
+//        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

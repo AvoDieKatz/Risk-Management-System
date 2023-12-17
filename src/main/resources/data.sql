@@ -203,3 +203,48 @@ VALUES ('To mitigate the risk of software bugs or compatibility problems, it is 
        ('To address the limited availability of skilled resources, investing in training and development programs is recommended. This will help enhance the skills and knowledge of the existing team members and ensure the availability of skilled resources for the project.', 'MITIGATE', false, 8, 2, ADDTIME((SELECT created_at FROM tbl_thread WHERE id = 8), '10:12:13'), ADDTIME((SELECT created_at FROM tbl_thread WHERE id = 8), '10:12:13')),
        ('To control and manage project scope effectively, implementing a change management process is crucial. This process will help ensure that any changes to the project scope are properly evaluated, approved, and managed to avoid scope creep.', 'MITIGATE', false, 9, 5, ADDTIME((SELECT created_at FROM tbl_thread WHERE id = 9), '11:34:35'), ADDTIME((SELECT created_at FROM tbl_thread WHERE id = 9), '11:34:35')),
        ('To ensure high-quality deliverables and customer satisfaction, implementing a robust quality assurance process is recommended. This includes regular quality checks, testing, and feedback loops to address any potential issues or concerns.', 'MITIGATE', false, 10, 5, ADDTIME((SELECT created_at FROM tbl_thread WHERE id = 10), '13:56:57'), ADDTIME((SELECT created_at FROM tbl_thread WHERE id = 10), '13:56:57'));
+
+
+/**
+  Seed tbl_thread_comment
+ */
+INSERT INTO tbl_thread_comment (content, author_id, thread_id, created_at, updated_at)
+VALUES ('The risk of software bugs or compatibility problems is a valid concern and can have a significant impact on project timelines and product quality.', 3, 1, ADDTIME((SELECT created_at from tbl_thread where id = 1), '02:15:43'), ADDTIME((SELECT created_at from tbl_thread where id = 1), '02:15:43')),
+       ('Another potential issue to consider is the lack of proper documentation, which can lead to confusion and delays in the development process.', 2, 1, ADDTIME((SELECT created_at from tbl_thread where id = 1), '03:45:12'), ADDTIME((SELECT created_at from tbl_thread where id = 1), '03:45:12')),
+       ('It is important to allocate sufficient time for testing and quality assurance to catch any potential issues before they impact the project.', 4, 1, ADDTIME((SELECT created_at from tbl_thread where id = 1), '05:30:20'), ADDTIME((SELECT created_at from tbl_thread where id = 1), '05:30:20')),
+
+        ('Insufficient funding or unexpected expenses can indeed jeopardize a project, leading to delays and compromised quality.', 4, 2, ADDTIME((SELECT created_at from tbl_thread where id = 2), '08:10:15'), ADDTIME((SELECT created_at from tbl_thread where id = 2), '08:10:15')),
+        ('To mitigate this risk, it may be necessary to secure additional funding sources or revise the project budget.', 1, 2, ADDTIME((SELECT created_at from tbl_thread where id = 2), '10:25:30'), ADDTIME((SELECT created_at from tbl_thread where id = 2), '10:25:30')),
+        ('Regular financial monitoring and frequent communication with stakeholders can help identify and address any unexpected financial challenges.', 5, 2, ADDTIME((SELECT created_at from tbl_thread where id = 2), '12:45:50'), ADDTIME((SELECT created_at from tbl_thread where id = 2), '12:45:50')),
+
+        ('Delays in project timelines due to unexpected events or resource constraints are common risks.', 1, 3, ADDTIME((SELECT created_at from tbl_thread where id = 3), '14:20:10'), ADDTIME((SELECT created_at from tbl_thread where id = 3), '14:20:10')),
+        ('It is important to have contingency plans in place and maintain open communication with team members and stakeholders to address any potential delays.', 3, 3, ADDTIME((SELECT created_at from tbl_thread where id = 3), '16:35:25'), ADDTIME((SELECT created_at from tbl_thread where id = 3), '16:35:25')),
+        ('Resource allocation and workload management should be carefully planned to minimize the risk of delays.', 2, 3, ADDTIME((SELECT created_at from tbl_thread where id = 3), '18:55:40'), ADDTIME((SELECT created_at from tbl_thread where id = 3), '18:55:40')),
+
+        ('Low demand or market saturation can be a significant risk, especially in a competitive market.', 2, 4, ADDTIME((SELECT created_at from tbl_thread where id = 4), '21:10:55'), ADDTIME((SELECT created_at from tbl_thread where id = 4), '21:10:55')),
+        ('To mitigate this risk, conducting market research and identifying unique selling points can help attract customers and differentiate from competitors.', 4, 4, ADDTIME((SELECT created_at from tbl_thread where id = 4), '23:30:10'), ADDTIME((SELECT created_at from tbl_thread where id = 4), '23:30:10')),
+        ('Effective marketing strategies and customer engagement can also help create demand and mitigate the impact of market saturation.', 1, 4, ADDTIME((SELECT created_at from tbl_thread where id = 4), '01:45:25'), ADDTIME((SELECT created_at from tbl_thread where id = 4), '01:45:25')),
+
+        ('Data breaches and unauthorized access pose a significant threat to the project and its stakeholders.', 5, 5, ADDTIME((SELECT created_at from tbl_thread where id = 5), '04:00:40'), ADDTIME((SELECT created_at from tbl_thread where id = 5), '04:00:40')),
+        ('Implementing strong security measures, including encryption and access controls, can help mitigate the risk of data breaches.', 3, 5, ADDTIME((SELECT created_at from tbl_thread where id = 5), '06:20:55'), ADDTIME((SELECT created_at from tbl_thread where id = 5), '06:20:55')),
+        ('Regular security audits and employee training on cyber security best practices are also important to maintain data integrity.', 2, 5, ADDTIME((SELECT created_at from tbl_thread where id = 5), '08:40:10'), ADDTIME((SELECT created_at from tbl_thread where id = 5), '08:40:10')),
+
+        ('Non-compliance with legal requirements can have serious implications for the project.', 3, 6, ADDTIME((SELECT created_at from tbl_thread where id = 6), '11:00:25'), ADDTIME((SELECT created_at from tbl_thread where id = 6), '11:00:25')),
+        ('To ensure compliance, it is necessary to stay updated with relevant laws and regulations and seek legal advice if needed.', 1, 6, ADDTIME((SELECT created_at from tbl_thread where id = 6), '13:20:40'), ADDTIME((SELECT created_at from tbl_thread where id = 6), '13:20:40')),
+        ('Establishing internal processes and documentation to track compliance can help mitigate the risk of non-compliance.', 4, 6, ADDTIME((SELECT created_at from tbl_thread where id = 6), '15:40:55'), ADDTIME((SELECT created_at from tbl_thread where id = 6), '15:40:55')),
+
+        ('Conflicts and disagreements among stakeholders can significantly hinder project progress and outcomes.', 4, 7, ADDTIME((SELECT created_at from tbl_thread where id = 7), '18:00:10'), ADDTIME((SELECT created_at from tbl_thread where id = 7), '18:00:10')),
+        ('Open and transparent communication, active listening, and conflict resolution techniques can help manage and resolve stakeholder conflicts.', 5, 7, ADDTIME((SELECT created_at from tbl_thread where id = 7), '20:20:25'), ADDTIME((SELECT created_at from tbl_thread where id = 7), '20:20:25')),
+        ('Establishing a clear decision-making process and involving stakeholders in key decisions can also help prevent conflicts.', 2, 7, ADDTIME((SELECT created_at from tbl_thread where id = 7), '22:40:40'), ADDTIME((SELECT created_at from tbl_thread where id = 7), '22:40:40')),
+
+        ('Limited availability of skilled resources is a common risk that can affect project execution.', 1, 8, ADDTIME((SELECT created_at from tbl_thread where id = 8), '01:00:55'), ADDTIME((SELECT created_at from tbl_thread where id = 8), '01:00:55')),
+        ('Investing in training and development programs can help enhance the skills and knowledge of existing team members.', 3, 8, ADDTIME((SELECT created_at from tbl_thread where id = 8), '03:20:10'), ADDTIME((SELECT created_at from tbl_thread where id = 8), '03:20:10')),
+        ('Building relationships with external contractors or consultants can also provide access to additional skilled resources.', 5, 8, ADDTIME((SELECT created_at from tbl_thread where id = 8), '05:40:25'), ADDTIME((SELECT created_at from tbl_thread where id = 8), '05:40:25')),
+
+        ('Uncontrolled expansion of project scope can lead to scope creep and impact project objectives.', 2, 9, ADDTIME((SELECT created_at from tbl_thread where id = 9), '08:00:40'), ADDTIME((SELECT created_at from tbl_thread where id = 9), '08:00:40')),
+        ('Establishing a change management process and conducting regular scope reviews can help mitigate the risk of scope creep.', 4, 9, ADDTIME((SELECT created_at from tbl_thread where id = 9), '10:20:55'), ADDTIME((SELECT created_at from tbl_thread where id = 9), '10:20:55')),
+        ('Clearly defining project scope and obtaining stakeholder approval can also help prevent uncontrolled expansion.', 1, 9, ADDTIME((SELECT created_at from tbl_thread where id = 9), '12:40:10'), ADDTIME((SELECT created_at from tbl_thread where id = 9), '12:40:10')),
+
+        ('Lorem ipsum dolor sit amet.', 3, 10, ADDTIME((SELECT created_at from tbl_thread where id = 10), '15:00:25'), ADDTIME((SELECT created_at from tbl_thread where id = 10), '15:00:25')),
+        ('Consectetur adipiscing elit.', 2, 10, ADDTIME((SELECT created_at from tbl_thread where id = 10), '17:20:40'), ADDTIME((SELECT created_at from tbl_thread where id = 10), '17:20:40')),
+        ('Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 1, 10, ADDTIME((SELECT created_at from tbl_thread where id = 10), '19:40:55'), ADDTIME((SELECT created_at from tbl_thread where id = 10), '19:40:55'))

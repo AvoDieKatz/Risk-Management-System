@@ -1,4 +1,7 @@
 import api from "../utils/api.js";
+// import SockJS from "sockjs-client";
+// import Stomp from "stompjs"
+import { getTokenFromStorage } from "../utils/storage.js";
 
 const basePath = "/thread";
 export default {
@@ -12,6 +15,10 @@ export default {
 
     getThreadAssessment: (threadId) =>
         api.get(`${basePath}/${threadId}/assess`),
+
+    getThreadComments: (threadId) => api.get(`${basePath}/${threadId}/comment`),
+
+    createThreadComment: (threadId, request) => api.post(`${basePath}/${threadId}/comment`, request),
 
     createThread: (request) => api.post(`${basePath}`, request),
 
